@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobileapp/UI/authentification.dart';
 import 'package:mobileapp/UI/home_page.dart';
 import 'package:mobileapp/UI/tickets_page.dart';
 import 'package:mobileapp/UI/computers_page.dart';
@@ -49,7 +50,23 @@ class NavigationDrawer extends StatelessWidget {
                     icon: Icons.computer,
                     onClicked: () => seletedItem(context, 2),
                   ),
-                  
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  const Divider(
+                    color: Colors.white70,
+                  ),
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  buildMenuItem(
+                    text: 'Configuration',
+                    icon: Icons.settings,
+                    onClicked: () => seletedItem(context, 3),
+                  ),
                 ],
               ),
             ),
@@ -98,7 +115,11 @@ class NavigationDrawer extends StatelessWidget {
           builder: (context) => const ComputersPage(),
         ));
         break;
-      
+      case 3:
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => const Authentification(),
+        ));
+        break;
     }
   }
 
