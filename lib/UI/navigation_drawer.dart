@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobileapp/UI/home_page.dart';
 import 'package:mobileapp/UI/tickets_page.dart';
+import 'package:mobileapp/UI/computers_page.dart';
 
 class NavigationDrawer extends StatelessWidget {
   NavigationDrawer({super.key});
@@ -40,7 +41,15 @@ class NavigationDrawer extends StatelessWidget {
                     icon: Icons.error_outline,
                     onClicked: () => seletedItem(context, 1),
                   ),
-                 
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  buildMenuItem(
+                    text: 'Computers',
+                    icon: Icons.computer,
+                    onClicked: () => seletedItem(context, 2),
+                  ),
+                  
                 ],
               ),
             ),
@@ -84,7 +93,12 @@ class NavigationDrawer extends StatelessWidget {
           builder: (context) => TicketsPage(),
         ));
         break;
-     
+      case 2:
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => const ComputersPage(),
+        ));
+        break;
+      
     }
   }
 
