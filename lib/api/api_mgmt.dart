@@ -26,7 +26,7 @@ class ApiMgmt {
       // If the server did return a 200 OK response,
       // then parse the JSON.
       authStatus = true;
-      return jsonDecode(response.body);
+      return response.body;
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
