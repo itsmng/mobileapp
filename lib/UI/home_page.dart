@@ -42,7 +42,10 @@ class _HomePageState extends State<HomePage> {
     int cptAssigned = 0;
     int cptPlanned = 0;
     int cptPending = 0;
+    int latestTickets = 0;
 
+    DateTime currentDate = DateTime.now();
+    Duration diff;
     for (var element in futureTicket) {
       if (element.status == 1) {
         cptNew++;
@@ -53,10 +56,18 @@ class _HomePageState extends State<HomePage> {
       } else if (element.status == 4) {
         cptPending++;
       }
+
+      DateTime date = DateTime.parse(element.date.toString());
+      diff = currentDate.difference(date);
+      if (diff.inHours <= 24) {
+        latestTickets++;
+      }
     }
+
     listTicketsData["new"] = cptNew;
     listTicketsData["processing (assigned)"] = cptAssigned;
     listTicketsData["processing (planned)"] = cptPlanned;
     listTicketsData["pending"] = cptPending;
+    listTicketsData["latest tickets"] = latestTickets;
   }
 }
