@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mobileapp/UI/navigation_drawer.dart';
 import 'package:mobileapp/api/api_endpoints.dart';
@@ -38,36 +39,39 @@ class _HomePageState extends State<HomePage> {
 
   handleTickets() async {
     futureTicket = await ticket.fetchTicketsData(apiResponse);
-    int cptNew = 0;
-    int cptAssigned = 0;
-    int cptPlanned = 0;
-    int cptPending = 0;
+    int newTicket = 0;
+    int assignedTicket = 0;
+    int plannedTickets = 0;
+    int pendingTickets = 0;
     int latestTickets = 0;
+ 
 
-    DateTime currentDate = DateTime.now();
-    Duration diff;
-    for (var element in futureTicket) {
-      if (element.status == 1) {
-        cptNew++;
-      } else if (element.status == 2) {
-        cptAssigned++;
-      } else if (element.status == 3) {
-        cptPlanned++;
-      } else if (element.status == 4) {
-        cptPending++;
+    if (kDebugMode) {
+      DateTime currentDate = DateTime.now();
+      late Duration diff;
+      for (var element in futureTicket) {
+        if (element.status == 1) {
+          newTicket++;
+        } else if (element.status == 2) {
+          assignedTicket++;
+        } else if (element.status == 3) {
+          plannedTickets++;
+        } else if (element.status == 4) {
+          pendingTickets++;
+        }
+
+        DateTime ticketDate = DateTime.parse(element.date.toString());
+        diff = currentDate.difference(ticketDate);
+        if (diff.inHours <= 24) {
+          latestTickets++;
+        }
       }
 
-      DateTime date = DateTime.parse(element.date.toString());
-      diff = currentDate.difference(date);
-      if (diff.inHours <= 24) {
-        latestTickets++;
+      listTicketsData["new"] = newTicket;
+      listTicketsData["processing (assigned)"] = assignedTicket;
+      listTicketsData["processing (planned)"] = plannedTickets;
+      listTicketsData["pending"] = pendingTickets;
+      listTicketsData["latest tickets"] = latestTickets;
       }
-    }
-
-    listTicketsData["new"] = cptNew;
-    listTicketsData["processing (assigned)"] = cptAssigned;
-    listTicketsData["processing (planned)"] = cptPlanned;
-    listTicketsData["pending"] = cptPending;
-    listTicketsData["latest tickets"] = latestTickets;
   }
 }
