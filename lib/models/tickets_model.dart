@@ -8,18 +8,21 @@ List<Tickets> postFromJson(String str) =>
 class Tickets {
   String? date;
   int? status;
+  String? timeToResolve;
 
   final apiMgmt = ApiMgmt();
 
   Tickets({
     this.date,
     this.status,
+    this.timeToResolve,
   });
 
   factory Tickets.fromMap(Map<String, dynamic> json) {
     return Tickets(
       date: json["date"],
       status: json["status"],
+      timeToResolve: json["time_to_resolve"],
     );
   }
 

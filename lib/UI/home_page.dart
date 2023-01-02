@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mobileapp/UI/navigation_drawer.dart';
 import 'package:mobileapp/api/api_endpoints.dart';
@@ -44,27 +43,32 @@ class _HomePageState extends State<HomePage> {
     int plannedTickets = 0;
     int pendingTickets = 0;
     int latestTickets = 0;
- 
+    int lateTickets = 0;
 
-    if (kDebugMode) {
-      DateTime currentDate = DateTime.now();
-      late Duration diff;
-      for (var element in futureTicket) {
-        if (element.status == 1) {
-          newTicket++;
-        } else if (element.status == 2) {
-          assignedTicket++;
-        } else if (element.status == 3) {
-          plannedTickets++;
-        } else if (element.status == 4) {
-          pendingTickets++;
-        }
+    DateTime currentDate = DateTime.now();
+    late Duration diff;
+    for (var element in futureTicket) {
+      if (element.status == 1) {
+        newTicket++;
+      } else if (element.status == 2) {
+        assignedTicket++;
+      } else if (element.status == 3) {
+        plannedTickets++;
+      } else if (element.status == 4) {
+        pendingTickets++;
+      }
 
-        DateTime ticketDate = DateTime.parse(element.date.toString());
-        diff = currentDate.difference(ticketDate);
-        if (diff.inHours <= 24) {
-          latestTickets++;
+      if (element.timeToResolve != null) {
+        DateTime resolveTime = DateTime.parse(element.timeToResolve.toString());
+        if (resolveTime.isBefore(currentDate)) {
+          lateTickets++;
         }
+      }
+
+      DateTime ticketDate = DateTime.parse(element.date.toString());
+      diff = currentDate.difference(ticketDate);
+      if (diff.inHours <= 24) {
+        latestTickets++;
       }
 
       listTicketsData["new"] = newTicket;
@@ -72,6 +76,7 @@ class _HomePageState extends State<HomePage> {
       listTicketsData["processing (planned)"] = plannedTickets;
       listTicketsData["pending"] = pendingTickets;
       listTicketsData["latest tickets"] = latestTickets;
-      }
+      listTicketsData["late tickets"] = lateTickets;
+    }
   }
 }
