@@ -21,4 +21,11 @@ class ApiEndpoint {
       "Ticket_User/?expand_dropdowns=true&searchText[tickets_id]=%s&searchText[type]=2";
   static const String apiGetTicketAssigned =
       "Ticket_User/?expand_dropdowns=false&searchText[users_id]=%s&searchText[type]=2";
+
+  // Computer API Endpoint
+  static const String apiGetAllComputers =
+      "Computer/?expand_dropdowns=true&range=0-500";
+  static const String apiGetAllComputersByName =
+      "Computer/?expand_dropdowns=true&searchText[name]=^%s&range=0-500";
+  static const String apiGetOneComputers = "Computer/%s?expand_dropdowns=true";
 }
