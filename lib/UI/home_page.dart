@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobileapp/UI/navigation_drawer.dart';
 import 'package:mobileapp/api/api_endpoints.dart';
 import 'package:mobileapp/models/bar_model.dart';
+import 'package:mobileapp/models/computer_model.dart';
 import 'package:mobileapp/models/tickets_model.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
@@ -14,16 +15,24 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late List<Tickets> futureTicket;
-  var ticket = Tickets();
-  Map listTicketsData = {};
+  late List<Computer> futureComputer;
 
-  dynamic apiResponse;
+  var ticket = Tickets();
+  var computer = Computer();
+
+  Map listTicketsData = {};
+  Map<String, int> listComputerData = {};
+
+  dynamic apiResponse, apiResponseComputer;
 
   @override
   void initState() {
     super.initState();
     apiResponse = ticket.apiMgmt.get(ApiEndpoint.apiGetAllTickets);
+    apiResponseComputer = ticket.apiMgmt.get(ApiEndpoint.apiGetAllComputers);
+
     handleTickets();
+    handleComputers();
   }
 
   List<charts.Series<BarMmodel, String>> _createTicketsChart() {
@@ -107,7 +116,7 @@ class _HomePageState extends State<HomePage> {
               child: Card(
                 child: Padding(
                   padding: const EdgeInsets.all(3),
-                  
+
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
@@ -137,6 +146,32 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ],
                   ),
+                ),
+              ),
+            ),
+            Container(
+              height: 200,
+              padding: const EdgeInsets.all(10),
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(5),
+                  child: Column(children: <Widget>[
+                    Text(
+                      "Computers status",
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                    Expanded(
+                      child: charts.PieChart<String>(
+                        defaultRenderer:
+                            charts.ArcRendererConfig(arcRendererDecorators: [
+                          charts.ArcLabelDecorator(
+                              labelPosition: charts.ArcLabelPosition.outside)
+                        ]),
+                        _createComputerChart(),
+                        animate: true,
+                      ),
+                    ),
+                  ]),
                 ),
               ),
             ),
@@ -191,5 +226,55 @@ class _HomePageState extends State<HomePage> {
         listTicketsData["late tickets"] = lateTickets;
       });
     }
+  }
+
+  handleComputers() async {
+    futureComputer = await computer.fetchComputerData(apiResponseComputer);
+
+    for (var element in futureComputer) {
+      int cpt = 0;
+      for (var ele in futureComputer) {
+        if (ele.status == element.status) {
+          cpt++;
+        }
+      }
+      setState(() {
+        listComputerData[element.status.toString()] = cpt;
+      });
+    }
+  }
+
+  List<charts.Series<BarMmodel, String>> _createComputerChart() {
+    List<BarMmodel> data = [];
+    List<Color> colors = [
+      Colors.redAccent,
+      Colors.teal,
+      Colors.green,
+      Colors.orangeAccent,
+      Colors.grey,
+      Colors.blueAccent,
+      Colors.orange,
+      Colors.greenAccent,
+      Colors.yellowAccent,
+      Colors.purpleAccent
+    ];
+    int index = 0;
+    if (listComputerData.isNotEmpty) {
+      listComputerData.forEach((key, value) {
+        data.add(BarMmodel(
+            key, value, charts.ColorUtil.fromDartColor(colors[index])));
+        index++;
+      });
+    }
+
+    return [
+      charts.Series<BarMmodel, String>(
+        data: data,
+        id: 'graphTickets',
+        colorFn: (BarMmodel barModeel, _) => barModeel.barColor,
+        domainFn: (BarMmodel barModeel, _) => barModeel.title,
+        measureFn: (BarMmodel barModeel, _) => barModeel.value,
+      )
+    ];
   }
 }
