@@ -20,7 +20,7 @@ class _HomePageState extends State<HomePage> {
   var ticket = Tickets();
   var computer = Computer();
 
-  Map listTicketsData = {};
+  Map<String, int> listTicketsData = {};
   Map<String, int> listComputerData = {};
 
   dynamic apiResponse, apiResponseComputer;
@@ -33,48 +33,6 @@ class _HomePageState extends State<HomePage> {
 
     handleTickets();
     handleComputers();
-  }
-
-  List<charts.Series<BarMmodel, String>> _createTicketsChart() {
-    List<BarMmodel> data = [];
-
-    if (listTicketsData["new"] != null &&
-        listTicketsData["processing (assigned)"] != null &&
-        listTicketsData["processing (planned)"] != null &&
-        listTicketsData["pending"] != null) {
-      data = [
-        BarMmodel(
-            "New",
-            listTicketsData["new"],
-            charts.ColorUtil.fromDartColor(
-                const Color.fromARGB(255, 78, 121, 167))),
-        BarMmodel(
-            "Assigned",
-            listTicketsData["processing (assigned)"],
-            charts.ColorUtil.fromDartColor(
-                const Color.fromARGB(255, 242, 142, 44))),
-        BarMmodel(
-            "Planned",
-            listTicketsData["processing (planned)"],
-            charts.ColorUtil.fromDartColor(
-                const Color.fromARGB(255, 225, 87, 89))),
-        BarMmodel(
-            "Pending",
-            listTicketsData["pending"],
-            charts.ColorUtil.fromDartColor(
-                const Color.fromARGB(255, 118, 183, 178))),
-      ];
-    }
-
-    return [
-      charts.Series<BarMmodel, String>(
-        data: data,
-        id: 'graphTickets',
-        colorFn: (BarMmodel barModeel, _) => barModeel.barColor,
-        domainFn: (BarMmodel barModeel, _) => barModeel.title,
-        measureFn: (BarMmodel barModeel, _) => barModeel.value,
-      )
-    ];
   }
 
   @override
@@ -116,7 +74,6 @@ class _HomePageState extends State<HomePage> {
               child: Card(
                 child: Padding(
                   padding: const EdgeInsets.all(3),
-
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
@@ -127,7 +84,7 @@ class _HomePageState extends State<HomePage> {
                             style: Theme.of(context).textTheme.bodyLarge,
                           ),
                           Text(
-                            listTicketsData["latest tickets"].toString(),
+                            listTicketsData["Latest tickets"].toString(),
                             style: Theme.of(context).textTheme.bodyLarge,
                           ),
                         ],
@@ -139,7 +96,7 @@ class _HomePageState extends State<HomePage> {
                             style: Theme.of(context).textTheme.bodyLarge,
                           ),
                           Text(
-                            listTicketsData["late tickets"].toString(),
+                            listTicketsData["Late tickets"].toString(),
                             style: Theme.of(context).textTheme.bodyLarge,
                           ),
                         ],
@@ -218,14 +175,45 @@ class _HomePageState extends State<HomePage> {
       }
 
       setState(() {
-        listTicketsData["new"] = newTicket;
-        listTicketsData["processing (assigned)"] = assignedTicket;
-        listTicketsData["processing (planned)"] = plannedTickets;
-        listTicketsData["pending"] = pendingTickets;
-        listTicketsData["latest tickets"] = latestTickets;
-        listTicketsData["late tickets"] = lateTickets;
+        listTicketsData["New"] = newTicket;
+        listTicketsData["Assigned"] = assignedTicket;
+        listTicketsData["Planned"] = plannedTickets;
+        listTicketsData["Pending"] = pendingTickets;
+        listTicketsData["Latest tickets"] = latestTickets;
+        listTicketsData["Late tickets"] = lateTickets;
       });
     }
+  }
+
+  List<charts.Series<BarMmodel, String>> _createTicketsChart() {
+    List<BarMmodel> data = [];
+
+    List<Color> colors = [
+      const Color.fromARGB(255, 78, 121, 167),
+      const Color.fromARGB(255, 242, 142, 44),
+      const Color.fromARGB(255, 225, 87, 89),
+      const Color.fromARGB(255, 118, 183, 178)
+    ];
+    int index = 0;
+    if (listTicketsData.isNotEmpty) {
+      listTicketsData.forEach((key, value) {
+        if (key != "Late tickets" && key != "Latest tickets") {
+          data.add(BarMmodel(
+              key, value, charts.ColorUtil.fromDartColor(colors[index])));
+          index++;
+        }
+      });
+    }
+
+    return [
+      charts.Series<BarMmodel, String>(
+        data: data,
+        id: 'graphTickets',
+        colorFn: (BarMmodel barModeel, _) => barModeel.barColor,
+        domainFn: (BarMmodel barModeel, _) => barModeel.title,
+        measureFn: (BarMmodel barModeel, _) => barModeel.value,
+      )
+    ];
   }
 
   handleComputers() async {
