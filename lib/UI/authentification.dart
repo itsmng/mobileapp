@@ -113,25 +113,7 @@ class _AuthentificationState extends State<Authentification> {
                         ],
                       ).show();
                     } else {
-                      futureSession =
-                          _initSession.fetchInitSessionData(apiResponse);
-                      if (_initSession.apiMgmt.apiSessionToken == null) {
-                        futureSession.then((InitSession data) {
-                          _initSession.apiMgmt
-                              .setApiSessionToken(data.sessionToken.toString());
-                        });
-                      }
-                      if (_initSession.apiMgmt.apiSessionToken != null) {
-                        if (!mounted) return;
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const HomePage(),
-                        ));
-                        /*
-                        Connected
-                        Redirect to the home page
-                        */
-
-                      }
+                      controlAuthentification();
                     }
                   }
                 },
@@ -266,5 +248,47 @@ class _AuthentificationState extends State<Authentification> {
         ),
       ],
     );
+  }
+
+  void controlAuthentification() async {
+    _formKey.currentState!.save();
+    Future<dynamic> apiResponse =
+        _initSession.apiMgmt.authentification(initSession);
+
+    final apiResponseValue =
+        await apiResponse.then((val) => val[sessionTokenField]);
+
+    if (apiResponseValue == null) {
+      //alert error connexion
+      Alert(
+        context: context,
+        type: AlertType.error,
+        title: "Error connexion",
+        buttons: [
+          DialogButton(
+            color: const Color.fromARGB(255, 245, 183, 177),
+            onPressed: () => Navigator.pop(context),
+            width: 120,
+            child: const Text(
+              'Valider',
+              style: TextStyle(
+                  color: Color.fromARGB(255, 143, 90, 10),
+                  fontWeight: FontWeight.bold),
+            ),
+          )
+        ],
+      ).show();
+    } else {
+      futureSession = _initSession.fetchInitSessionData(apiResponse);
+      futureSession.then((InitSession data) {
+        _initSession.apiMgmt.setApiSessionToken(data.sessionToken.toString());
+        if (_initSession.apiMgmt.apiSessionToken != null) {
+          if (!mounted) return;
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => const HomePage(),
+          ));
+        }
+      });
+    }
   }
 }
