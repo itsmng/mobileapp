@@ -45,7 +45,7 @@ class _HomePageState extends State<HomePage> {
         title: const Text("Home"),
       ),
       body: Center(
-        child: Column(
+        child: ListView(
           children: [
             Container(
               height: 300,
