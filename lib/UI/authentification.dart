@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobileapp/UI/home_page.dart';
 import 'package:mobileapp/api/model.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
@@ -10,18 +11,29 @@ class Authentification extends StatefulWidget {
 }
 
 class _AuthentificationState extends State<Authentification> {
-  final _initSession = InitSession();
+  static final _initSession = InitSession();
   late Future<InitSession> futureSession;
 
-  late String _url;
-  late String _apiToken;
-  late String _userToken;
-  late bool _checkSSL = false;
+  String _url = _initSession.apiMgmt.apiBaseUrl;
+  String _apiToken = _initSession.apiMgmt.apiAuthToken;
+  String _userToken = _initSession.apiMgmt.userToken;
+  bool _checkSSL = _initSession.apiMgmt.checkSSL;
   late String sessionTokenValue;
   static const String initSession = "initSession";
   static const String sessionTokenField = "session_token";
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _urlController = TextEditingController();
+  final TextEditingController _apiTokenController = TextEditingController();
+  final TextEditingController _userTokenController = TextEditingController();
+
+  @override
+  void initState() {
+    _urlController.text = _url;
+    _apiTokenController.text = _apiToken;
+    _userTokenController.text = _userToken;
+    return super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,50 +84,54 @@ class _AuthentificationState extends State<Authentification> {
                 onPressed: () async {
                   if (!_formKey.currentState!.validate()) {
                     return;
-                  }
-
-                  _formKey.currentState!.save();
-                  Future<dynamic> apiResponse =
-                      _initSession.apiMgmt.authentification(initSession);
-
-                  final apiResponseValue =
-                      await apiResponse.then((val) => val[sessionTokenField]);
-
-                  if (apiResponseValue == null) {
-                    //alert error connexion
-                    Alert(
-                      context: context,
-                      type: AlertType.error,
-                      title: "Error connexion",
-                      buttons: [
-                        DialogButton(
-                          color: const Color.fromARGB(255, 245, 183, 177),
-                          onPressed: () => Navigator.pop(context),
-                          width: 120,
-                          child: const Text(
-                            'Valider',
-                            style: TextStyle(
-                                color: Color.fromARGB(255, 143, 90, 10),
-                                fontWeight: FontWeight.bold),
-                          ),
-                        )
-                      ],
-                    ).show();
                   } else {
-                    futureSession =
-                        _initSession.fetchInitSessionData(apiResponse);
-                    if (_initSession.apiMgmt.apiSessionToken == null) {
-                      futureSession.then((InitSession data) {
-                        _initSession.apiMgmt
-                            .setApiSessionToken(data.sessionToken.toString());
-                      });
-                    }
-                    if (_initSession.apiMgmt.apiSessionToken != null) {
-                      /*
+                    _formKey.currentState!.save();
+                    Future<dynamic> apiResponse =
+                        _initSession.apiMgmt.authentification(initSession);
+
+                    final apiResponseValue =
+                        await apiResponse.then((val) => val[sessionTokenField]);
+
+                    if (apiResponseValue == null) {
+                      //alert error connexion
+                      Alert(
+                        context: context,
+                        type: AlertType.error,
+                        title: "Error connexion",
+                        buttons: [
+                          DialogButton(
+                            color: const Color.fromARGB(255, 245, 183, 177),
+                            onPressed: () => Navigator.pop(context),
+                            width: 120,
+                            child: const Text(
+                              'Valider',
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 143, 90, 10),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          )
+                        ],
+                      ).show();
+                    } else {
+                      futureSession =
+                          _initSession.fetchInitSessionData(apiResponse);
+                      if (_initSession.apiMgmt.apiSessionToken == null) {
+                        futureSession.then((InitSession data) {
+                          _initSession.apiMgmt
+                              .setApiSessionToken(data.sessionToken.toString());
+                        });
+                      }
+                      if (_initSession.apiMgmt.apiSessionToken != null) {
+                        if (!mounted) return;
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const HomePage(),
+                        ));
+                        /*
                         Connected
                         Redirect to the home page
                         */
 
+                      }
                     }
                   }
                 },
@@ -129,6 +145,7 @@ class _AuthentificationState extends State<Authentification> {
 
   Widget _buildURL() {
     return TextFormField(
+      controller: _urlController,
       // ignore: prefer_const_constructors
       decoration: const InputDecoration(
         prefixIcon: Icon(Icons.link, color: Colors.white),
@@ -151,7 +168,10 @@ class _AuthentificationState extends State<Authentification> {
       },
       onSaved: (String? value) {
         _url = value.toString();
-        _initSession.apiMgmt.setApiBaseUrl(_url);
+        _initSession.apiMgmt.setApiBaseUrl(_url.toString());
+      },
+      onChanged: (String value) {
+        _url = value;
       },
       style: const TextStyle(color: Colors.white),
     );
@@ -159,6 +179,7 @@ class _AuthentificationState extends State<Authentification> {
 
   Widget _buildApiToken() {
     return TextFormField(
+      controller: _apiTokenController,
       decoration: const InputDecoration(
         prefixIcon: Icon(Icons.login, color: Colors.white),
         focusColor: Colors.white,
@@ -183,12 +204,16 @@ class _AuthentificationState extends State<Authentification> {
         _apiToken = value.toString();
         _initSession.apiMgmt.setApiAuthToken(_apiToken);
       },
+      onChanged: (String value) {
+        _apiToken = value;
+      },
       style: const TextStyle(color: Colors.white),
     );
   }
 
   Widget _buildUserToken() {
     return TextFormField(
+      controller: _userTokenController,
       decoration: const InputDecoration(
         prefixIcon: Icon(Icons.person, color: Colors.white),
         focusColor: Colors.white,
@@ -212,6 +237,9 @@ class _AuthentificationState extends State<Authentification> {
       onSaved: (String? value) {
         _userToken = value.toString();
         _initSession.apiMgmt.setUserToken(_userToken);
+      },
+      onChanged: (String value) {
+        _userToken = value;
       },
       style: const TextStyle(color: Colors.white),
     );
