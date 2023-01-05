@@ -45,80 +45,94 @@ class _AuthentificationState extends State<Authentification> {
         title: const Text("Authentification API ITSM-NG"),
       ),
       body: Container(
-        margin: const EdgeInsets.only(bottom: 70, left: 24, top: 24, right: 24),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Image.asset('assets/login_logo_itsm.png', width: 150),
-              const SizedBox(
-                height: 45,
-              ),
-              Expanded(
-                child: _buildURL(),
-              ),
-              Expanded(
-                child: _buildApiToken(),
-              ),
-              Expanded(
-                child: _buildUserToken(),
-              ),
-              Expanded(
-                child: _buildCheckSSL(),
-              ),
-
-              // ElevatedButton
-              ElevatedButton(
-                //MaterialButton
-                style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      const Color.fromARGB(255, 245, 183, 177), // background
+        margin: const EdgeInsets.only(bottom: 2, left: 24, top: 10, right: 24),
+        child: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Image.asset('assets/login_logo_itsm.png', width: 150),
+                const SizedBox(
+                  height: 20,
                 ),
-                child: const Text(
-                  'Valider',
-                  style: TextStyle(
-                      color: Color.fromARGB(255, 143, 90, 10),
-                      fontWeight: FontWeight.bold),
+                Container(
+                  child: _buildURL(),
                 ),
-                onPressed: () async {
-                  if (!_formKey.currentState!.validate()) {
-                    return;
-                  } else {
-                    _formKey.currentState!.save();
-                    Future<dynamic> apiResponse =
-                        _initSession.apiMgmt.authentification(initSession);
+                const SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  child: _buildApiToken(),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  child: _buildUserToken(),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  child: _buildCheckSSL(),
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
 
-                    final apiResponseValue =
-                        await apiResponse.then((val) => val[sessionTokenField]);
-
-                    if (apiResponseValue == null) {
-                      //alert error connexion
-                      Alert(
-                        context: context,
-                        type: AlertType.error,
-                        title: "Error connexion",
-                        buttons: [
-                          DialogButton(
-                            color: const Color.fromARGB(255, 245, 183, 177),
-                            onPressed: () => Navigator.pop(context),
-                            width: 120,
-                            child: const Text(
-                              'Valider',
-                              style: TextStyle(
-                                  color: Color.fromARGB(255, 143, 90, 10),
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          )
-                        ],
-                      ).show();
+                // ElevatedButton
+                ElevatedButton(
+                  //MaterialButton
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                        const Color.fromARGB(255, 245, 183, 177), // background
+                  ),
+                  child: const Text(
+                    'Valider',
+                    style: TextStyle(
+                        color: Color.fromARGB(255, 143, 90, 10),
+                        fontWeight: FontWeight.bold),
+                  ),
+                  onPressed: () async {
+                    if (!_formKey.currentState!.validate()) {
+                      return;
                     } else {
-                      controlAuthentification();
+                      _formKey.currentState!.save();
+                      Future<dynamic> apiResponse =
+                          _initSession.apiMgmt.authentification(initSession);
+
+                      final apiResponseValue = await apiResponse
+                          .then((val) => val[sessionTokenField]);
+
+                      if (apiResponseValue == null) {
+                        //alert error connexion
+                        Alert(
+                          context: context,
+                          type: AlertType.error,
+                          title: "Error connexion",
+                          buttons: [
+                            DialogButton(
+                              color: const Color.fromARGB(255, 245, 183, 177),
+                              onPressed: () => Navigator.pop(context),
+                              width: 120,
+                              child: const Text(
+                                'Valider',
+                                style: TextStyle(
+                                    color: Color.fromARGB(255, 143, 90, 10),
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            )
+                          ],
+                        ).show();
+                      } else {
+                        controlAuthentification();
+                      }
                     }
-                  }
-                },
-              ),
-            ],
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
