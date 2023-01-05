@@ -247,12 +247,16 @@ class _HomePageState extends State<HomePage> {
       Colors.purpleAccent
     ];
     int index = 0;
+
     if (listComputerData.isNotEmpty) {
       listComputerData.forEach((key, value) {
         data.add(BarMmodel(
             key, value, charts.ColorUtil.fromDartColor(colors[index])));
         index++;
       });
+    } else {
+      data.add(BarMmodel(
+          "No item found", 1, charts.ColorUtil.fromDartColor(Colors.red)));
     }
 
     return [
