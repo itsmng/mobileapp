@@ -21,7 +21,7 @@ class _AuthentificationState extends State<Authentification> {
   bool _checkSSL = _initSession.apiMgmt.checkSSL;
   late String sessionTokenValue;
   static const String initSession = "initSession";
-  static const String sessionTokenField = "session_token";
+  static const String sessionTokenField = "Session_token";
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _urlController = TextEditingController();
@@ -99,36 +99,7 @@ class _AuthentificationState extends State<Authentification> {
                     if (!_formKey.currentState!.validate()) {
                       return;
                     } else {
-                      _formKey.currentState!.save();
-                      Future<dynamic> apiResponse =
-                          _initSession.apiMgmt.authentification(initSession);
-
-                      final apiResponseValue = await apiResponse
-                          .then((val) => val[sessionTokenField]);
-
-                      if (apiResponseValue == null) {
-                        //alert error connexion
-                        Alert(
-                          context: context,
-                          type: AlertType.error,
-                          title: "Error connexion",
-                          buttons: [
-                            DialogButton(
-                              color: const Color.fromARGB(255, 245, 183, 177),
-                              onPressed: () => Navigator.pop(context),
-                              width: 120,
-                              child: const Text(
-                                'Valider',
-                                style: TextStyle(
-                                    color: Color.fromARGB(255, 143, 90, 10),
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            )
-                          ],
-                        ).show();
-                      } else {
-                        controlAuthentification();
-                      }
+                      controlAuthentification();
                     }
                   },
                 ),
@@ -275,18 +246,38 @@ class _AuthentificationState extends State<Authentification> {
 
     final apiResponseValue =
         await apiResponse.then((val) => val[sessionTokenField]);
-
-    if (apiResponseValue == null) {
+  
+    if (apiResponseValue == "ERROR_WRONG_APP_TOKEN_PARAMETER") {
       //alert error connexion
       Alert(
         context: context,
-        type: AlertType.error,
-        title: "Error connexion",
+        desc: "le paramètre app_token semble incorrect",
+        style: const AlertStyle(isCloseButton: false),
         buttons: [
           DialogButton(
             color: const Color.fromARGB(255, 245, 183, 177),
             onPressed: () => Navigator.pop(context),
-            width: 120,
+            width: 90,
+            child: const Text(
+              'Valider',
+              style: TextStyle(
+                  color: Color.fromARGB(255, 143, 90, 10),
+                  fontWeight: FontWeight.bold),
+            ),
+          )
+        ],
+      ).show();
+    } else if (apiResponseValue == "ERROR_GLPI_LOGIN_USER_TOKEN") {
+      //alert error connexion
+      Alert(
+        context: context,
+        desc: "le paramètre user_token semble incorrect",
+        style: const AlertStyle(isCloseButton: false),
+        buttons: [
+          DialogButton(
+            color: const Color.fromARGB(255, 245, 183, 177),
+            onPressed: () => Navigator.pop(context),
+            width: 90,
             child: const Text(
               'Valider',
               style: TextStyle(

@@ -54,8 +54,11 @@ class ApiMgmt {
       // If the server did not return a 200 OK response,
       // then throw an exception.
       authStatus = false;
+     String?  errorMessage;
+        var tab = response.body.split(",");
+        errorMessage = tab[0].substring(2, tab[0].length - 1);
       return {
-        "Session-token": null,
+        "Session_token": errorMessage,
       };
     }
   }
