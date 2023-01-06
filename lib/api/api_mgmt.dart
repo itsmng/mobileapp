@@ -37,32 +37,39 @@ class ApiMgmt {
 
   // Method to init the connexion
   dynamic authentification(String relativeUrl) async {
-    final response = await http
-        .get(Uri.parse(getAbsoluteUrl(relativeUrl)), headers: <String, String>{
-      'App-token': apiAuthToken.toString(),
-      'Authorization': "${"user_token"} $userToken",
-      HttpHeaders.contentTypeHeader: headerType,
-    });
+    dynamic response;
+    try {
+      response = await http.get(Uri.parse(getAbsoluteUrl(relativeUrl)),
+          headers: <String, String>{
+            'App-token': apiAuthToken.toString(),
+            'Authorization': "${"user_token"} $userToken",
+            HttpHeaders.contentTypeHeader: headerType,
+          });
 
-    if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      authStatus = true;
+      if (response.statusCode == 200) {
+        // If the server did return a 200 OK response,
+        // then parse the JSON.
+        authStatus = true;
 
-      return jsonDecode(response.body);
-    } else if (response.statusCode == 404) {
+        return jsonDecode(response.body);
+      } else if (response.statusCode == 404) {
+        return {
+          "Session_token": "errorURL",
+        };
+      } else {
+        // If the server did not return a 200 OK response,
+        // then throw an exception.
+        authStatus = false;
+        String? errorMessage;
+        var tab = response.body.split(",");
+        errorMessage = tab[0].substring(2, tab[0].length - 1);
+        return {
+          "Session_token": errorMessage,
+        };
+      }
+    } catch (error) {
       return {
         "Session_token": "errorURL",
-      };
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      authStatus = false;
-      String? errorMessage;
-      var tab = response.body.split(",");
-      errorMessage = tab[0].substring(2, tab[0].length - 1);
-      return {
-        "Session_token": errorMessage,
       };
     }
   }
