@@ -15,8 +15,13 @@ class Computer {
   });
 
   factory Computer.fromMap(Map<String, dynamic> json) {
+    if (json["states_id"] == 0) {
+      return Computer(
+        status: "No status",
+      );
+    }
     return Computer(
-      status: json["states_id"],
+      status: json["states_id"].toString(),
     );
   }
 
