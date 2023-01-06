@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobileapp/UI/home_page.dart';
 import 'package:mobileapp/api/model.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:regexed_validator/regexed_validator.dart';
 
 class Authentification extends StatefulWidget {
   const Authentification({super.key});
@@ -159,6 +160,9 @@ class _AuthentificationState extends State<Authentification> {
       validator: (String? value) {
         if (value.toString().isEmpty) {
           return 'API URL is Required';
+        }
+        if (!validator.url(value.toString())) {
+          return 'Enter a valid URL';
         }
         return null;
       },
