@@ -50,13 +50,17 @@ class ApiMgmt {
       authStatus = true;
 
       return jsonDecode(response.body);
+    } else if (response.statusCode == 404) {
+      return {
+        "Session_token": "errorURL",
+      };
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
       authStatus = false;
-     String?  errorMessage;
-        var tab = response.body.split(",");
-        errorMessage = tab[0].substring(2, tab[0].length - 1);
+      String? errorMessage;
+      var tab = response.body.split(",");
+      errorMessage = tab[0].substring(2, tab[0].length - 1);
       return {
         "Session_token": errorMessage,
       };

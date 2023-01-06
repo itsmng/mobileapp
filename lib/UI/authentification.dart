@@ -246,8 +246,8 @@ class _AuthentificationState extends State<Authentification> {
 
     final apiResponseValue =
         await apiResponse.then((val) => val[sessionTokenField]);
-  
-    if (apiResponseValue == "ERROR_WRONG_APP_TOKEN_PARAMETER") {
+    if (apiResponseValue == "ERROR_WRONG_APP_TOKEN_PARAMETER" &&
+        apiResponseValue != null) {
       //alert error connexion
       Alert(
         context: context,
@@ -267,11 +267,32 @@ class _AuthentificationState extends State<Authentification> {
           )
         ],
       ).show();
-    } else if (apiResponseValue == "ERROR_GLPI_LOGIN_USER_TOKEN") {
+    } else if (apiResponseValue == "ERROR_GLPI_LOGIN_USER_TOKEN" &&
+        apiResponseValue != null) {
       //alert error connexion
       Alert(
         context: context,
         desc: "le paramètre user_token semble incorrect",
+        style: const AlertStyle(isCloseButton: false),
+        buttons: [
+          DialogButton(
+            color: const Color.fromARGB(255, 245, 183, 177),
+            onPressed: () => Navigator.pop(context),
+            width: 90,
+            child: const Text(
+              'Valider',
+              style: TextStyle(
+                  color: Color.fromARGB(255, 143, 90, 10),
+                  fontWeight: FontWeight.bold),
+            ),
+          )
+        ],
+      ).show();
+    } else if (apiResponseValue == "errorURL" && apiResponseValue != null) {
+      //alert error connexion
+      Alert(
+        context: context,
+        desc: "L'url semble incorrect",
         style: const AlertStyle(isCloseButton: false),
         buttons: [
           DialogButton(
