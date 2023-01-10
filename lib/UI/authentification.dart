@@ -240,12 +240,18 @@ class _AuthentificationState extends State<Authentification> {
   }
 
   void controlAuthentification() async {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      content: Text("Loading"),
+      duration: Duration(seconds: 1),
+    ));
     _formKey.currentState!.save();
     Future<dynamic> apiResponse =
         _initSession.apiMgmt.authentification(initSession);
 
     final apiResponseValue =
         await apiResponse.then((val) => val[sessionTokenField]);
+
     if (apiResponseValue == "ERROR_WRONG_APP_TOKEN_PARAMETER" &&
         apiResponseValue != null) {
       //alert error connexion
