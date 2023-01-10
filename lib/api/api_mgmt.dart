@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
@@ -37,15 +38,13 @@ class ApiMgmt {
 
   // Method to init the connexion
   dynamic authentification(String relativeUrl) async {
-    dynamic response;
     try {
-      response = await http.get(Uri.parse(getAbsoluteUrl(relativeUrl)),
+      final response = await http.get(Uri.parse(getAbsoluteUrl(relativeUrl)),
           headers: <String, String>{
             'App-token': apiAuthToken.toString(),
             'Authorization': "${"user_token"} $userToken",
             HttpHeaders.contentTypeHeader: headerType,
-          });
-
+          }).timeout(const Duration(seconds: 15));
       if (response.statusCode == 200) {
         // If the server did return a 200 OK response,
         // then parse the JSON.
@@ -67,7 +66,15 @@ class ApiMgmt {
           "Session_token": errorMessage,
         };
       }
-    } catch (error) {
+    } on SocketException catch (_) {
+      return {
+        "Session_token": "errorURL",
+      };
+    } on TimeoutException catch (_) {
+      return {
+        "Session_token": "errorURL",
+      };
+    } catch (_) {
       return {
         "Session_token": "errorURL",
       };
