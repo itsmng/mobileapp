@@ -22,6 +22,8 @@ class _TicketsPageState extends State<TicketsPage> {
   bool isAscending = false;
   int rowPerPage = 8;
 
+  final TextEditingController _searchController = TextEditingController();
+
   void onsortColoumn(int columnIndex, bool ascending) {
     if (columnIndex == 0) {
       filterData!.sort((a, b) => compareString(ascending, a.title!, b.title!));
@@ -70,6 +72,21 @@ class _TicketsPageState extends State<TicketsPage> {
             child: PaginatedDataTable(
               sortColumnIndex: sortColumnIndex,
               sortAscending: isAscending,
+              header: Container(
+                  padding: const EdgeInsets.all(5),
+                  child: TextField(
+                    controller: _searchController,
+                    decoration: const InputDecoration(
+                      hintText: "Search",
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        dataTickets = filterData!
+                            .where((element) => element.title!.contains(value))
+                            .toList();
+                      });
+                    },
+                  )),
               source: RowSourceTicket(
                 myData: dataTickets,
                 count: dataTickets.length,
