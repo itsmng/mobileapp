@@ -23,16 +23,16 @@ class _HomePageState extends State<HomePage> {
   Map<String, int> listTicketsData = {};
   Map<String, int> listComputerData = {};
 
-  dynamic apiResponse, apiResponseComputer;
+  dynamic apiResponseTicket, apiResponseComputer;
 
   @override
   void initState() {
-    super.initState();
-    apiResponse = ticket.apiMgmt.get(ApiEndpoint.apiGetAllTickets);
+    apiResponseTicket = ticket.apiMgmt.get(ApiEndpoint.apiGetAllTickets);
     apiResponseComputer = ticket.apiMgmt.get(ApiEndpoint.apiGetAllComputers);
 
     handleTickets();
     handleComputers();
+    super.initState();
   }
 
   @override
@@ -139,7 +139,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   handleTickets() async {
-    futureTicket = await ticket.fetchTicketsData(apiResponse);
+    futureTicket = await ticket.fetchTicketsData(apiResponseTicket);
 
     int newTicket = 0;
     int assignedTicket = 0;
