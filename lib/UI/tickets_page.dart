@@ -16,6 +16,32 @@ class _TicketsPageState extends State<TicketsPage> {
   late List<Tickets> dataTickets = [];
   dynamic apiRespTicket;
 
+  List<Tickets>? filterData;
+
+  int? sortColumnIndex;
+  bool isAscending = false;
+  int rowPerPage = 8;
+
+  void onsortColoumn(int columnIndex, bool ascending) {
+    if (columnIndex == 0) {
+      filterData!.sort((a, b) => compareString(ascending, a.title!, b.title!));
+    } else if (columnIndex == 1) {
+      filterData!
+          .sort((a, b) => compareString(ascending, a.category!, b.category!));
+    } else if (columnIndex == 2) {
+      filterData!
+          .sort((a, b) => compareString(ascending, a.location!, b.location!));
+    }
+    setState(() {
+      sortColumnIndex = columnIndex;
+      isAscending = ascending;
+    });
+  }
+
+  int compareString(bool ascending, String s, String t) {
+    return ascending ? s.compareTo(t) : t.compareTo(s);
+  }
+
   @override
   void initState() {
     apiRespTicket = ticket.apiMgmt.get(ApiEndpoint.apiGetAllTickets);
@@ -42,32 +68,37 @@ class _TicketsPageState extends State<TicketsPage> {
           width: double.infinity,
           child: SingleChildScrollView(
             child: PaginatedDataTable(
+              sortColumnIndex: sortColumnIndex,
+              sortAscending: isAscending,
               source: RowSourceTicket(
                 myData: dataTickets,
                 count: dataTickets.length,
               ),
-              rowsPerPage: 10,
+              rowsPerPage: rowPerPage,
               columnSpacing: 8,
-              columns: const [
+              columns: [
                 // ignore: prefer_const_constructors
                 DataColumn(
-                  label: Text(
-                    "Title",
-                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-                  ),
-                ),
+                    label: const Text(
+                      "Title",
+                      style:
+                          TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+                    ),
+                    onSort: onsortColoumn),
                 DataColumn(
-                  label: Text(
-                    "	Category",
-                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-                  ),
-                ),
+                    label: const Text(
+                      "	Category",
+                      style:
+                          TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+                    ),
+                    onSort: onsortColoumn),
                 DataColumn(
-                  label: Text(
-                    "Location",
-                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-                  ),
-                ),
+                    label: const Text(
+                      "Location",
+                      style:
+                          TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+                    ),
+                    onSort: onsortColoumn),
               ],
             ),
           )),
@@ -78,6 +109,7 @@ class _TicketsPageState extends State<TicketsPage> {
     dataTickets = await ticket.fetchTicketsData(apiRespTicket);
     setState(() {
       dataTickets;
+      filterData = dataTickets;
     });
   }
 }
