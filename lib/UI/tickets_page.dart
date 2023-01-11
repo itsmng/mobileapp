@@ -77,32 +77,22 @@ class _TicketsPageState extends State<TicketsPage> {
               rowsPerPage: rowPerPage,
               columnSpacing: 8,
               columns: [
-                // ignore: prefer_const_constructors
-                DataColumn(
-                    label: const Text(
-                      "Title",
-                      style:
-                          TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-                    ),
-                    onSort: onsortColoumn),
-                DataColumn(
-                    label: const Text(
-                      "	Category",
-                      style:
-                          TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-                    ),
-                    onSort: onsortColoumn),
-                DataColumn(
-                    label: const Text(
-                      "Location",
-                      style:
-                          TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-                    ),
-                    onSort: onsortColoumn),
+                rowDataColumn("Titile"),
+                rowDataColumn("Category"),
+                rowDataColumn("Location"),
               ],
             ),
           )),
     );
+  }
+
+  DataColumn rowDataColumn(String cell) {
+    return DataColumn(
+        label: Text(
+          cell,
+          style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+        ),
+        onSort: onsortColoumn);
   }
 
   getTicketData() async {
