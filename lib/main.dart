@@ -1,7 +1,6 @@
 //import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mobileapp/UI/authentification.dart';
-//import 'package:mobileapp/UI/authentification.dart';
 
 void main() => runApp(const MyApp());
 
@@ -16,12 +15,14 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Authentification API',
-        theme: ThemeData(
-          primarySwatch: Colors.grey,
-          primaryColor: const Color.fromARGB(255, 254, 255, 255),
-          // scaffoldBackgroundColor: const Color.fromARGB(255, 174, 12, 42)
-        ),
-        home: const Authentification());
+      title: 'Authentification API',
+      theme: ThemeData(
+        primarySwatch: Colors.grey,
+        primaryColor: const Color.fromARGB(255, 254, 255, 255),
+        // scaffoldBackgroundColor: const Color.fromARGB(255, 174, 12, 42)
+      ),
+     
+      home: const Authentification(),
+    );
   }
 }
