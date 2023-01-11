@@ -26,12 +26,12 @@ class _TicketsPageState extends State<TicketsPage> {
 
   void onsortColoumn(int columnIndex, bool ascending) {
     if (columnIndex == 0) {
-      filterData!.sort((a, b) => compareString(ascending, a.title!, b.title!));
+      dataTickets.sort((a, b) => compareString(ascending, a.title!, b.title!));
     } else if (columnIndex == 1) {
-      filterData!
+      dataTickets
           .sort((a, b) => compareString(ascending, a.category!, b.category!));
     } else if (columnIndex == 2) {
-      filterData!
+      dataTickets
           .sort((a, b) => compareString(ascending, a.location!, b.location!));
     }
     setState(() {
