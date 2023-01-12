@@ -3,6 +3,7 @@ import 'package:mobileapp/Data_table/row_source_ticket.dart';
 import 'package:mobileapp/UI/navigation_drawer.dart';
 import 'package:mobileapp/api/api_endpoints.dart';
 import 'package:mobileapp/common/multi_select.dart';
+import 'package:mobileapp/models/special_status.dart';
 import 'package:mobileapp/models/tickets_model.dart';
 
 class TicketsPage extends StatefulWidget {
@@ -15,11 +16,21 @@ class TicketsPage extends StatefulWidget {
 class _TicketsPageState extends State<TicketsPage> {
   List<String> _selectedItems = [];
 
+  // Object of the Special Status class
+  final _specialStatus = SpecialStatus();
+
   // Implement a multi select filter on the screen
   void _showMultiSelectFilter() async {
     // a list of selectable items
     // these items are fetched from a API
-    final List<String> items = ['New', 'Pending', 'Close', 'Assigned'];
+    final List<String> items = [];
+    List<SpecialStatus> allSpecialStatus =
+        await _specialStatus.getAllSpecialStatus();
+
+    // Add all special status to items
+    for (var specialStatus in allSpecialStatus) {
+      items.add(specialStatus.name.toString());
+    }
 
     // Get the list of selected item
     final List<String>? results = await showDialog(
@@ -34,19 +45,18 @@ class _TicketsPageState extends State<TicketsPage> {
       setState(() {
         _selectedItems = results;
 
-        var listStatus = {1: "New", 2: "Assigned"};
-
         // Remove elements of the list
         dataTickets = [];
 
         // Add the ferting elements in the list
         for (var element in _selectedItems) {
-          listStatus.forEach((key, value) {
-            if (element == value) {
-              dataTickets
-                  .addAll(filterData!.where((e) => e.status == key).toList());
+          for (var stat in allSpecialStatus) {
+            if (element == stat.name) {
+              dataTickets.addAll(filterData!
+                  .where((element) => element.status == stat.id)
+                  .toList());
             }
-          });
+          }
         }
       });
     }
