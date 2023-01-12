@@ -28,4 +28,7 @@ class ApiEndpoint {
   static const String apiGetAllComputersByName =
       "Computer/?expand_dropdowns=true&searchText[name]=^%s&range=0-500";
   static const String apiGetOneComputers = "Computer/%s?expand_dropdowns=true";
+
+  // Special status API Endpoint
+  static const String apiGetAllSpecialStatus = "SpecialStatus";
 }
