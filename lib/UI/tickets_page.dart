@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobileapp/Data_table/row_source_ticket.dart';
 import 'package:mobileapp/UI/navigation_drawer.dart';
 import 'package:mobileapp/api/api_endpoints.dart';
+import 'package:mobileapp/common/multi_select.dart';
 import 'package:mobileapp/models/tickets_model.dart';
 
 class TicketsPage extends StatefulWidget {
@@ -12,6 +13,45 @@ class TicketsPage extends StatefulWidget {
 }
 
 class _TicketsPageState extends State<TicketsPage> {
+  List<String> _selectedItems = [];
+
+  // Implement a multi select filter on the screen
+  void _showMultiSelectFilter() async {
+    // a list of selectable items
+    // these items are fetched from a API
+    final List<String> items = ['New', 'Pending', 'Close', 'Assigned'];
+
+    // Get the list of selected item
+    final List<String>? results = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return MultiSelect(items: items);
+      },
+    );
+
+    // Update UI
+    if (results != null) {
+      setState(() {
+        _selectedItems = results;
+
+        var listStatus = {1: "New", 2: "Assigned"};
+
+        // Remove elements of the list
+        dataTickets = [];
+
+        // Add the ferting elements in the list
+        for (var element in _selectedItems) {
+          listStatus.forEach((key, value) {
+            if (element == value) {
+              dataTickets
+                  .addAll(filterData!.where((e) => e.status == key).toList());
+            }
+          });
+        }
+      });
+    }
+  }
+
   final ticket = Tickets();
   late List<Tickets> dataTickets = [];
   dynamic apiRespTicket;
@@ -70,6 +110,13 @@ class _TicketsPageState extends State<TicketsPage> {
           width: double.infinity,
           child: SingleChildScrollView(
             child: PaginatedDataTable(
+              actions: <IconButton>[
+                IconButton(
+                  splashColor: Colors.transparent,
+                  icon: const Icon(Icons.filter_alt_outlined),
+                  onPressed: _showMultiSelectFilter,
+                ),
+              ],
               sortColumnIndex: sortColumnIndex,
               sortAscending: isAscending,
               header: Container(
