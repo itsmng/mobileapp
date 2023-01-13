@@ -33,11 +33,24 @@ class Tickets {
   });
 
   factory Tickets.fromMap(Map<String, dynamic> json) {
+    Map<int, String> listPriority = {
+      1: "Very low",
+      2: "Low",
+      3: "Medium",
+      4: "High",
+      5: "Very high",
+      6: "Major"
+    };
+
     if (json["itilcategories_id"] == 0) {
       json["itilcategories_id"] = "";
     }
     if (json["locations_id"] == 0) {
       json["locations_id"] = "";
+    }
+
+    if (listPriority.containsKey(json["priority"])) {
+      json["priority"] = listPriority[json["priority"]];
     }
 
     return Tickets(
