@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:mobileapp/models/tickets_model.dart';
 
 class RowSourceTicket extends DataTableSource {
   dynamic myData;
   final int count;
+  String customSecondHeader, customThirdHeader;
   RowSourceTicket({
     required this.myData,
     required this.count,
+    required this.customSecondHeader,
+    required this.customThirdHeader,
   });
 
   @override
   DataRow? getRow(int index) {
     if (index < rowCount) {
-      return recentDataRow(myData![index]);
+      return recentDataRow(myData![index], customSecondHeader, customThirdHeader);
     } else {
       return null;
     }
@@ -27,12 +31,14 @@ class RowSourceTicket extends DataTableSource {
   int get selectedRowCount => 0;
 }
 
-DataRow recentDataRow(var data) {
+DataRow recentDataRow(Tickets data, String firstHeaderCustomizable, String secondHeaderCustomizable) {
+
   return DataRow(
     cells: [
-      DataCell(Text(data.title ?? "Title")),
-      DataCell(Text(data.category.toString())),
-      DataCell(Text(data.location.toString())),
+      DataCell(Text(data.title.toString())),
+      // Create dynamic values  
+      DataCell(Text(data.getAttribute(firstHeaderCustomizable).toString())),
+      DataCell(Text(data.getAttribute(secondHeaderCustomizable).toString())),
     ],
   );
 }

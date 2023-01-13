@@ -46,4 +46,26 @@ class Tickets {
 
     return parsed.map<Tickets>((json) => Tickets.fromMap(json)).toList();
   }
+
+  // Method to return Tickets's attributes by selected name 
+  getAttribute(String name) {
+    switch (name) {
+      case "Date":
+        return date;
+      case "Status":
+        return status;
+      case "Time to resolve":
+        return timeToResolve;
+      case "Title":
+        return title;
+      case "Category":
+        return category;
+      case "Location":
+        return location;
+
+      // return by defaul the date if no choise
+      default:
+        return date;
+    }
+  }
 }
