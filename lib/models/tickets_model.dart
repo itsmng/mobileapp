@@ -12,6 +12,10 @@ class Tickets {
   String? title;
   String? category;
   String? location;
+  String? lastUpdate;
+  String? entity;
+  String? priority;
+  int? id;
 
   final apiMgmt = ApiMgmt();
 
@@ -22,6 +26,10 @@ class Tickets {
     this.title,
     this.category,
     this.location,
+    this.lastUpdate,
+    this.entity,
+    this.priority,
+    this.id,
   });
 
   factory Tickets.fromMap(Map<String, dynamic> json) {
@@ -31,6 +39,7 @@ class Tickets {
     if (json["locations_id"] == 0) {
       json["locations_id"] = "";
     }
+
     return Tickets(
       date: json["date"],
       status: json["status"],
@@ -38,6 +47,10 @@ class Tickets {
       title: json["name"],
       category: json["itilcategories_id"],
       location: json["locations_id"],
+      lastUpdate: json["date_mod"],
+      entity: json["entities_id"],
+      priority: json["priority"].toString(),
+      id: json["id"],
     );
   }
 
@@ -47,7 +60,7 @@ class Tickets {
     return parsed.map<Tickets>((json) => Tickets.fromMap(json)).toList();
   }
 
-  // Method to return Tickets's attributes by selected name 
+  // Method to return Tickets's attributes by selected
   getAttribute(String name) {
     switch (name) {
       case "Date":
@@ -62,6 +75,14 @@ class Tickets {
         return category;
       case "Location":
         return location;
+      case "Last update":
+        return lastUpdate;
+      case "Entity":
+        return entity;
+      case "Priority":
+        return priority;
+      case "ID":
+        return id;
 
       // return by defaul the date if no choise
       default:
