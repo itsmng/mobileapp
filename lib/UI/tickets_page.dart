@@ -95,6 +95,14 @@ class _TicketsPageState extends State<TicketsPage> {
       setState(() {
         _selectedItems = results;
 
+        // If we select one element it's fixed in the third postion of the table
+        thirdHeaderCustomizable = _selectedItems[0];
+
+        // If we select two element 
+        if (_selectedItems.length == 2) {
+          secondHeaderCustomizable = _selectedItems[0];
+          thirdHeaderCustomizable = _selectedItems[1];
+        }
       });
     }
   }
@@ -189,6 +197,8 @@ class _TicketsPageState extends State<TicketsPage> {
               source: RowSourceTicket(
                 myData: dataTickets,
                 count: dataTickets.length,
+                customSecondHeader: secondHeaderCustomizable,
+                customThirdHeader: thirdHeaderCustomizable,
               ),
               rowsPerPage: rowPerPage,
               columnSpacing: 8,
