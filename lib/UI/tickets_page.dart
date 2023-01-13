@@ -67,6 +67,38 @@ class _TicketsPageState extends State<TicketsPage> {
     }
   }
 
+  // Implement a multi select edit field on the screen
+  void _showMultiSelectEditFiled() async {
+    // a list of selectable items
+    final List<String> items = [
+      "ID",
+      "Title",
+      "Category",
+      "Location",
+      "Entity",
+      "Status",
+      "Priority",
+      "Open date",
+      "Last update",
+    ];
+
+    // Get the list of selected item
+    final List<String>? results = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return MultiSelect(items: items);
+      },
+    );
+
+    // Update UI
+    if (results != null) {
+      setState(() {
+        _selectedItems = results;
+
+      });
+    }
+  }
+
   final ticket = Tickets();
   late List<Tickets> dataTickets = [];
   dynamic apiRespTicket;
