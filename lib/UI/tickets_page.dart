@@ -16,6 +16,11 @@ class TicketsPage extends StatefulWidget {
 class _TicketsPageState extends State<TicketsPage> {
   List<String> _selectedItems = [];
 
+  // Default values of the tables
+  late String firstHeaderNoCustomizable = "Title";
+  late String secondHeaderCustomizable = "Status";
+  late String thirdHeaderCustomizable = "Open_date";
+
   // Object of the Special Status class
   final _specialStatus = SpecialStatus();
 
@@ -122,9 +127,14 @@ class _TicketsPageState extends State<TicketsPage> {
             child: PaginatedDataTable(
               actions: <IconButton>[
                 IconButton(
-                  splashColor: Colors.transparent,
+                  color: const Color.fromARGB(255, 123, 8, 29),
                   icon: const Icon(Icons.filter_alt_outlined),
                   onPressed: _showMultiSelectFilter,
+                ),
+                IconButton(
+                  color: const Color.fromARGB(255, 123, 8, 29),
+                  icon: const Icon(Icons.mode_edit),
+                  onPressed: _showMultiSelectEditFiled,
                 ),
               ],
               sortColumnIndex: sortColumnIndex,
@@ -151,19 +161,24 @@ class _TicketsPageState extends State<TicketsPage> {
               rowsPerPage: rowPerPage,
               columnSpacing: 8,
               columns: [
-                rowDataColumn("Titile"),
-                rowDataColumn("Category"),
-                rowDataColumn("Location"),
+                tableHeaders(firstHeaderNoCustomizable),
+                tableHeaders(secondHeaderCustomizable),
+                tableHeaders(thirdHeaderCustomizable),
               ],
             ),
           )),
     );
   }
 
-  DataColumn rowDataColumn(String cell) {
+  DataColumn tableHeaders(String name) {
+    // Replace the underscore by space
+    if (name.contains("_")) {
+      name = name.replaceAll("_", " ");
+    }
+
     return DataColumn(
         label: Text(
-          cell,
+          name,
           style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
         ),
         onSort: onsortColoumn);
