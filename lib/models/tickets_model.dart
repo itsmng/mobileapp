@@ -71,10 +71,33 @@ class Tickets {
     );
   }
 
+  // Method to get all special status and return a list of them
+  static Future<Map<int, String>> getSpecialStatusValues() async {
+    final specialStatusObject = SpecialStatus();
+    List<SpecialStatus> specialStatuses =
+        await specialStatusObject.getAllSpecialStatus();
+    Map<int, String> list = {};
+    for (var e in specialStatuses) {
+      list[e.id!] = e.name.toString();
+    }
+    return list;
+  }
+
   Future<List<Tickets>> fetchTicketsData(dynamic data) async {
     final parsed = json.decode(await data).cast<Map<String, dynamic>>();
+    var listTickets = parsed.map<Tickets>((json) => Tickets.fromMap(json)).toList();
 
-    return parsed.map<Tickets>((json) => Tickets.fromMap(json)).toList();
+    // Retrieve the list of the special status
+    Map<int, String> listStatus = await getSpecialStatusValues();
+
+    // Replace the special status id by there matching name
+    for (Tickets ele in listTickets) {
+      if (listStatus.containsKey(ele.statusID)) {
+        ele.statusValue = listStatus[ele.statusID];
+      }
+    }
+
+    return listTickets;
   }
 
   // Method to return Tickets's attributes by selected
