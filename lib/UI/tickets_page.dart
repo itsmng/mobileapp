@@ -58,7 +58,7 @@ class _TicketsPageState extends State<TicketsPage> {
           for (var stat in allSpecialStatus) {
             if (element == stat.name) {
               dataTickets.addAll(filterData!
-                  .where((element) => element.status == stat.id)
+                  .where((element) => element.statusID == stat.id)
                   .toList());
             }
           }

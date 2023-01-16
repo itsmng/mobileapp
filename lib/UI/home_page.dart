@@ -151,13 +151,13 @@ class _HomePageState extends State<HomePage> {
     late Duration diff;
 
     for (var element in futureTicket) {
-      if (element.status == 1) {
+      if (element.statusID == 1) {
         newTicket++;
-      } else if (element.status == 2) {
+      } else if (element.statusID == 2) {
         assignedTicket++;
-      } else if (element.status == 3) {
+      } else if (element.statusID == 3) {
         plannedTickets++;
-      } else if (element.status == 4) {
+      } else if (element.statusID == 4) {
         pendingTickets++;
       }
 

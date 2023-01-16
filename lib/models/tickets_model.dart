@@ -1,13 +1,15 @@
 import 'dart:convert';
 
 import 'package:mobileapp/api/api_mgmt.dart';
+import 'package:mobileapp/models/special_status.dart';
 
 List<Tickets> postFromJson(String str) =>
     List<Tickets>.from(json.decode(str).map((x) => Tickets.fromMap(x)));
 
 class Tickets {
   String? date;
-  int? status;
+  int? statusID;
+  String? statusValue;
   String? timeToResolve;
   String? title;
   String? category;
@@ -21,7 +23,7 @@ class Tickets {
 
   Tickets({
     this.date,
-    this.status,
+    this.statusID,
     this.timeToResolve,
     this.title,
     this.category,
@@ -30,6 +32,7 @@ class Tickets {
     this.entity,
     this.priority,
     this.id,
+    this.statusValue,
   });
 
   factory Tickets.fromMap(Map<String, dynamic> json) {
@@ -55,7 +58,7 @@ class Tickets {
 
     return Tickets(
       date: json["date"],
-      status: json["status"],
+      statusID: json["status"],
       timeToResolve: json["time_to_resolve"],
       title: json["name"],
       category: json["itilcategories_id"],
@@ -64,6 +67,7 @@ class Tickets {
       entity: json["entities_id"],
       priority: json["priority"].toString(),
       id: json["id"],
+      statusValue: json["status"].toString(),
     );
   }
 
@@ -79,7 +83,7 @@ class Tickets {
       case "Date":
         return date;
       case "Status":
-        return status;
+        return statusValue;
       case "Time to resolve":
         return timeToResolve;
       case "Title":
