@@ -72,7 +72,6 @@ class _TicketsPageState extends State<TicketsPage> {
     // a list of selectable items
     final List<String> items = [
       "ID",
-      "Title",
       "Category",
       "Location",
       "Entity",
@@ -98,7 +97,7 @@ class _TicketsPageState extends State<TicketsPage> {
         // If we select one element it's fixed in the third postion of the table
         thirdHeaderCustomizable = _selectedItems[0];
 
-        // If we select two element 
+        // If we select two element
         if (_selectedItems.length == 2) {
           secondHeaderCustomizable = _selectedItems[0];
           thirdHeaderCustomizable = _selectedItems[1];
@@ -199,6 +198,7 @@ class _TicketsPageState extends State<TicketsPage> {
                 count: dataTickets.length,
                 customSecondHeader: secondHeaderCustomizable,
                 customThirdHeader: thirdHeaderCustomizable,
+                context: context,
               ),
               rowsPerPage: rowPerPage,
               columnSpacing: 8,
