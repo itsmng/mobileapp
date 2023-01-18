@@ -254,6 +254,7 @@ class _AuthentificationState extends State<Authentification> {
 
     if (apiResponseValue == "ERROR_WRONG_APP_TOKEN_PARAMETER" &&
         apiResponseValue != null) {
+          if (!mounted) return;
       //alert error connexion
       Alert(
         context: context,
@@ -275,6 +276,7 @@ class _AuthentificationState extends State<Authentification> {
       ).show();
     } else if (apiResponseValue == "ERROR_GLPI_LOGIN_USER_TOKEN" &&
         apiResponseValue != null) {
+          if (!mounted) return;
       //alert error connexion
       Alert(
         context: context,
@@ -295,6 +297,7 @@ class _AuthentificationState extends State<Authentification> {
         ],
       ).show();
     } else if (apiResponseValue == "errorURL" && apiResponseValue != null) {
+      if (!mounted) return;
       //alert error connexion
       Alert(
         context: context,

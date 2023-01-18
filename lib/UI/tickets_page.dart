@@ -37,6 +37,7 @@ class _TicketsPageState extends State<TicketsPage> {
       items.add(specialStatus.name.toString());
     }
 
+    if (!mounted) return;
     // Get the list of selected item
     final List<String>? results = await showDialog(
       context: context,
@@ -148,7 +149,7 @@ class _TicketsPageState extends State<TicketsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: NavigationDrawer(),
+      drawer: const NavigationDrawerMenu(),
       appBar: AppBar(
         title: const Text('All tickets'),
         centerTitle: true,

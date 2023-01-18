@@ -4,10 +4,9 @@ import 'package:mobileapp/UI/home_page.dart';
 import 'package:mobileapp/UI/tickets_page.dart';
 import 'package:mobileapp/UI/computers_page.dart';
 
-class NavigationDrawer extends StatelessWidget {
-  NavigationDrawer({super.key});
-  // ignore: prefer_const_constructors
-  final padding = EdgeInsets.symmetric(horizontal: 20);
+class NavigationDrawerMenu extends StatelessWidget {
+  const NavigationDrawerMenu({super.key});
+  final padding = const EdgeInsets.symmetric(horizontal: 20);
 
   @override
   Widget build(BuildContext context) {

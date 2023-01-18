@@ -6,7 +6,7 @@ class ComputersPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        drawer: NavigationDrawer(),
+        drawer: const NavigationDrawerMenu(),
         appBar: AppBar(
           title: const Text('Computers'),
           centerTitle: true,
