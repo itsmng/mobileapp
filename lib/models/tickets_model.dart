@@ -71,6 +71,8 @@ class Tickets {
     );
   }
 
+  static Map<String, dynamic> toJson(Tickets value) => {'name': value.title};
+
   // Method to get all special status and return a list of them
   static Future<Map<int, String>> getSpecialStatusValues() async {
     final specialStatusObject = SpecialStatus();
@@ -83,9 +85,11 @@ class Tickets {
     return list;
   }
 
+  // A function that converts a response body into a List<Photo>.
   Future<List<Tickets>> fetchTicketsData(dynamic data) async {
     final parsed = json.decode(await data).cast<Map<String, dynamic>>();
-    var listTickets = parsed.map<Tickets>((json) => Tickets.fromMap(json)).toList();
+    var listTickets =
+        parsed.map<Tickets>((json) => Tickets.fromMap(json)).toList();
 
     // Retrieve the list of the special status
     Map<int, String> listStatus = await getSpecialStatusValues();

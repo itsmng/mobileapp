@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:mobileapp/UI/tickets_page.dart';
+import 'package:mobileapp/api/api_endpoints.dart';
+import 'package:mobileapp/common/message.dart';
 import 'package:mobileapp/form_fields.dart/button.dart';
 import 'package:mobileapp/form_fields.dart/form_fields_ticket.dart';
 import 'package:mobileapp/models/tickets_model.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 
 class DetailTicket extends StatefulWidget {
   const DetailTicket({super.key, required this.ticket});
@@ -19,6 +21,12 @@ class _DetailTicketState extends State<DetailTicket> {
   final buttonForm = Button();
 
   final TextEditingController _titleController = TextEditingController();
+
+  final objectTicket = Tickets();
+  dynamic responseAPI;
+  Map updateData = {};
+
+  final messages = Messages();
 
   @override
   void initState() {
@@ -57,24 +65,27 @@ class _DetailTicketState extends State<DetailTicket> {
                       if (!_formKeyTicket.currentState!.validate()) {
                         return;
                       } else {
-                        Alert(
-                          context: context,
-                          desc: "${_titleController.text} ",
-                          style: const AlertStyle(isCloseButton: false),
-                          buttons: [
-                            DialogButton(
-                              color: const Color.fromARGB(255, 245, 183, 177),
-                              onPressed: () => Navigator.pop(context),
-                              width: 90,
-                              child: const Text(
-                                'Valider',
-                                style: TextStyle(
-                                    color: Color.fromARGB(255, 143, 90, 10),
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            )
-                          ],
-                        ).show();
+                        updateData["name"] = _titleController.text;
+                        responseAPI = objectTicket.apiMgmt.put(
+                            ApiEndpoint.apiUpdateTicket,
+                            widget.ticket.id!,
+                            updateData);
+
+                        final apiResponseValue =
+                            await responseAPI.then((val) => val["update"]);
+                        
+                        if (apiResponseValue == "true") {
+                          if (!mounted) return;
+                          messages.messageBottomBar(
+                              "Item successfully updated: ${widget.ticket.title}",
+                              context);
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const TicketsPage(),
+                          ));
+                        } else {
+                          if (!mounted) return;
+                          messages.sendAlert("Update cancelled", context);
+                        }
                       }
                     },
                   )
