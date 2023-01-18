@@ -43,6 +43,54 @@ class ApiMgmt {
     }
   }
 
+  dynamic put(String relativeUrl, int id, Map dataToJson) async {
+    try {
+      // obtain shared preferences
+      final prefs = await SharedPreferences.getInstance();
+
+      final jsonText = jsonEncode({'input': dataToJson},
+          toEncodable: (Object? value) => value is Tickets
+              ? Tickets.toJson(value)
+              : throw UnsupportedError('Cannot convert to JSON: $value'));
+      final response = await http
+          .put(
+              Uri.parse(getAbsoluteUrlWithID(
+                  prefs.getString('URL').toString(), relativeUrl, id)),
+              headers: <String, String>{
+                'App-token': prefs.getString('App-token') ?? 0.toString(),
+                'Session-token':
+                    prefs.getString('Session-token') ?? 0.toString(),
+                HttpHeaders.contentTypeHeader: headerType,
+              },
+              body: jsonText)
+          .timeout(const Duration(seconds: 60));
+
+      if (response.statusCode == 200) {
+        // If the server did return a 200 OK response,
+        return {
+          "update": "true",
+        };
+      } else {
+        // If the server did not return a 200 OK response,
+        return {
+          "update": "false",
+        };
+      }
+    } on SocketException catch (_) {
+      return {
+        "update": "errorUpdate",
+      };
+    } on TimeoutException catch (_) {
+      return {
+        "update": "errorUpdate",
+      };
+    } catch (_) {
+      return {
+        "update": "errorUpdate",
+      };
+    }
+  }
+
   // Method to init the connexion
   dynamic authentification(String relativeUrl, String apiAuthToken,
       String userToken, String apiBaseUrl) async {

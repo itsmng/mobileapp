@@ -73,7 +73,7 @@ class _DetailTicketState extends State<DetailTicket> {
 
                         final apiResponseValue =
                             await responseAPI.then((val) => val["update"]);
-                        
+
                         if (apiResponseValue == "true") {
                           if (!mounted) return;
                           messages.messageBottomBar(
@@ -82,6 +82,10 @@ class _DetailTicketState extends State<DetailTicket> {
                           Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => const TicketsPage(),
                           ));
+                        } else if (apiResponseValue == "errorUpdate") {
+                          if (!mounted) return;
+                          messages.sendAlert(
+                              "Error to update: Check API connexion", context);
                         } else {
                           if (!mounted) return;
                           messages.sendAlert("Update cancelled", context);
