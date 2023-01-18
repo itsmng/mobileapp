@@ -150,7 +150,7 @@ class _TicketsPageState extends State<TicketsPage> {
     return Scaffold(
       drawer: NavigationDrawer(),
       appBar: AppBar(
-        title: const Text('Tickets'),
+        title: const Text('All tickets'),
         centerTitle: true,
         backgroundColor: const Color.fromARGB(255, 123, 8, 29),
         foregroundColor: const Color.fromARGB(255, 255, 255, 255),

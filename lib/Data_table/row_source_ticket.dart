@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobileapp/UI/update_ticket.dart';
+import 'package:mobileapp/UI/detail_ticket.dart';
 import 'package:mobileapp/models/tickets_model.dart';
 
 class RowSourceTicket extends DataTableSource {
@@ -44,7 +44,7 @@ DataRow recentDataRow(Tickets data, String firstHeaderCustomizable,
           onTap: (() => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => UpdateTicket(
+                builder: (context) => DetailTicket(
                   ticket: data,
                 ),
               )))),
