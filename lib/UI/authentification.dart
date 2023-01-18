@@ -15,9 +15,6 @@ class _AuthentificationState extends State<Authentification> {
   static final _initSession = InitSession();
   late Future<InitSession> futureSession;
 
-  String _url = _initSession.apiMgmt.apiBaseUrl;
-  String _apiToken = _initSession.apiMgmt.apiAuthToken;
-  String _userToken = _initSession.apiMgmt.userToken;
   bool _checkSSL = _initSession.apiMgmt.checkSSL;
   late String sessionTokenValue;
   static const String initSession = "initSession";
@@ -30,9 +27,9 @@ class _AuthentificationState extends State<Authentification> {
 
   @override
   void initState() {
-    _urlController.text = _url;
-    _apiTokenController.text = _apiToken;
-    _userTokenController.text = _userToken;
+    _urlController.text = _initSession.apiMgmt.urlAPI;
+    _apiTokenController.text = _initSession.apiMgmt.appTokenAPI;
+    _userTokenController.text = _initSession.apiMgmt.userTokenAPI;
     return super.initState();
   }
 
@@ -137,13 +134,7 @@ class _AuthentificationState extends State<Authentification> {
         }
         return null;
       },
-      onSaved: (String? value) {
-        _url = value.toString();
-        _initSession.apiMgmt.setApiBaseUrl(_url.toString());
-      },
-      onChanged: (String value) {
-        _url = value;
-      },
+
       style: const TextStyle(color: Colors.white),
     );
   }
@@ -171,13 +162,6 @@ class _AuthentificationState extends State<Authentification> {
         }
         return null;
       },
-      onSaved: (String? value) {
-        _apiToken = value.toString();
-        _initSession.apiMgmt.setApiAuthToken(_apiToken);
-      },
-      onChanged: (String value) {
-        _apiToken = value;
-      },
       style: const TextStyle(color: Colors.white),
     );
   }
@@ -204,13 +188,6 @@ class _AuthentificationState extends State<Authentification> {
           return 'API token is Required';
         }
         return null;
-      },
-      onSaved: (String? value) {
-        _userToken = value.toString();
-        _initSession.apiMgmt.setUserToken(_userToken);
-      },
-      onChanged: (String value) {
-        _userToken = value;
       },
       style: const TextStyle(color: Colors.white),
     );
@@ -246,15 +223,18 @@ class _AuthentificationState extends State<Authentification> {
       duration: Duration(seconds: 1),
     ));
     _formKey.currentState!.save();
-    Future<dynamic> apiResponse =
-        _initSession.apiMgmt.authentification(initSession);
+    Future<dynamic> apiResponse = _initSession.apiMgmt.authentification(
+        initSession,
+        _apiTokenController.text,
+        _userTokenController.text,
+        _urlController.text);
 
     final apiResponseValue =
         await apiResponse.then((val) => val[sessionTokenField]);
 
     if (apiResponseValue == "ERROR_WRONG_APP_TOKEN_PARAMETER" &&
         apiResponseValue != null) {
-          if (!mounted) return;
+      if (!mounted) return;
       //alert error connexion
       Alert(
         context: context,
@@ -276,7 +256,7 @@ class _AuthentificationState extends State<Authentification> {
       ).show();
     } else if (apiResponseValue == "ERROR_GLPI_LOGIN_USER_TOKEN" &&
         apiResponseValue != null) {
-          if (!mounted) return;
+      if (!mounted) return;
       //alert error connexion
       Alert(
         context: context,
@@ -320,6 +300,16 @@ class _AuthentificationState extends State<Authentification> {
     } else {
       futureSession = _initSession.fetchInitSessionData(apiResponse);
       futureSession.then((InitSession data) {
+        _initSession.apiMgmt
+            .saveStringData("Session-token", data.sessionToken.toString());
+        _initSession.apiMgmt
+            .saveStringData("App-token", _apiTokenController.text);
+        _initSession.apiMgmt
+            .saveStringData("User-token", _userTokenController.text);
+        _initSession.apiMgmt.saveStringData("URL", _urlController.text);
+        _initSession.apiMgmt.saveBoolData("SSL", _checkSSL);
+        _initSession.apiMgmt.saveBoolData("Auth-status", _initSession.apiMgmt.authStatus);
+
         _initSession.apiMgmt.setApiSessionToken(data.sessionToken.toString());
         if (_initSession.apiMgmt.apiSessionToken != null) {
           if (!mounted) return;

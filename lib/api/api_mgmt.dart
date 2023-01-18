@@ -2,13 +2,15 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:mobileapp/models/tickets_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 ///Class to manage api call
 class ApiMgmt {
-  String? apiBaseUrl;
-  String? apiAuthToken;
+  String urlAPI = "";
+  String appTokenAPI = "";
+  String userTokenAPI = "";
   String? apiSessionToken;
-  String? userToken;
   bool checkSSL = false;
   bool authStatus = false;
   final String headerType = "application/json;charset=UTF-8";
@@ -16,12 +18,17 @@ class ApiMgmt {
   ApiMgmt();
 
   dynamic get(String relativeUrl) async {
-    final response = await http
-        .get(Uri.parse(getAbsoluteUrl(relativeUrl)), headers: <String, String>{
-      'App-token': apiAuthToken.toString(),
-      'Session-token': apiSessionToken.toString(),
-      HttpHeaders.contentTypeHeader: headerType,
-    });
+    // obtain shared preferences
+    final prefs = await SharedPreferences.getInstance();
+
+    final response = await http.get(
+        Uri.parse(
+            getAbsoluteUrl(prefs.getString('URL').toString(), relativeUrl)),
+        headers: <String, String>{
+          'App-token': prefs.getString('App-token') ?? 0.toString(),
+          'Session-token': prefs.getString('Session-token') ?? 0.toString(),
+          HttpHeaders.contentTypeHeader: headerType,
+        });
 
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
@@ -37,11 +44,13 @@ class ApiMgmt {
   }
 
   // Method to init the connexion
-  dynamic authentification(String relativeUrl) async {
+  dynamic authentification(String relativeUrl, String apiAuthToken,
+      String userToken, String apiBaseUrl) async {
     try {
-      final response = await http.get(Uri.parse(getAbsoluteUrl(relativeUrl)),
+      final response = await http.get(
+          Uri.parse(getAbsoluteUrl(apiBaseUrl, relativeUrl)),
           headers: <String, String>{
-            'App-token': apiAuthToken.toString(),
+            'App-token': apiAuthToken,
             'Authorization': "${"user_token"} $userToken",
             HttpHeaders.contentTypeHeader: headerType,
           }).timeout(const Duration(seconds: 15));
@@ -49,6 +58,12 @@ class ApiMgmt {
         // If the server did return a 200 OK response,
         // then parse the JSON.
         authStatus = true;
+
+        // obtain shared preferences
+        final prefs = await SharedPreferences.getInstance();
+        urlAPI = prefs.getString('URL').toString();
+        appTokenAPI = prefs.getString('App-token').toString();
+        userTokenAPI = prefs.getString('User-token').toString();
 
         return jsonDecode(response.body);
       } else if (response.statusCode == 404) {
@@ -83,12 +98,17 @@ class ApiMgmt {
 
   // Metod to logged out
   void logoutFromItsmAPI(String relativeUrl) async {
-    final response = await http
-        .get(Uri.parse(getAbsoluteUrl(relativeUrl)), headers: <String, String>{
-      'App-token': apiAuthToken.toString(),
-      'Session-token': apiSessionToken.toString(),
-      HttpHeaders.contentTypeHeader: headerType,
-    });
+    // obtain shared preferences
+    final prefs = await SharedPreferences.getInstance();
+
+    final response = await http.get(
+        Uri.parse(
+            getAbsoluteUrl(prefs.getString('URL').toString(), relativeUrl)),
+        headers: <String, String>{
+          'App-token': prefs.getString('App-token') ?? 0.toString(),
+          'Session-token': prefs.getString('Session-token') ?? 0.toString(),
+          HttpHeaders.contentTypeHeader: headerType,
+        });
 
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
@@ -102,29 +122,34 @@ class ApiMgmt {
   }
 
   // return the the url with API url + endpoind as parameter
-  String getAbsoluteUrl(String endpoint) {
-    final String uri = apiBaseUrl.toString() + endpoint;
+  String getAbsoluteUrl(String apiBaseUrl, String endpoint) {
+    final String uri = apiBaseUrl + endpoint;
     return uri;
+  }
+
+  // return the the url with API url + endpoind as parameter
+  String getAbsoluteUrlWithID(String apiBaseUrl, String endpoint, int id) {
+    final String uri = apiBaseUrl + endpoint + id.toString();
+    return uri;
+  }
+
+  // Save data on the disk
+  Future<void> saveStringData(String key, String value) async {
+    final prefs = await SharedPreferences.getInstance();
+    // set value
+    await prefs.setString(key, value);
+  }
+
+  // Save data on the disk
+  Future<void> saveBoolData(String key, bool value) async {
+    final prefs = await SharedPreferences.getInstance();
+    // set value
+    await prefs.setBool(key, value);
   }
 
   // Set api session token
   void setApiSessionToken(String sessionToken) {
     apiSessionToken = sessionToken;
-  }
-
-  // set the url of the API
-  void setApiBaseUrl(String apiBaseUrl) {
-    this.apiBaseUrl = apiBaseUrl;
-  }
-
-  // Set the token of the API
-  void setApiAuthToken(String apiAuthToken) {
-    this.apiAuthToken = apiAuthToken;
-  }
-
-  // Set the token of the user
-  void setUserToken(String userToken) {
-    this.userToken = userToken;
   }
 
   // Set the the ssl check
