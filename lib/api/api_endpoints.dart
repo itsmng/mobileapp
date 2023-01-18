@@ -4,7 +4,7 @@ class ApiEndpoint {
 
   // Ticket API Endpoint
   static const String apiRootTicket = "Ticket/";
-  static const String apiUpdateTicket = "Ticket/%s";
+  static const String apiUpdateTicket = "Ticket/";
   static const String apiGetAllTickets =
       "Ticket/?expand_dropdowns=true&range=0-500";
   static const String apiGetMyTickets =
