@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mobileapp/form_fields.dart/button.dart';
 import 'package:mobileapp/form_fields.dart/form_fields_ticket.dart';
 import 'package:mobileapp/models/tickets_model.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class DetailTicket extends StatefulWidget {
   const DetailTicket({super.key, required this.ticket});
@@ -14,6 +16,7 @@ class _DetailTicketState extends State<DetailTicket> {
   final GlobalKey<FormState> _formKeyTicket = GlobalKey<FormState>();
 
   final formFieldsTicket = FormFieldsTicket();
+  final buttonForm = Button();
 
   final TextEditingController _titleController = TextEditingController();
 
@@ -46,6 +49,35 @@ class _DetailTicketState extends State<DetailTicket> {
                   const SizedBox(
                     height: 10,
                   ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  buttonForm.buttonSave(
+                    () async {
+                      if (!_formKeyTicket.currentState!.validate()) {
+                        return;
+                      } else {
+                        Alert(
+                          context: context,
+                          desc: "${_titleController.text} ",
+                          style: const AlertStyle(isCloseButton: false),
+                          buttons: [
+                            DialogButton(
+                              color: const Color.fromARGB(255, 245, 183, 177),
+                              onPressed: () => Navigator.pop(context),
+                              width: 90,
+                              child: const Text(
+                                'Valider',
+                                style: TextStyle(
+                                    color: Color.fromARGB(255, 143, 90, 10),
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            )
+                          ],
+                        ).show();
+                      }
+                    },
+                  )
                 ],
               )),
         ),
