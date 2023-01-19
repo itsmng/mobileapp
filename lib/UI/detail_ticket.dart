@@ -44,6 +44,29 @@ class _DetailTicketState extends State<DetailTicket> {
     return menuItems;
   }
 
+  Map<int, String> listStatus = {
+    1: "New",
+    2: "Assigned",
+    3: "Planned",
+    4: "Pending",
+    5: "Solved",
+    6: "Closed"
+  };
+  late String selectedStatus;
+  List<DropdownMenuItem<String>> get dropdownStatus {
+    List<DropdownMenuItem<String>> menuItems = [
+      const DropdownMenuItem(value: "New", child: Text("New")),
+      const DropdownMenuItem(
+          value: "Processing (assigned)", child: Text("Aassigned")),
+      const DropdownMenuItem(
+          value: "Processing (planned)", child: Text("Planned")),
+      const DropdownMenuItem(value: "Pending", child: Text("Pending")),
+      const DropdownMenuItem(value: "Solved", child: Text("Solved")),
+      const DropdownMenuItem(value: "Closed", child: Text("Closed")),
+    ];
+    return menuItems;
+  }
+
   final objectTicket = Tickets();
   dynamic responseAPI;
   Map updateData = {};
@@ -54,6 +77,7 @@ class _DetailTicketState extends State<DetailTicket> {
   void initState() {
     _titleController.text = widget.ticket.title.toString();
     selectedPriority = widget.ticket.priority.toString();
+    selectedStatus = widget.ticket.statusValue.toString();
     super.initState();
   }
 
@@ -67,6 +91,12 @@ class _DetailTicketState extends State<DetailTicket> {
         foregroundColor: const Color.fromARGB(255, 255, 255, 255),
       ),
       body: Container(
+        padding: const EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+          color: Theme.of(context).canvasColor,
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        width: double.infinity,
         margin: const EdgeInsets.all(12),
         child: SingleChildScrollView(
           child: Form(
@@ -108,7 +138,32 @@ class _DetailTicketState extends State<DetailTicket> {
                         ),
                       ),
                       const SizedBox(
-                        width: 50,
+                        width: 15,
+                      ),
+                      Expanded(
+                        child: DropdownButtonFormField(
+                          value: selectedStatus,
+                          items: dropdownStatus,
+                          onChanged: (String? value) {
+                            setState(() {
+                              selectedStatus = value!;
+                            });
+                          },
+                          decoration: const InputDecoration(
+                            labelText: 'Status',
+                            prefixIcon: Icon(Icons.query_stats_sharp,
+                                color: Colors.black),
+                            focusColor: Colors.black,
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                  width: 3, color: Colors.greenAccent),
+                            ),
+                            labelStyle: TextStyle(color: Colors.black),
+                            errorStyle: TextStyle(
+                                color: Color.fromARGB(255, 245, 183, 177),
+                                fontStyle: FontStyle.italic),
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -123,8 +178,12 @@ class _DetailTicketState extends State<DetailTicket> {
                         var priorityID = listPriority.keys.where((element) =>
                             listPriority[element] == selectedPriority);
 
+                        var statusID = listStatus.keys.where(
+                            (element) => listStatus[element] == selectedStatus);
+
                         updateData["name"] = _titleController.text;
                         updateData["priority"] = priorityID.first;
+                        updateData["status"] = statusID.first;
 
                         responseAPI = objectTicket.apiMgmt.put(
                             ApiEndpoint.apiUpdateTicket,

@@ -71,8 +71,11 @@ class Tickets {
     );
   }
 
-  static Map<String, dynamic> toJson(Tickets value) =>
-      {'name': value.title, 'priority': value.priority};
+  static Map<String, dynamic> toJson(Tickets value) => {
+        'name': value.title,
+        'priority': value.priority,
+        'status': value.statusValue
+      };
 
   // Method to get all special status and return a list of them
   static Future<Map<int, String>> getSpecialStatusValues() async {
