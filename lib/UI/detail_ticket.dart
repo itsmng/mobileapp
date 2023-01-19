@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:mobileapp/UI/tickets_page.dart';
 import 'package:mobileapp/api/api_endpoints.dart';
+import 'package:mobileapp/common/dropdown.dart';
 import 'package:mobileapp/common/message.dart';
 import 'package:mobileapp/form_fields.dart/button.dart';
 import 'package:mobileapp/form_fields.dart/form_fields_ticket.dart';
+import 'package:mobileapp/models/special_status.dart';
 import 'package:mobileapp/models/tickets_model.dart';
 
 class DetailTicket extends StatefulWidget {
@@ -21,6 +23,16 @@ class _DetailTicketState extends State<DetailTicket> {
   final buttonForm = Button();
 
   final TextEditingController _titleController = TextEditingController();
+
+  final objectTicket = Tickets();
+  dynamic responseAPI;
+  Map updateData = {};
+
+  final messages = Messages();
+  final dropdown = Dropdown();
+
+  Map<int, String> listStatus = {};
+  late String selectedStatus;
 
   Map<int, String> listPriority = {
     1: "Very low",
@@ -44,29 +56,6 @@ class _DetailTicketState extends State<DetailTicket> {
     return menuItems;
   }
 
-  Map<int, String> listStatus = {
-    1: "New",
-    2: "Assigned",
-    3: "Planned",
-    4: "Pending",
-    5: "Solved",
-    6: "Closed"
-  };
-  late String selectedStatus;
-  List<DropdownMenuItem<String>> get dropdownStatus {
-    List<DropdownMenuItem<String>> menuItems = [
-      const DropdownMenuItem(value: "New", child: Text("New")),
-      const DropdownMenuItem(
-          value: "Processing (assigned)", child: Text("Aassigned")),
-      const DropdownMenuItem(
-          value: "Processing (planned)", child: Text("Planned")),
-      const DropdownMenuItem(value: "Pending", child: Text("Pending")),
-      const DropdownMenuItem(value: "Solved", child: Text("Solved")),
-      const DropdownMenuItem(value: "Closed", child: Text("Closed")),
-    ];
-    return menuItems;
-  }
-
   Map<int, String> listEntities = {
     0: "root entity",
     1: "under root entity",
@@ -81,18 +70,13 @@ class _DetailTicketState extends State<DetailTicket> {
     return menuItems;
   }
 
-  final objectTicket = Tickets();
-  dynamic responseAPI;
-  Map updateData = {};
-
-  final messages = Messages();
-
   @override
   void initState() {
     _titleController.text = widget.ticket.title.toString();
     selectedPriority = widget.ticket.priority.toString();
     selectedStatus = widget.ticket.statusValue.toString();
     selectedEntity = widget.ticket.entity.toString();
+    getAllStatus();
     super.initState();
   }
 
@@ -158,7 +142,7 @@ class _DetailTicketState extends State<DetailTicket> {
                       Expanded(
                         child: DropdownButtonFormField(
                           value: selectedStatus,
-                          items: dropdownStatus,
+                          items: dropdown.dropdownItem(listStatus),
                           onChanged: (String? value) {
                             setState(() {
                               selectedStatus = value!;
@@ -228,12 +212,11 @@ class _DetailTicketState extends State<DetailTicket> {
 
                         var entityID = listEntities.keys.where((element) =>
                             listEntities[element] == selectedEntity);
-                        print(entityID.first);
 
                         updateData["name"] = _titleController.text;
                         updateData["priority"] = priorityID.first;
                         updateData["status"] = statusID.first;
-                        updateData["entities_id"] = statusID.first;
+                        updateData["entities_id"] = entityID.first;
 
                         responseAPI = objectTicket.apiMgmt.put(
                             ApiEndpoint.apiUpdateTicket,
@@ -267,5 +250,17 @@ class _DetailTicketState extends State<DetailTicket> {
         ),
       ),
     );
+  }
+
+  getAllStatus() async {
+    // Object of the Special Status class
+    final specialStatus = SpecialStatus();
+    List<SpecialStatus> allSpecialStatus =
+        await specialStatus.getAllSpecialStatus();
+    setState(() {
+      for (var e in allSpecialStatus) {
+        listStatus[e.id!] = e.name.toString();
+      }
+    });
   }
 }
