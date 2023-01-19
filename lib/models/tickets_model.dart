@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:mobileapp/api/api_mgmt.dart';
 import 'package:mobileapp/models/special_status.dart';
+import 'package:mobileapp/models/ticket_user.dart';
 
 List<Tickets> postFromJson(String str) =>
     List<Tickets>.from(json.decode(str).map((x) => Tickets.fromMap(x)));
@@ -20,6 +21,8 @@ class Tickets {
   int? id;
   String? recipient;
   String? content;
+  String? assignedUser;
+  int? assignedUserID;
 
   final apiMgmt = ApiMgmt();
 
@@ -37,6 +40,7 @@ class Tickets {
     this.statusValue,
     this.recipient,
     this.content,
+    this.assignedUser,
   });
 
   factory Tickets.fromMap(Map<String, dynamic> json) {
@@ -77,6 +81,7 @@ class Tickets {
       statusValue: json["status"].toString(),
       recipient: json["users_id_recipient"],
       content: json["content"],
+      assignedUser: "",
     );
   }
 
@@ -115,6 +120,19 @@ class Tickets {
       }
     }
 
+    final ticketUser = TicketUser();
+    List<TicketUser> allTicketUsers = await ticketUser.getAllTicketUsers();
+
+    // Add assigned user in the corresponding ticket
+    for (Tickets ticket in listTickets) {
+      for (TicketUser ticketUser in allTicketUsers) {
+        if (ticketUser.ticketsID == ticket.title.toString()) {
+          ticket.assignedUser = ticketUser.userID;
+          ticket.assignedUserID = ticketUser.id;
+        }
+      }
+    }
+ 
     return listTickets;
   }
 
