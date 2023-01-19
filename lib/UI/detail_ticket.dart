@@ -10,6 +10,7 @@ import 'package:mobileapp/models/itil_category.dart';
 import 'package:mobileapp/models/location.dart';
 import 'package:mobileapp/models/special_status.dart';
 import 'package:mobileapp/models/tickets_model.dart';
+import 'package:mobileapp/models/user.dart';
 
 class DetailTicket extends StatefulWidget {
   const DetailTicket({super.key, required this.ticket});
@@ -46,6 +47,9 @@ class _DetailTicketState extends State<DetailTicket> {
   Map<int, String> listITILCategory = {};
   late String selectedITILCategory;
 
+  Map<int, String> listUsers = {};
+  late String selectedUserRecipient;
+
   Map<int, String> listPriority = {
     1: "Very low",
     2: "Low",
@@ -76,11 +80,13 @@ class _DetailTicketState extends State<DetailTicket> {
     selectedEntity = widget.ticket.entity.toString();
     selectedLocation = widget.ticket.location.toString();
     selectedITILCategory = widget.ticket.category.toString();
+    selectedUserRecipient = widget.ticket.recipient.toString();
 
     getAllStatus();
     getAllEntities();
     getAllLocations();
     getAllITILCategory();
+    getAllUsers();
     super.initState();
   }
 
@@ -258,6 +264,36 @@ class _DetailTicketState extends State<DetailTicket> {
                       ),
                     ],
                   ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Expanded(
+                        child: DropdownButtonFormField(
+                          value: selectedUserRecipient,
+                          items: dropdown.dropdownItem(listUsers),
+                          onChanged: (String? value) {
+                            setState(() {
+                              selectedUserRecipient = value!;
+                            });
+                          },
+                          decoration: const InputDecoration(
+                            labelText: 'Recipient',
+                            prefixIcon: Icon(Icons.query_stats_sharp,
+                                color: Colors.black),
+                            focusColor: Colors.black,
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                  width: 3, color: Colors.greenAccent),
+                            ),
+                            labelStyle: TextStyle(color: Colors.black),
+                            errorStyle: TextStyle(
+                                color: Color.fromARGB(255, 245, 183, 177),
+                                fontStyle: FontStyle.italic),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                   const SizedBox(
                     height: 30,
                   ),
@@ -282,6 +318,8 @@ class _DetailTicketState extends State<DetailTicket> {
                             (element) =>
                                 listITILCategory[element] ==
                                 selectedITILCategory);
+                        var userRecipientID = listUsers.keys.where((element) =>
+                            listUsers[element] == selectedUserRecipient);
 
                         updateData["name"] = _titleController.text;
                         updateData["priority"] = priorityID.first;
@@ -289,6 +327,8 @@ class _DetailTicketState extends State<DetailTicket> {
                         updateData["entities_id"] = entityID.first;
                         updateData["locations_id"] = locationID.first;
                         updateData["itilcategories_id"] = itilCategoryID.first;
+                        updateData["users_id_recipient"] =
+                            userRecipientID.first;
 
                         responseAPI = objectTicket.apiMgmt.put(
                             ApiEndpoint.apiUpdateTicket,
@@ -368,6 +408,18 @@ class _DetailTicketState extends State<DetailTicket> {
       listITILCategory[0] = "";
       for (var e in allITILCategories) {
         listITILCategory[e.id!] = e.name.toString();
+      }
+    });
+  }
+
+  getAllUsers() async {
+    // Object of the Special Status class
+    final user = User();
+    List<User> allUsers = await user.getAllUsers();
+    setState(() {
+      listUsers[0] = "";
+      for (var e in allUsers) {
+        listUsers[e.id!] = e.name.toString();
       }
     });
   }
