@@ -22,6 +22,28 @@ class _DetailTicketState extends State<DetailTicket> {
 
   final TextEditingController _titleController = TextEditingController();
 
+  Map<int, String> listPriority = {
+    1: "Very low",
+    2: "Low",
+    3: "Medium",
+    4: "High",
+    5: "Very high",
+    6: "Major"
+  };
+  late String selectedPriority;
+
+  List<DropdownMenuItem<String>> get dropdownPriority {
+    List<DropdownMenuItem<String>> menuItems = [
+      const DropdownMenuItem(value: "Very low", child: Text("Very low")),
+      const DropdownMenuItem(value: "Low", child: Text("Low")),
+      const DropdownMenuItem(value: "Medium", child: Text("Medium")),
+      const DropdownMenuItem(value: "High", child: Text("High")),
+      const DropdownMenuItem(value: "Very high", child: Text("Very high")),
+      const DropdownMenuItem(value: "Major", child: Text("Major")),
+    ];
+    return menuItems;
+  }
+
   final objectTicket = Tickets();
   dynamic responseAPI;
   Map updateData = {};
@@ -31,7 +53,7 @@ class _DetailTicketState extends State<DetailTicket> {
   @override
   void initState() {
     _titleController.text = widget.ticket.title.toString();
-
+    selectedPriority = widget.ticket.priority.toString();
     super.initState();
   }
 
@@ -57,6 +79,39 @@ class _DetailTicketState extends State<DetailTicket> {
                   const SizedBox(
                     height: 10,
                   ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Expanded(
+                        child: DropdownButtonFormField(
+                          value: selectedPriority,
+                          items: dropdownPriority,
+                          onChanged: (String? value) {
+                            setState(() {
+                              selectedPriority = value!;
+                            });
+                          },
+                          decoration: const InputDecoration(
+                            labelText: 'Priority',
+                            prefixIcon:
+                                Icon(Icons.priority_high, color: Colors.black),
+                            focusColor: Colors.black,
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                  width: 3, color: Colors.greenAccent),
+                            ),
+                            labelStyle: TextStyle(color: Colors.black),
+                            errorStyle: TextStyle(
+                                color: Color.fromARGB(255, 245, 183, 177),
+                                fontStyle: FontStyle.italic),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 50,
+                      ),
+                    ],
+                  ),
                   const SizedBox(
                     height: 30,
                   ),
@@ -65,7 +120,12 @@ class _DetailTicketState extends State<DetailTicket> {
                       if (!_formKeyTicket.currentState!.validate()) {
                         return;
                       } else {
+                        var priorityID = listPriority.keys.where((element) =>
+                            listPriority[element] == selectedPriority);
+
                         updateData["name"] = _titleController.text;
+                        updateData["priority"] = priorityID.first;
+
                         responseAPI = objectTicket.apiMgmt.put(
                             ApiEndpoint.apiUpdateTicket,
                             widget.ticket.id!,
