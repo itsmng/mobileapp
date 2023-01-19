@@ -67,6 +67,20 @@ class _DetailTicketState extends State<DetailTicket> {
     return menuItems;
   }
 
+  Map<int, String> listEntities = {
+    0: "root entity",
+    1: "under root entity",
+  };
+  late String selectedEntity;
+  List<DropdownMenuItem<String>> get dropdownEntities {
+    List<DropdownMenuItem<String>> menuItems = [
+      const DropdownMenuItem(value: "root entity", child: Text("root entity")),
+      const DropdownMenuItem(
+          value: "under root entity", child: Text("under root entity")),
+    ];
+    return menuItems;
+  }
+
   final objectTicket = Tickets();
   dynamic responseAPI;
   Map updateData = {};
@@ -78,6 +92,7 @@ class _DetailTicketState extends State<DetailTicket> {
     _titleController.text = widget.ticket.title.toString();
     selectedPriority = widget.ticket.priority.toString();
     selectedStatus = widget.ticket.statusValue.toString();
+    selectedEntity = widget.ticket.entity.toString();
     super.initState();
   }
 
@@ -167,6 +182,36 @@ class _DetailTicketState extends State<DetailTicket> {
                       ),
                     ],
                   ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Expanded(
+                        child: DropdownButtonFormField(
+                          value: selectedEntity,
+                          items: dropdownEntities,
+                          onChanged: (String? value) {
+                            setState(() {
+                              selectedEntity = value!;
+                            });
+                          },
+                          decoration: const InputDecoration(
+                            labelText: 'Status',
+                            prefixIcon:
+                                Icon(Icons.category_sharp, color: Colors.black),
+                            focusColor: Colors.black,
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                  width: 3, color: Colors.greenAccent),
+                            ),
+                            labelStyle: TextStyle(color: Colors.black),
+                            errorStyle: TextStyle(
+                                color: Color.fromARGB(255, 245, 183, 177),
+                                fontStyle: FontStyle.italic),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                   const SizedBox(
                     height: 30,
                   ),
@@ -181,9 +226,14 @@ class _DetailTicketState extends State<DetailTicket> {
                         var statusID = listStatus.keys.where(
                             (element) => listStatus[element] == selectedStatus);
 
+                        var entityID = listEntities.keys.where((element) =>
+                            listEntities[element] == selectedEntity);
+                        print(entityID.first);
+
                         updateData["name"] = _titleController.text;
                         updateData["priority"] = priorityID.first;
                         updateData["status"] = statusID.first;
+                        updateData["entities_id"] = statusID.first;
 
                         responseAPI = objectTicket.apiMgmt.put(
                             ApiEndpoint.apiUpdateTicket,
