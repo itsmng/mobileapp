@@ -37,4 +37,9 @@ class ApiEndpoint {
 
   // Location API Endpoint
   static const String apiGetAllLocations = "Location";
+
+   // Location API Endpoint
+  static const String apiGetAllItilCategories = "ITILCategory";
+
+
 }
