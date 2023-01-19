@@ -5,6 +5,7 @@ import 'package:mobileapp/common/dropdown.dart';
 import 'package:mobileapp/common/message.dart';
 import 'package:mobileapp/form_fields.dart/button.dart';
 import 'package:mobileapp/form_fields.dart/form_fields_ticket.dart';
+import 'package:mobileapp/models/entity.dart';
 import 'package:mobileapp/models/special_status.dart';
 import 'package:mobileapp/models/tickets_model.dart';
 
@@ -34,6 +35,9 @@ class _DetailTicketState extends State<DetailTicket> {
   Map<int, String> listStatus = {};
   late String selectedStatus;
 
+  Map<int, String> listEntities = {};
+  late String selectedEntity;
+
   Map<int, String> listPriority = {
     1: "Very low",
     2: "Low",
@@ -56,27 +60,15 @@ class _DetailTicketState extends State<DetailTicket> {
     return menuItems;
   }
 
-  Map<int, String> listEntities = {
-    0: "root entity",
-    1: "under root entity",
-  };
-  late String selectedEntity;
-  List<DropdownMenuItem<String>> get dropdownEntities {
-    List<DropdownMenuItem<String>> menuItems = [
-      const DropdownMenuItem(value: "root entity", child: Text("root entity")),
-      const DropdownMenuItem(
-          value: "under root entity", child: Text("under root entity")),
-    ];
-    return menuItems;
-  }
-
   @override
   void initState() {
     _titleController.text = widget.ticket.title.toString();
     selectedPriority = widget.ticket.priority.toString();
     selectedStatus = widget.ticket.statusValue.toString();
     selectedEntity = widget.ticket.entity.toString();
+
     getAllStatus();
+    getAllEntities();
     super.initState();
   }
 
@@ -172,14 +164,14 @@ class _DetailTicketState extends State<DetailTicket> {
                       Expanded(
                         child: DropdownButtonFormField(
                           value: selectedEntity,
-                          items: dropdownEntities,
+                          items: dropdown.dropdownItem(listEntities),
                           onChanged: (String? value) {
                             setState(() {
                               selectedEntity = value!;
                             });
                           },
                           decoration: const InputDecoration(
-                            labelText: 'Status',
+                            labelText: 'Entity',
                             prefixIcon:
                                 Icon(Icons.category_sharp, color: Colors.black),
                             focusColor: Colors.black,
@@ -260,6 +252,17 @@ class _DetailTicketState extends State<DetailTicket> {
     setState(() {
       for (var e in allSpecialStatus) {
         listStatus[e.id!] = e.name.toString();
+      }
+    });
+  }
+
+  getAllEntities() async {
+    // Object of the Special Status class
+    final entities = Entity();
+    List<Entity> allEntities = await entities.getAllEntities();
+    setState(() {
+      for (var e in allEntities) {
+        listEntities[e.id!] = e.name.toString();
       }
     });
   }
