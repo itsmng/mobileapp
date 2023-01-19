@@ -3,7 +3,7 @@ class ApiEndpoint {
   static const String apiGetFullSession = "getFullSession/";
 
   // Ticket API Endpoint
-  static const String apiRootTicket = "Ticket/";
+  static const String apiRootTicket = "Ticket/?expand_dropdowns=true";
   static const String apiUpdateTicket = "Ticket/";
   static const String apiGetAllTickets =
       "Ticket/?expand_dropdowns=true&range=0-500";
@@ -38,9 +38,14 @@ class ApiEndpoint {
   // Location API Endpoint
   static const String apiGetAllLocations = "Location";
 
-  // Location API Endpoint
+  // ITIL category API Endpoint
   static const String apiGetAllItilCategories = "ITILCategory";
 
-  // Location API Endpoint
+  // All User API Endpoint
   static const String apiGetAllUsers = "User";
+
+  // Ticket user API Endpoint
+  static const String apiGetAllTicketUsers =
+      "Ticket_User/?expand_dropdowns=true&searchText[type]=2";
+   static const String apiUpdateTicketUser = "Ticket_User/";
 }
