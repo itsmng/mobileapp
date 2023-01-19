@@ -18,28 +18,33 @@ class ApiMgmt {
   ApiMgmt();
 
   dynamic get(String relativeUrl) async {
-    // obtain shared preferences
-    final prefs = await SharedPreferences.getInstance();
+    try {
+      // obtain shared preferences
+      final prefs = await SharedPreferences.getInstance();
 
-    final response = await http.get(
-        Uri.parse(
-            getAbsoluteUrl(prefs.getString('URL').toString(), relativeUrl)),
-        headers: <String, String>{
-          'App-token': prefs.getString('App-token') ?? 0.toString(),
-          'Session-token': prefs.getString('Session-token') ?? 0.toString(),
-          HttpHeaders.contentTypeHeader: headerType,
-        });
+      final response = await http.get(
+          Uri.parse(
+              getAbsoluteUrl(prefs.getString('URL').toString(), relativeUrl)),
+          headers: <String, String>{
+            'App-token': prefs.getString('App-token') ?? 0.toString(),
+            'Session-token': prefs.getString('Session-token') ?? 0.toString(),
+            HttpHeaders.contentTypeHeader: headerType,
+          });
 
-    if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      authStatus = true;
-      return response.body;
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      authStatus = false;
-      throw Exception("Failed to get data from the endpoind $relativeUrl");
+      if (response.statusCode == 200) {
+        // If the server did return a 200 OK response,
+        // then parse the JSON.
+        authStatus = true;
+
+        return response.body;
+      } else {
+        // If the server did not return a 200 OK response,
+        // then throw an exception.
+        authStatus = false;
+        throw Exception("Failed to get data from the endpoind $relativeUrl");
+      }
+    } catch (_) {
+      return null;
     }
   }
 
