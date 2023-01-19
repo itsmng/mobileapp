@@ -6,6 +6,7 @@ import 'package:mobileapp/common/message.dart';
 import 'package:mobileapp/form_fields.dart/button.dart';
 import 'package:mobileapp/form_fields.dart/form_fields_ticket.dart';
 import 'package:mobileapp/models/entity.dart';
+import 'package:mobileapp/models/location.dart';
 import 'package:mobileapp/models/special_status.dart';
 import 'package:mobileapp/models/tickets_model.dart';
 
@@ -38,6 +39,9 @@ class _DetailTicketState extends State<DetailTicket> {
   Map<int, String> listEntities = {};
   late String selectedEntity;
 
+  Map<int, String> listLocations = {};
+  late String selectedLocation;
+
   Map<int, String> listPriority = {
     1: "Very low",
     2: "Low",
@@ -66,9 +70,11 @@ class _DetailTicketState extends State<DetailTicket> {
     selectedPriority = widget.ticket.priority.toString();
     selectedStatus = widget.ticket.statusValue.toString();
     selectedEntity = widget.ticket.entity.toString();
+    selectedLocation = widget.ticket.location.toString();
 
     getAllStatus();
     getAllEntities();
+    getAllLocations();
     super.initState();
   }
 
@@ -133,6 +139,36 @@ class _DetailTicketState extends State<DetailTicket> {
                       ),
                       Expanded(
                         child: DropdownButtonFormField(
+                          value: selectedEntity,
+                          items: dropdown.dropdownItem(listEntities),
+                          onChanged: (String? value) {
+                            setState(() {
+                              selectedEntity = value!;
+                            });
+                          },
+                          decoration: const InputDecoration(
+                            labelText: 'Entity',
+                            prefixIcon:
+                                Icon(Icons.category_sharp, color: Colors.black),
+                            focusColor: Colors.black,
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                  width: 3, color: Colors.greenAccent),
+                            ),
+                            labelStyle: TextStyle(color: Colors.black),
+                            errorStyle: TextStyle(
+                                color: Color.fromARGB(255, 245, 183, 177),
+                                fontStyle: FontStyle.italic),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Expanded(
+                        child: DropdownButtonFormField(
                           value: selectedStatus,
                           items: dropdown.dropdownItem(listStatus),
                           onChanged: (String? value) {
@@ -163,17 +199,17 @@ class _DetailTicketState extends State<DetailTicket> {
                     children: <Widget>[
                       Expanded(
                         child: DropdownButtonFormField(
-                          value: selectedEntity,
-                          items: dropdown.dropdownItem(listEntities),
+                          value: selectedLocation,
+                          items: dropdown.dropdownItem(listLocations),
                           onChanged: (String? value) {
                             setState(() {
-                              selectedEntity = value!;
+                              selectedLocation = value!;
                             });
                           },
                           decoration: const InputDecoration(
-                            labelText: 'Entity',
-                            prefixIcon:
-                                Icon(Icons.category_sharp, color: Colors.black),
+                            labelText: 'Location',
+                            prefixIcon: Icon(Icons.query_stats_sharp,
+                                color: Colors.black),
                             focusColor: Colors.black,
                             enabledBorder: UnderlineInputBorder(
                               borderSide: BorderSide(
@@ -205,10 +241,14 @@ class _DetailTicketState extends State<DetailTicket> {
                         var entityID = listEntities.keys.where((element) =>
                             listEntities[element] == selectedEntity);
 
+                        var locationID = listLocations.keys.where((element) =>
+                            listLocations[element] == selectedLocation);
+
                         updateData["name"] = _titleController.text;
                         updateData["priority"] = priorityID.first;
                         updateData["status"] = statusID.first;
                         updateData["entities_id"] = entityID.first;
+                        updateData["locations_id"] = locationID.first;
 
                         responseAPI = objectTicket.apiMgmt.put(
                             ApiEndpoint.apiUpdateTicket,
@@ -254,6 +294,7 @@ class _DetailTicketState extends State<DetailTicket> {
         listStatus[e.id!] = e.name.toString();
       }
     });
+    print(listStatus);
   }
 
   getAllEntities() async {
@@ -265,5 +306,18 @@ class _DetailTicketState extends State<DetailTicket> {
         listEntities[e.id!] = e.name.toString();
       }
     });
+    print(listEntities);
+  }
+
+  getAllLocations() async {
+    // Object of the Special Status class
+    final location = Location();
+    List<Location> allLocations = await location.getAllLocations();
+    setState(() {
+      for (var e in allLocations) {
+        listLocations[e.id!] = e.name.toString();
+      }
+    });
+    print(listLocations);
   }
 }
