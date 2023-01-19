@@ -28,12 +28,12 @@ class User {
   }
 
   getAllUsers() async {
-    List<User> futureItilUsers;
+    List<User> futureUsers;
     dynamic apiResp;
 
     apiResp = apiMgmt.get(ApiEndpoint.apiGetAllUsers);
-    futureItilUsers = await fetchUsersData(apiResp);
+    futureUsers = await fetchUsersData(apiResp);
 
-    return futureItilUsers;
+    return futureUsers;
   }
 }
