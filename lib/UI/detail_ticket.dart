@@ -9,6 +9,7 @@ import 'package:mobileapp/models/entity.dart';
 import 'package:mobileapp/models/itil_category.dart';
 import 'package:mobileapp/models/location.dart';
 import 'package:mobileapp/models/special_status.dart';
+import 'package:mobileapp/models/ticket_user.dart';
 import 'package:mobileapp/models/tickets_model.dart';
 import 'package:mobileapp/models/user.dart';
 
@@ -30,7 +31,9 @@ class _DetailTicketState extends State<DetailTicket> {
 
   final objectTicket = Tickets();
   dynamic responseAPI;
+  dynamic responseAPIUpdateUserAssigned;
   Map updateData = {};
+  Map updateTicketUserData = {};
 
   final messages = Messages();
   final dropdown = Dropdown();
@@ -49,6 +52,9 @@ class _DetailTicketState extends State<DetailTicket> {
 
   Map<int, String> listUsers = {};
   late String selectedUserRecipient;
+
+  Map<int, String> listAssignedUsers = {};
+  late String selectedAssignedUser;
 
   Map<int, String> listPriority = {
     1: "Very low",
@@ -81,12 +87,14 @@ class _DetailTicketState extends State<DetailTicket> {
     selectedLocation = widget.ticket.location.toString();
     selectedITILCategory = widget.ticket.category.toString();
     selectedUserRecipient = widget.ticket.recipient.toString();
+    selectedAssignedUser = widget.ticket.assignedUser.toString();
 
     getAllStatus();
     getAllEntities();
     getAllLocations();
     getAllITILCategory();
     getAllUsers();
+    getAllAssignedUsers();
     super.initState();
   }
 
@@ -278,8 +286,36 @@ class _DetailTicketState extends State<DetailTicket> {
                           },
                           decoration: const InputDecoration(
                             labelText: 'Recipient',
-                            prefixIcon: Icon(Icons.query_stats_sharp,
+                            prefixIcon: Icon(Icons.supervised_user_circle,
                                 color: Colors.black),
+                            focusColor: Colors.black,
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                  width: 3, color: Colors.greenAccent),
+                            ),
+                            labelStyle: TextStyle(color: Colors.black),
+                            errorStyle: TextStyle(
+                                color: Color.fromARGB(255, 245, 183, 177),
+                                fontStyle: FontStyle.italic),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 15,
+                      ),
+                      Expanded(
+                        child: DropdownButtonFormField(
+                          value: selectedAssignedUser,
+                          items: dropdown.dropdownItem(listAssignedUsers),
+                          onChanged: (String? value) {
+                            setState(() {
+                              selectedAssignedUser = value!;
+                            });
+                          },
+                          decoration: const InputDecoration(
+                            labelText: 'Assigned',
+                            prefixIcon:
+                                Icon(Icons.assignment_ind, color: Colors.black),
                             focusColor: Colors.black,
                             enabledBorder: UnderlineInputBorder(
                               borderSide: BorderSide(
@@ -320,6 +356,8 @@ class _DetailTicketState extends State<DetailTicket> {
                                 selectedITILCategory);
                         var userRecipientID = listUsers.keys.where((element) =>
                             listUsers[element] == selectedUserRecipient);
+                        var assignedID = listUsers.keys.where((element) =>
+                            listUsers[element] == selectedAssignedUser);
 
                         updateData["name"] = _titleController.text;
                         updateData["priority"] = priorityID.first;
@@ -329,6 +367,14 @@ class _DetailTicketState extends State<DetailTicket> {
                         updateData["itilcategories_id"] = itilCategoryID.first;
                         updateData["users_id_recipient"] =
                             userRecipientID.first;
+
+                        updateTicketUserData["users_id"] = assignedID.first;
+
+                        responseAPIUpdateUserAssigned = objectTicket.apiMgmt
+                            .put(
+                                ApiEndpoint.apiUpdateTicketUser,
+                                widget.ticket.assignedUserID!,
+                                updateTicketUserData);
 
                         responseAPI = objectTicket.apiMgmt.put(
                             ApiEndpoint.apiUpdateTicket,
@@ -420,6 +466,25 @@ class _DetailTicketState extends State<DetailTicket> {
       listUsers[0] = "";
       for (var e in allUsers) {
         listUsers[e.id!] = e.name.toString();
+      }
+    });
+  }
+
+  getAllAssignedUsers() async {
+    // Object of the Special Status class
+    final assignedUser = TicketUser();
+    List<TicketUser> allAssignedUsers = await assignedUser.getAllTicketUsers();
+    await getAllUsers();
+    setState(() {
+      listAssignedUsers[0] = "";
+      for (var e in allAssignedUsers) {
+        if (!listAssignedUsers.containsValue(e.userID.toString())) {
+          listUsers.forEach((key, value) {
+            if (value == e.userID.toString()) {
+              listAssignedUsers[key] = e.userID.toString();
+            }
+          });
+        }
       }
     });
   }
