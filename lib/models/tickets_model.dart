@@ -18,6 +18,8 @@ class Tickets {
   String? entity;
   String? priority;
   int? id;
+  String? recipient;
+  String? content;
 
   final apiMgmt = ApiMgmt();
 
@@ -33,6 +35,8 @@ class Tickets {
     this.priority,
     this.id,
     this.statusValue,
+    this.recipient,
+    this.content,
   });
 
   factory Tickets.fromMap(Map<String, dynamic> json) {
@@ -51,6 +55,9 @@ class Tickets {
     if (json["locations_id"] == 0) {
       json["locations_id"] = "";
     }
+    if (json["users_id_recipient"] == 0) {
+      json["users_id_recipient"] = "";
+    }
 
     if (listPriority.containsKey(json["priority"])) {
       json["priority"] = listPriority[json["priority"]];
@@ -68,6 +75,8 @@ class Tickets {
       priority: json["priority"].toString(),
       id: json["id"],
       statusValue: json["status"].toString(),
+      recipient: json["users_id_recipient"],
+      content: json["content"],
     );
   }
 
@@ -132,6 +141,8 @@ class Tickets {
         return priority;
       case "ID":
         return id;
+      case "Recipient":
+        return recipient;
 
       // return by defaul the date if no choise
       default:

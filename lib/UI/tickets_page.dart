@@ -80,6 +80,7 @@ class _TicketsPageState extends State<TicketsPage> {
       "Priority",
       "Open date",
       "Last update",
+      "Recipient",
     ];
 
     // Get the list of selected item
