@@ -31,4 +31,7 @@ class ApiEndpoint {
 
   // Special status API Endpoint
   static const String apiGetAllSpecialStatus = "SpecialStatus";
+
+  // Entity API Endpoint
+  static const String apiGetAllEntities = "Entity";
 }
