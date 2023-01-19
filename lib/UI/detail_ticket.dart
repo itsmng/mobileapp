@@ -6,6 +6,7 @@ import 'package:mobileapp/common/message.dart';
 import 'package:mobileapp/form_fields.dart/button.dart';
 import 'package:mobileapp/form_fields.dart/form_fields_ticket.dart';
 import 'package:mobileapp/models/entity.dart';
+import 'package:mobileapp/models/itil_category.dart';
 import 'package:mobileapp/models/location.dart';
 import 'package:mobileapp/models/special_status.dart';
 import 'package:mobileapp/models/tickets_model.dart';
@@ -42,6 +43,9 @@ class _DetailTicketState extends State<DetailTicket> {
   Map<int, String> listLocations = {};
   late String selectedLocation;
 
+  Map<int, String> listITILCategory = {};
+  late String selectedITILCategory;
+
   Map<int, String> listPriority = {
     1: "Very low",
     2: "Low",
@@ -53,7 +57,7 @@ class _DetailTicketState extends State<DetailTicket> {
   late String selectedPriority;
 
   List<DropdownMenuItem<String>> get dropdownPriority {
-    List<DropdownMenuItem<String>> menuItems = [
+    List<DropdownMenuItem<String>> menuItem = [
       const DropdownMenuItem(value: "Very low", child: Text("Very low")),
       const DropdownMenuItem(value: "Low", child: Text("Low")),
       const DropdownMenuItem(value: "Medium", child: Text("Medium")),
@@ -61,7 +65,7 @@ class _DetailTicketState extends State<DetailTicket> {
       const DropdownMenuItem(value: "Very high", child: Text("Very high")),
       const DropdownMenuItem(value: "Major", child: Text("Major")),
     ];
-    return menuItems;
+    return menuItem;
   }
 
   @override
@@ -71,10 +75,12 @@ class _DetailTicketState extends State<DetailTicket> {
     selectedStatus = widget.ticket.statusValue.toString();
     selectedEntity = widget.ticket.entity.toString();
     selectedLocation = widget.ticket.location.toString();
+    selectedITILCategory = widget.ticket.category.toString();
 
     getAllStatus();
     getAllEntities();
     getAllLocations();
+    getAllITILCategory();
     super.initState();
   }
 
@@ -208,7 +214,35 @@ class _DetailTicketState extends State<DetailTicket> {
                           },
                           decoration: const InputDecoration(
                             labelText: 'Location',
-                            prefixIcon: Icon(Icons.query_stats_sharp,
+                            prefixIcon: Icon(Icons.house, color: Colors.black),
+                            focusColor: Colors.black,
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                  width: 3, color: Colors.greenAccent),
+                            ),
+                            labelStyle: TextStyle(color: Colors.black),
+                            errorStyle: TextStyle(
+                                color: Color.fromARGB(255, 245, 183, 177),
+                                fontStyle: FontStyle.italic),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 15,
+                      ),
+                      Expanded(
+                        child: DropdownButtonFormField(
+                          value: selectedITILCategory,
+                          items: dropdown.dropdownItem(listITILCategory),
+                          onChanged: (String? value) {
+                            setState(() {
+                              selectedITILCategory = value!;
+                            });
+                          },
+                          decoration: const InputDecoration(
+                            labelText: 'Category',
+                            prefixIcon: Icon(
+                                Icons.integration_instructions_outlined,
                                 color: Colors.black),
                             focusColor: Colors.black,
                             enabledBorder: UnderlineInputBorder(
@@ -244,11 +278,17 @@ class _DetailTicketState extends State<DetailTicket> {
                         var locationID = listLocations.keys.where((element) =>
                             listLocations[element] == selectedLocation);
 
+                        var itilCategoryID = listITILCategory.keys.where(
+                            (element) =>
+                                listITILCategory[element] ==
+                                selectedITILCategory);
+
                         updateData["name"] = _titleController.text;
                         updateData["priority"] = priorityID.first;
                         updateData["status"] = statusID.first;
                         updateData["entities_id"] = entityID.first;
                         updateData["locations_id"] = locationID.first;
+                        updateData["itilcategories_id"] = itilCategoryID.first;
 
                         responseAPI = objectTicket.apiMgmt.put(
                             ApiEndpoint.apiUpdateTicket,
@@ -294,7 +334,6 @@ class _DetailTicketState extends State<DetailTicket> {
         listStatus[e.id!] = e.name.toString();
       }
     });
-    print(listStatus);
   }
 
   getAllEntities() async {
@@ -306,7 +345,6 @@ class _DetailTicketState extends State<DetailTicket> {
         listEntities[e.id!] = e.name.toString();
       }
     });
-    print(listEntities);
   }
 
   getAllLocations() async {
@@ -314,10 +352,23 @@ class _DetailTicketState extends State<DetailTicket> {
     final location = Location();
     List<Location> allLocations = await location.getAllLocations();
     setState(() {
+      listLocations[0] = "";
       for (var e in allLocations) {
         listLocations[e.id!] = e.name.toString();
       }
     });
-    print(listLocations);
+  }
+
+  getAllITILCategory() async {
+    // Object of the Special Status class
+    final itilCategory = ITILCategory();
+    List<ITILCategory> allITILCategories =
+        await itilCategory.getAllItilCategories();
+    setState(() {
+      listITILCategory[0] = "";
+      for (var e in allITILCategories) {
+        listITILCategory[e.id!] = e.name.toString();
+      }
+    });
   }
 }
