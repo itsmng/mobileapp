@@ -32,4 +32,37 @@ class FormFieldsTicket {
       style: const TextStyle(color: Colors.black),
     );
   }
+
+  Widget buildTextAreaField(
+    TextEditingController controllerField,
+    IconData iconData,
+    String labelTextField,
+    TextInputType inputType,
+  ) {
+    return TextFormField(
+      controller: controllerField,
+      minLines: 5,
+      maxLines: 10,
+      decoration: InputDecoration(
+        prefixIcon: Icon(iconData, color: Colors.black),
+        focusColor: Colors.black,
+        enabledBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(width: 3, color: Colors.greenAccent),
+        ),
+        labelText: labelTextField,
+        labelStyle: const TextStyle(color: Colors.black),
+        errorStyle: const TextStyle(
+            color: Color.fromARGB(255, 245, 183, 177),
+            fontStyle: FontStyle.italic),
+      ),
+      keyboardType: inputType,
+      validator: (String? value) {
+        if (value.toString().isEmpty) {
+          return '$labelTextField is Required';
+        }
+        return null;
+      },
+      style: const TextStyle(color: Colors.black),
+    );
+  }
 }
