@@ -126,395 +126,364 @@ class _DetailTicketState extends State<DetailTicket> {
           ),
           body: TabBarView(
             children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).canvasColor,
-                  borderRadius: const BorderRadius.all(Radius.circular(10)),
-                ),
-                width: double.infinity,
-                margin: const EdgeInsets.all(12),
-                child: SingleChildScrollView(
-                  child: Form(
-                      key: _formKeyTicket,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          formFieldsTicket.buildTextField(_titleController,
-                              Icons.title, "Title", TextInputType.text),
-                          formFieldsTicket.buildDateTimeField(
-                              _dateController, "Open date", context),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              Expanded(
-                                child: DropdownButtonFormField(
-                                  value: selectedPriority,
-                                  items: dropdownPriority,
-                                  onChanged: (String? value) {
-                                    setState(() {
-                                      selectedPriority = value!;
-                                    });
-                                  },
-                                  decoration: const InputDecoration(
-                                    labelText: 'Priority',
-                                    prefixIcon: Icon(Icons.priority_high,
-                                        color: Colors.black),
-                                    focusColor: Colors.black,
-                                    enabledBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                          width: 3, color: Colors.greenAccent),
-                                    ),
-                                    labelStyle: TextStyle(color: Colors.black),
-                                    errorStyle: TextStyle(
-                                        color:
-                                            Color.fromARGB(255, 245, 183, 177),
-                                        fontStyle: FontStyle.italic),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 15,
-                              ),
-                              Expanded(
-                                child: DropdownButtonFormField(
-                                  value: selectedEntity,
-                                  items: dropdown.dropdownItem(listEntities),
-                                  onChanged: (String? value) {
-                                    setState(() {
-                                      selectedEntity = value!;
-                                    });
-                                  },
-                                  decoration: const InputDecoration(
-                                    labelText: 'Entity',
-                                    prefixIcon: Icon(Icons.category_sharp,
-                                        color: Colors.black),
-                                    focusColor: Colors.black,
-                                    enabledBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                          width: 3, color: Colors.greenAccent),
-                                    ),
-                                    labelStyle: TextStyle(color: Colors.black),
-                                    errorStyle: TextStyle(
-                                        color:
-                                            Color.fromARGB(255, 245, 183, 177),
-                                        fontStyle: FontStyle.italic),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Expanded(
-                                child: DropdownButtonFormField(
-                                  value: selectedStatus,
-                                  items: dropdown.dropdownItem(listStatus),
-                                  onChanged: (String? value) {
-                                    setState(() {
-                                      selectedStatus = value!;
-                                    });
-                                  },
-                                  decoration: const InputDecoration(
-                                    labelText: 'Status',
-                                    prefixIcon: Icon(Icons.query_stats_sharp,
-                                        color: Colors.black),
-                                    focusColor: Colors.black,
-                                    enabledBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                          width: 3, color: Colors.greenAccent),
-                                    ),
-                                    labelStyle: TextStyle(color: Colors.black),
-                                    errorStyle: TextStyle(
-                                        color:
-                                            Color.fromARGB(255, 245, 183, 177),
-                                        fontStyle: FontStyle.italic),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Expanded(
-                                child: DropdownButtonFormField(
-                                  value: selectedLocation,
-                                  items: dropdown.dropdownItem(listLocations),
-                                  onChanged: (String? value) {
-                                    setState(() {
-                                      selectedLocation = value!;
-                                    });
-                                  },
-                                  decoration: const InputDecoration(
-                                    labelText: 'Location',
-                                    prefixIcon:
-                                        Icon(Icons.house, color: Colors.black),
-                                    focusColor: Colors.black,
-                                    enabledBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                          width: 3, color: Colors.greenAccent),
-                                    ),
-                                    labelStyle: TextStyle(color: Colors.black),
-                                    errorStyle: TextStyle(
-                                        color:
-                                            Color.fromARGB(255, 245, 183, 177),
-                                        fontStyle: FontStyle.italic),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 15,
-                              ),
-                              Expanded(
-                                child: DropdownButtonFormField(
-                                  value: selectedITILCategory,
-                                  items:
-                                      dropdown.dropdownItem(listITILCategory),
-                                  onChanged: (String? value) {
-                                    setState(() {
-                                      selectedITILCategory = value!;
-                                    });
-                                  },
-                                  decoration: const InputDecoration(
-                                    labelText: 'Category',
-                                    prefixIcon: Icon(
-                                        Icons.integration_instructions_outlined,
-                                        color: Colors.black),
-                                    focusColor: Colors.black,
-                                    enabledBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                          width: 3, color: Colors.greenAccent),
-                                    ),
-                                    labelStyle: TextStyle(color: Colors.black),
-                                    errorStyle: TextStyle(
-                                        color:
-                                            Color.fromARGB(255, 245, 183, 177),
-                                        fontStyle: FontStyle.italic),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Expanded(
-                                child: DropdownButtonFormField(
-                                  value: selectedUserRecipient,
-                                  items: dropdown.dropdownItem(listUsers),
-                                  onChanged: (String? value) {
-                                    setState(() {
-                                      selectedUserRecipient = value!;
-                                    });
-                                  },
-                                  decoration: const InputDecoration(
-                                    labelText: 'Recipient',
-                                    prefixIcon: Icon(
-                                        Icons.supervised_user_circle,
-                                        color: Colors.black),
-                                    focusColor: Colors.black,
-                                    enabledBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                          width: 3, color: Colors.greenAccent),
-                                    ),
-                                    labelStyle: TextStyle(color: Colors.black),
-                                    errorStyle: TextStyle(
-                                        color:
-                                            Color.fromARGB(255, 245, 183, 177),
-                                        fontStyle: FontStyle.italic),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 15,
-                              ),
-                              Expanded(
-                                child: DropdownButtonFormField(
-                                  value: selectedAssignedUser,
-                                  items:
-                                      dropdown.dropdownItem(listAssignedUsers),
-                                  onChanged: (String? value) {
-                                    setState(() {
-                                      selectedAssignedUser = value!;
-                                    });
-                                  },
-                                  decoration: const InputDecoration(
-                                    labelText: 'Assigned',
-                                    prefixIcon: Icon(Icons.assignment_ind,
-                                        color: Colors.black),
-                                    focusColor: Colors.black,
-                                    enabledBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                          width: 3, color: Colors.greenAccent),
-                                    ),
-                                    labelStyle: TextStyle(color: Colors.black),
-                                    errorStyle: TextStyle(
-                                        color:
-                                            Color.fromARGB(255, 245, 183, 177),
-                                        fontStyle: FontStyle.italic),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          formFieldsTicket.buildTextAreaField(
-                            _contentController,
-                            Icons.text_fields,
-                            "Content",
-                            TextInputType.multiline,
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              const SizedBox(
-                                width: 20,
-                              ),
-                              Expanded(
-                                child: buttonForm.buttonDelete(() async {
-                                  responseAPIDelete = objectTicket.apiMgmt
-                                      .delete(ApiEndpoint.apiDeleteTicket,
-                                          widget.ticket.id!);
-
-                                  final apiResponseValueDelete =
-                                      await responseAPIDelete
-                                          .then((val) => val["delete"]);
-
-                                  if (apiResponseValueDelete == "true") {
-                                    if (!mounted) return;
-                                    messages.messageBottomBar(
-                                        "Item successfully deleted: ${widget.ticket.title}",
-                                        context);
-                                    Navigator.of(context)
-                                        .push(MaterialPageRoute(
-                                      builder: (context) => const TicketsPage(),
-                                    ));
-                                  } else if (apiResponseValueDelete ==
-                                      "errorDlete") {
-                                    if (!mounted) return;
-                                    messages.sendAlert(
-                                        "Error to delete: Check API connexion",
-                                        context);
-                                  } else {
-                                    if (!mounted) return;
-                                    messages.sendAlert(
-                                        "Deleted cancelled", context);
-                                  }
-                                }),
-                              ),
-                              const SizedBox(
-                                width: 50,
-                              ),
-                              Expanded(child: buttonForm.buttonSave(
-                                () async {
-                                  if (!_formKeyTicket.currentState!
-                                      .validate()) {
-                                    return;
-                                  } else {
-                                    var priorityID = listPriority.keys.where(
-                                        (element) =>
-                                            listPriority[element] ==
-                                            selectedPriority);
-
-                                    var statusID = listStatus.keys.where(
-                                        (element) =>
-                                            listStatus[element] ==
-                                            selectedStatus);
-
-                                    var entityID = listEntities.keys.where(
-                                        (element) =>
-                                            listEntities[element] ==
-                                            selectedEntity);
-
-                                    var locationID = listLocations.keys.where(
-                                        (element) =>
-                                            listLocations[element] ==
-                                            selectedLocation);
-
-                                    var itilCategoryID = listITILCategory.keys
-                                        .where((element) =>
-                                            listITILCategory[element] ==
-                                            selectedITILCategory);
-                                    var userRecipientID = listUsers.keys.where(
-                                        (element) =>
-                                            listUsers[element] ==
-                                            selectedUserRecipient);
-                                    var assignedID = listUsers.keys.where(
-                                        (element) =>
-                                            listUsers[element] ==
-                                            selectedAssignedUser);
-
-                                    updateData["name"] = _titleController.text;
-                                    updateData["priority"] = priorityID.first;
-                                    updateData["status"] = statusID.first;
-                                    updateData["entities_id"] = entityID.first;
-                                    updateData["locations_id"] =
-                                        locationID.first;
-                                    updateData["itilcategories_id"] =
-                                        itilCategoryID.first;
-                                    updateData["users_id_recipient"] =
-                                        userRecipientID.first;
-                                    updateData["content"] =
-                                        _contentController.text;
-
-                                    updateTicketUserData["users_id"] =
-                                        assignedID.first;
-
-                                    responseAPIUpdateUserAssigned =
-                                        objectTicket.apiMgmt.put(
-                                            ApiEndpoint.apiUpdateTicketUser,
-                                            widget.ticket.assignedUserID!,
-                                            updateTicketUserData);
-
-                                    responseAPI = objectTicket.apiMgmt.put(
-                                        ApiEndpoint.apiUpdateTicket,
-                                        widget.ticket.id!,
-                                        updateData);
-
-                                    final apiResponseValue = await responseAPI
-                                        .then((val) => val["update"]);
-
-                                    if (apiResponseValue == "true") {
-                                      if (!mounted) return;
-                                      messages.messageBottomBar(
-                                          "Item successfully updated: ${widget.ticket.title}",
-                                          context);
-                                      Navigator.of(context)
-                                          .push(MaterialPageRoute(
-                                        builder: (context) =>
-                                            const TicketsPage(),
-                                      ));
-                                    } else if (apiResponseValue ==
-                                        "errorUpdate") {
-                                      if (!mounted) return;
-                                      messages.sendAlert(
-                                          "Error to update: Check API connexion",
-                                          context);
-                                    } else {
-                                      if (!mounted) return;
-                                      messages.sendAlert(
-                                          "Update cancelled", context);
-                                    }
-                                  }
-                                },
-                              )),
-                              const SizedBox(
-                                width: 20,
-                              ),
-                            ],
-                          ),
-                        ],
-                      )),
-                ),
-              ),
+              updateTicket(),
               const Text('Follow up'),
               const Text('Task'),
             ],
           ),
         ));
+  }
+
+  // Method to update and delete the selected ticket
+  Widget updateTicket() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).canvasColor,
+        borderRadius: const BorderRadius.all(Radius.circular(10)),
+      ),
+      width: double.infinity,
+      margin: const EdgeInsets.all(12),
+      child: SingleChildScrollView(
+        child: Form(
+            key: _formKeyTicket,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                formFieldsTicket.buildTextField(
+                    _titleController, Icons.title, "Title", TextInputType.text),
+                formFieldsTicket.buildDateTimeField(
+                    _dateController, "Open date", context),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Expanded(
+                      child: DropdownButtonFormField(
+                        value: selectedPriority,
+                        items: dropdownPriority,
+                        onChanged: (String? value) {
+                          setState(() {
+                            selectedPriority = value!;
+                          });
+                        },
+                        decoration: const InputDecoration(
+                          labelText: 'Priority',
+                          prefixIcon:
+                              Icon(Icons.priority_high, color: Colors.black),
+                          focusColor: Colors.black,
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(width: 3, color: Colors.greenAccent),
+                          ),
+                          labelStyle: TextStyle(color: Colors.black),
+                          errorStyle: TextStyle(
+                              color: Color.fromARGB(255, 245, 183, 177),
+                              fontStyle: FontStyle.italic),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 15,
+                    ),
+                    Expanded(
+                      child: DropdownButtonFormField(
+                        value: selectedEntity,
+                        items: dropdown.dropdownItem(listEntities),
+                        onChanged: (String? value) {
+                          setState(() {
+                            selectedEntity = value!;
+                          });
+                        },
+                        decoration: const InputDecoration(
+                          labelText: 'Entity',
+                          prefixIcon:
+                              Icon(Icons.category_sharp, color: Colors.black),
+                          focusColor: Colors.black,
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(width: 3, color: Colors.greenAccent),
+                          ),
+                          labelStyle: TextStyle(color: Colors.black),
+                          errorStyle: TextStyle(
+                              color: Color.fromARGB(255, 245, 183, 177),
+                              fontStyle: FontStyle.italic),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Expanded(
+                      child: DropdownButtonFormField(
+                        value: selectedStatus,
+                        items: dropdown.dropdownItem(listStatus),
+                        onChanged: (String? value) {
+                          setState(() {
+                            selectedStatus = value!;
+                          });
+                        },
+                        decoration: const InputDecoration(
+                          labelText: 'Status',
+                          prefixIcon: Icon(Icons.query_stats_sharp,
+                              color: Colors.black),
+                          focusColor: Colors.black,
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(width: 3, color: Colors.greenAccent),
+                          ),
+                          labelStyle: TextStyle(color: Colors.black),
+                          errorStyle: TextStyle(
+                              color: Color.fromARGB(255, 245, 183, 177),
+                              fontStyle: FontStyle.italic),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Expanded(
+                      child: DropdownButtonFormField(
+                        value: selectedLocation,
+                        items: dropdown.dropdownItem(listLocations),
+                        onChanged: (String? value) {
+                          setState(() {
+                            selectedLocation = value!;
+                          });
+                        },
+                        decoration: const InputDecoration(
+                          labelText: 'Location',
+                          prefixIcon: Icon(Icons.house, color: Colors.black),
+                          focusColor: Colors.black,
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(width: 3, color: Colors.greenAccent),
+                          ),
+                          labelStyle: TextStyle(color: Colors.black),
+                          errorStyle: TextStyle(
+                              color: Color.fromARGB(255, 245, 183, 177),
+                              fontStyle: FontStyle.italic),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 15,
+                    ),
+                    Expanded(
+                      child: DropdownButtonFormField(
+                        value: selectedITILCategory,
+                        items: dropdown.dropdownItem(listITILCategory),
+                        onChanged: (String? value) {
+                          setState(() {
+                            selectedITILCategory = value!;
+                          });
+                        },
+                        decoration: const InputDecoration(
+                          labelText: 'Category',
+                          prefixIcon: Icon(
+                              Icons.integration_instructions_outlined,
+                              color: Colors.black),
+                          focusColor: Colors.black,
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(width: 3, color: Colors.greenAccent),
+                          ),
+                          labelStyle: TextStyle(color: Colors.black),
+                          errorStyle: TextStyle(
+                              color: Color.fromARGB(255, 245, 183, 177),
+                              fontStyle: FontStyle.italic),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Expanded(
+                      child: DropdownButtonFormField(
+                        value: selectedUserRecipient,
+                        items: dropdown.dropdownItem(listUsers),
+                        onChanged: (String? value) {
+                          setState(() {
+                            selectedUserRecipient = value!;
+                          });
+                        },
+                        decoration: const InputDecoration(
+                          labelText: 'Recipient',
+                          prefixIcon: Icon(Icons.supervised_user_circle,
+                              color: Colors.black),
+                          focusColor: Colors.black,
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(width: 3, color: Colors.greenAccent),
+                          ),
+                          labelStyle: TextStyle(color: Colors.black),
+                          errorStyle: TextStyle(
+                              color: Color.fromARGB(255, 245, 183, 177),
+                              fontStyle: FontStyle.italic),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 15,
+                    ),
+                    Expanded(
+                      child: DropdownButtonFormField(
+                        value: selectedAssignedUser,
+                        items: dropdown.dropdownItem(listAssignedUsers),
+                        onChanged: (String? value) {
+                          setState(() {
+                            selectedAssignedUser = value!;
+                          });
+                        },
+                        decoration: const InputDecoration(
+                          labelText: 'Assigned',
+                          prefixIcon:
+                              Icon(Icons.assignment_ind, color: Colors.black),
+                          focusColor: Colors.black,
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(width: 3, color: Colors.greenAccent),
+                          ),
+                          labelStyle: TextStyle(color: Colors.black),
+                          errorStyle: TextStyle(
+                              color: Color.fromARGB(255, 245, 183, 177),
+                              fontStyle: FontStyle.italic),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                formFieldsTicket.buildTextAreaField(
+                  _contentController,
+                  Icons.text_fields,
+                  "Content",
+                  TextInputType.multiline,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    Expanded(
+                      child: buttonForm.buttonDelete(() async {
+                        responseAPIDelete = objectTicket.apiMgmt.delete(
+                            ApiEndpoint.apiDeleteTicket, widget.ticket.id!);
+
+                        final apiResponseValueDelete = await responseAPIDelete
+                            .then((val) => val["delete"]);
+
+                        if (apiResponseValueDelete == "true") {
+                          if (!mounted) return;
+                          messages.messageBottomBar(
+                              "Item successfully deleted: ${widget.ticket.title}",
+                              context);
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const TicketsPage(),
+                          ));
+                        } else if (apiResponseValueDelete == "errorDlete") {
+                          if (!mounted) return;
+                          messages.sendAlert(
+                              "Error to delete: Check API connexion", context);
+                        } else {
+                          if (!mounted) return;
+                          messages.sendAlert("Deleted cancelled", context);
+                        }
+                      }),
+                    ),
+                    const SizedBox(
+                      width: 50,
+                    ),
+                    Expanded(child: buttonForm.buttonSave(
+                      () async {
+                        if (!_formKeyTicket.currentState!.validate()) {
+                          return;
+                        } else {
+                          var priorityID = listPriority.keys.where((element) =>
+                              listPriority[element] == selectedPriority);
+
+                          var statusID = listStatus.keys.where((element) =>
+                              listStatus[element] == selectedStatus);
+
+                          var entityID = listEntities.keys.where((element) =>
+                              listEntities[element] == selectedEntity);
+
+                          var locationID = listLocations.keys.where((element) =>
+                              listLocations[element] == selectedLocation);
+
+                          var itilCategoryID = listITILCategory.keys.where(
+                              (element) =>
+                                  listITILCategory[element] ==
+                                  selectedITILCategory);
+                          var userRecipientID = listUsers.keys.where(
+                              (element) =>
+                                  listUsers[element] == selectedUserRecipient);
+                          var assignedID = listUsers.keys.where((element) =>
+                              listUsers[element] == selectedAssignedUser);
+
+                          updateData["name"] = _titleController.text;
+                          updateData["priority"] = priorityID.first;
+                          updateData["status"] = statusID.first;
+                          updateData["entities_id"] = entityID.first;
+                          updateData["locations_id"] = locationID.first;
+                          updateData["itilcategories_id"] =
+                              itilCategoryID.first;
+                          updateData["users_id_recipient"] =
+                              userRecipientID.first;
+                          updateData["content"] = _contentController.text;
+
+                          updateTicketUserData["users_id"] = assignedID.first;
+
+                          responseAPIUpdateUserAssigned = objectTicket.apiMgmt
+                              .put(
+                                  ApiEndpoint.apiUpdateTicketUser,
+                                  widget.ticket.assignedUserID!,
+                                  updateTicketUserData);
+
+                          responseAPI = objectTicket.apiMgmt.put(
+                              ApiEndpoint.apiUpdateTicket,
+                              widget.ticket.id!,
+                              updateData);
+
+                          final apiResponseValue =
+                              await responseAPI.then((val) => val["update"]);
+
+                          if (apiResponseValue == "true") {
+                            if (!mounted) return;
+                            messages.messageBottomBar(
+                                "Item successfully updated: ${widget.ticket.title}",
+                                context);
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => const TicketsPage(),
+                            ));
+                          } else if (apiResponseValue == "errorUpdate") {
+                            if (!mounted) return;
+                            messages.sendAlert(
+                                "Error to update: Check API connexion",
+                                context);
+                          } else {
+                            if (!mounted) return;
+                            messages.sendAlert("Update cancelled", context);
+                          }
+                        }
+                      },
+                    )),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                  ],
+                ),
+              ],
+            )),
+      ),
+    );
   }
 
   getAllStatus() async {
