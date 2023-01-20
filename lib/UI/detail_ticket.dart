@@ -29,6 +29,7 @@ class _DetailTicketState extends State<DetailTicket> {
 
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _contentController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
 
   final objectTicket = Tickets();
   dynamic responseAPI;
@@ -83,6 +84,8 @@ class _DetailTicketState extends State<DetailTicket> {
   void initState() {
     _titleController.text = widget.ticket.title.toString();
     _contentController.text = widget.ticket.content.toString();
+    _dateController.text = widget.ticket.date.toString();
+
     selectedPriority = widget.ticket.priority.toString();
     selectedStatus = widget.ticket.statusValue.toString();
     selectedEntity = widget.ticket.entity.toString();
@@ -125,9 +128,8 @@ class _DetailTicketState extends State<DetailTicket> {
                 children: <Widget>[
                   formFieldsTicket.buildTextField(_titleController, Icons.title,
                       "Title", TextInputType.text),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  formFieldsTicket.buildDateTimeField(
+                      _dateController, "Open date", context),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
