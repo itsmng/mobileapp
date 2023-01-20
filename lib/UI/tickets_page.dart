@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobileapp/Data_table/row_source_ticket.dart';
+import 'package:mobileapp/UI/create_ticket.dart';
 import 'package:mobileapp/UI/navigation_drawer.dart';
 import 'package:mobileapp/api/api_endpoints.dart';
 import 'package:mobileapp/common/multi_select.dart';
@@ -156,6 +157,17 @@ class _TicketsPageState extends State<TicketsPage> {
         centerTitle: true,
         backgroundColor: const Color.fromARGB(255, 123, 8, 29),
         foregroundColor: const Color.fromARGB(255, 255, 255, 255),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            tooltip: 'Create ticket',
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const CreateTicket(),
+              ));
+            },
+          )
+        ],
       ),
       body: Container(
           padding: const EdgeInsets.all(8.0),
