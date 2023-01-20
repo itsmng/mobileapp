@@ -109,7 +109,7 @@ class ApiMgmt {
           'Session-token': prefs.getString('Session-token') ?? 0.toString(),
           HttpHeaders.contentTypeHeader: headerType,
         },
-      ).timeout(const Duration(seconds: 60));
+      ).timeout(const Duration(seconds: 120));
 
       if (response.statusCode == 200) {
         // If the server did return a 200 OK response,
@@ -133,6 +133,54 @@ class ApiMgmt {
     } catch (_) {
       return {
         "delete": "errorDelete",
+      };
+    }
+  }
+
+  dynamic post(String relativeUrl, Map dataToJson) async {
+    try {
+      // obtain shared preferences
+      final prefs = await SharedPreferences.getInstance();
+
+      final jsonText = jsonEncode({'input': dataToJson},
+          toEncodable: (Object? value) => value is Tickets
+              ? Tickets.toJson(value)
+              : throw UnsupportedError('Cannot convert to JSON: $value'));
+      final response = await http
+          .post(
+              Uri.parse(getAbsoluteUrl(
+                  prefs.getString('URL').toString(), relativeUrl)),
+              headers: <String, String>{
+                'App-token': prefs.getString('App-token') ?? 0.toString(),
+                'Session-token':
+                    prefs.getString('Session-token') ?? 0.toString(),
+                HttpHeaders.contentTypeHeader: headerType,
+              },
+              body: jsonText)
+          .timeout(const Duration(seconds: 120));
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        // If the server did return a 200 OK response,
+        return {
+          "add": "true",
+        };
+      } else {
+        // If the server did not return a 200 OK response,
+        return {
+          "add": "false",
+        };
+      }
+    } on SocketException catch (_) {
+      return {
+        "add": "errorAdd",
+      };
+    } on TimeoutException catch (_) {
+      return {
+        "add": "errorAdd",
+      };
+    } catch (_) {
+      return {
+        "add": "errorAdd",
       };
     }
   }
