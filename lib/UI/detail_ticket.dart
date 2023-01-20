@@ -34,6 +34,7 @@ class _DetailTicketState extends State<DetailTicket> {
   final objectTicket = Tickets();
   dynamic responseAPI;
   dynamic responseAPIUpdateUserAssigned;
+  dynamic responseAPIDelete;
   Map updateData = {};
   Map updateTicketUserData = {};
 
@@ -373,7 +374,36 @@ class _DetailTicketState extends State<DetailTicket> {
                                 width: 20,
                               ),
                               Expanded(
-                                child: buttonForm.buttonDelete(() {}),
+                                child: buttonForm.buttonDelete(() async {
+                                  responseAPIDelete = objectTicket.apiMgmt
+                                      .delete(ApiEndpoint.apiDeleteTicket,
+                                          widget.ticket.id!);
+
+                                  final apiResponseValueDelete =
+                                      await responseAPIDelete
+                                          .then((val) => val["delete"]);
+
+                                  if (apiResponseValueDelete == "true") {
+                                    if (!mounted) return;
+                                    messages.messageBottomBar(
+                                        "Item successfully deleted: ${widget.ticket.title}",
+                                        context);
+                                    Navigator.of(context)
+                                        .push(MaterialPageRoute(
+                                      builder: (context) => const TicketsPage(),
+                                    ));
+                                  } else if (apiResponseValueDelete ==
+                                      "errorDlete") {
+                                    if (!mounted) return;
+                                    messages.sendAlert(
+                                        "Error to delete: Check API connexion",
+                                        context);
+                                  } else {
+                                    if (!mounted) return;
+                                    messages.sendAlert(
+                                        "Deleted cancelled", context);
+                                  }
+                                }),
                               ),
                               const SizedBox(
                                 width: 50,

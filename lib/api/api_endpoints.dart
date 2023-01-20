@@ -10,6 +10,7 @@ class ApiEndpoint {
   static const String apiGetMyTickets =
       "Ticket/?expand_dropdowns=true&range=0-500";
   static const String apiGetTicketsDetails = "Ticket/%s?expand_dropdowns=true";
+   static const String apiDeleteTicket = "Ticket/";
 
   // Task API Endpoint
   static const String apiRootTicketTasks = "TicketTask/";
