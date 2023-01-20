@@ -42,6 +42,9 @@ class FormFieldsTicket {
         }
         return null;
       },
+      onSaved: (String? val) {
+        controllerField.text = val!;
+      },
       style: const TextStyle(color: Colors.black),
     );
   }
@@ -86,6 +89,9 @@ class FormFieldsTicket {
           return '$labelTextField is Required';
         }
         return null;
+      },
+      onSaved: (String? val) {
+        controllerField.text = val!;
       },
       style: const TextStyle(color: Colors.black),
     );
