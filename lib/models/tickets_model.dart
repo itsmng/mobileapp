@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:mobileapp/api/api_mgmt.dart';
 import 'package:mobileapp/models/special_status.dart';
 import 'package:mobileapp/models/ticket_user.dart';
