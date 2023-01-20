@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:mobileapp/api/api_mgmt.dart';
 import 'package:mobileapp/models/special_status.dart';
 import 'package:mobileapp/models/ticket_user.dart';
@@ -67,6 +68,12 @@ class Tickets {
       json["priority"] = listPriority[json["priority"]];
     }
 
+    // Remove &lt;p&gt; and &lt;/p&gt; caracters adding by the API
+    json["content"] =
+        json["content"].toString().replaceAll(RegExp(r'&lt;p&gt;'), "");
+    json["content"] =
+        json["content"].toString().replaceAll(RegExp(r'&lt;/p&gt;'), "");
+
     return Tickets(
       date: json["date"],
       statusID: json["status"],
@@ -132,7 +139,7 @@ class Tickets {
         }
       }
     }
- 
+
     return listTickets;
   }
 
