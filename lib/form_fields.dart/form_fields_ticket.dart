@@ -9,10 +9,22 @@ class FormFieldsTicket {
     String labelTextField,
     TextInputType inputType,
   ) {
+    // This function is triggered when the clear buttion is pressed
+    void _clearTextField() {
+      // Clear everything in the text field
+      controllerField.clear();
+    }
+
     return TextFormField(
       controller: controllerField,
       decoration: InputDecoration(
         prefixIcon: Icon(iconData, color: Colors.black),
+        suffixIcon: controllerField.text.isEmpty
+            ? null // Show nothing if the text field is empty
+            : IconButton(
+                icon: const Icon(Icons.clear),
+                onPressed: _clearTextField,
+              ), // Show the clear button if the text field has something
         focusColor: Colors.black,
         enabledBorder: const UnderlineInputBorder(
           borderSide: BorderSide(width: 3, color: Colors.greenAccent),
@@ -40,12 +52,24 @@ class FormFieldsTicket {
     String labelTextField,
     TextInputType inputType,
   ) {
+    // This function is triggered when the clear buttion is pressed
+    void _clearTextField() {
+      // Clear everything in the text field
+      controllerField.clear();
+    }
+
     return TextFormField(
       controller: controllerField,
       minLines: 5,
       maxLines: 10,
       decoration: InputDecoration(
         prefixIcon: Icon(iconData, color: Colors.black),
+        suffixIcon: controllerField.text.isEmpty
+            ? null // Show nothing if the text field is empty
+            : IconButton(
+                icon: const Icon(Icons.clear),
+                onPressed: _clearTextField,
+              ),
         focusColor: Colors.black,
         enabledBorder: const UnderlineInputBorder(
           borderSide: BorderSide(width: 3, color: Colors.greenAccent),
