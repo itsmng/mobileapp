@@ -31,7 +31,9 @@ class ApiMgmt {
             HttpHeaders.contentTypeHeader: headerType,
           });
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 ||
+          response.statusCode == 206 ||
+          response.statusCode == 201) {
         // If the server did return a 200 OK response,
         // then parse the JSON.
         authStatus = true;
@@ -70,7 +72,9 @@ class ApiMgmt {
               body: jsonText)
           .timeout(const Duration(seconds: 60));
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 ||
+          response.statusCode == 206 ||
+          response.statusCode == 201) {
         // If the server did return a 200 OK response,
         return {
           "update": "true",
@@ -111,7 +115,9 @@ class ApiMgmt {
         },
       ).timeout(const Duration(seconds: 120));
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 ||
+          response.statusCode == 206 ||
+          response.statusCode == 201) {
         // If the server did return a 200 OK response,
         return {
           "delete": "true",
@@ -159,7 +165,9 @@ class ApiMgmt {
               body: jsonText)
           .timeout(const Duration(seconds: 120));
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
+      if (response.statusCode == 200 ||
+          response.statusCode == 206 ||
+          response.statusCode == 201) {
         // If the server did return a 200 OK response,
         return {
           "add": "true",
