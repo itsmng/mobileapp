@@ -10,7 +10,7 @@ class FormFieldsTicket {
     TextInputType inputType,
   ) {
     // This function is triggered when the clear buttion is pressed
-    void _clearTextField() {
+    void clearTextField() {
       // Clear everything in the text field
       controllerField.clear();
     }
@@ -23,7 +23,7 @@ class FormFieldsTicket {
             ? null // Show nothing if the text field is empty
             : IconButton(
                 icon: const Icon(Icons.clear),
-                onPressed: _clearTextField,
+                onPressed: clearTextField,
               ), // Show the clear button if the text field has something
         focusColor: Colors.black,
         enabledBorder: const UnderlineInputBorder(
@@ -53,22 +53,22 @@ class FormFieldsTicket {
     TextInputType inputType,
   ) {
     // This function is triggered when the clear buttion is pressed
-    void _clearTextField() {
+    void clearTextField() {
       // Clear everything in the text field
       controllerField.clear();
     }
 
     return TextFormField(
       controller: controllerField,
-      minLines: 5,
-      maxLines: 10,
+      minLines: 3,
+      maxLines: 5,
       decoration: InputDecoration(
         prefixIcon: Icon(iconData, color: Colors.black),
         suffixIcon: controllerField.text.isEmpty
             ? null // Show nothing if the text field is empty
             : IconButton(
                 icon: const Icon(Icons.clear),
-                onPressed: _clearTextField,
+                onPressed: clearTextField,
               ),
         focusColor: Colors.black,
         enabledBorder: const UnderlineInputBorder(
