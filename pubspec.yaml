@@ -41,6 +41,7 @@ dependencies:
   charts_flutter: ^0.12.0
   regexed_validator: ^2.0.0+1
   shared_preferences: ^2.0.16
+  intl: ^0.17.0
   
 dev_dependencies:
   flutter_test:
