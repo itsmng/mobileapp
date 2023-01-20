@@ -28,6 +28,7 @@ class _DetailTicketState extends State<DetailTicket> {
   final buttonForm = Button();
 
   final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _contentController = TextEditingController();
 
   final objectTicket = Tickets();
   dynamic responseAPI;
@@ -81,6 +82,7 @@ class _DetailTicketState extends State<DetailTicket> {
   @override
   void initState() {
     _titleController.text = widget.ticket.title.toString();
+    _contentController.text = widget.ticket.content.toString();
     selectedPriority = widget.ticket.priority.toString();
     selectedStatus = widget.ticket.statusValue.toString();
     selectedEntity = widget.ticket.entity.toString();
@@ -330,6 +332,12 @@ class _DetailTicketState extends State<DetailTicket> {
                       ),
                     ],
                   ),
+                  formFieldsTicket.buildTextAreaField(
+                    _contentController,
+                    Icons.text_fields,
+                    "Content",
+                    TextInputType.multiline,
+                  ),
                   const SizedBox(
                     height: 30,
                   ),
@@ -367,6 +375,7 @@ class _DetailTicketState extends State<DetailTicket> {
                         updateData["itilcategories_id"] = itilCategoryID.first;
                         updateData["users_id_recipient"] =
                             userRecipientID.first;
+                        updateData["content"] = _contentController.text;
 
                         updateTicketUserData["users_id"] = assignedID.first;
 
