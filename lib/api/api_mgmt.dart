@@ -96,6 +96,47 @@ class ApiMgmt {
     }
   }
 
+  dynamic delete(String relativeUrl, int id) async {
+    try {
+      // obtain shared preferences
+      final prefs = await SharedPreferences.getInstance();
+
+      final response = await http.delete(
+        Uri.parse(getAbsoluteUrlWithID(
+            prefs.getString('URL').toString(), relativeUrl, id)),
+        headers: <String, String>{
+          'App-token': prefs.getString('App-token') ?? 0.toString(),
+          'Session-token': prefs.getString('Session-token') ?? 0.toString(),
+          HttpHeaders.contentTypeHeader: headerType,
+        },
+      ).timeout(const Duration(seconds: 60));
+
+      if (response.statusCode == 200) {
+        // If the server did return a 200 OK response,
+        return {
+          "delete": "true",
+        };
+      } else {
+        // If the server did not return a 200 OK response,
+        return {
+          "delete": "false",
+        };
+      }
+    } on SocketException catch (_) {
+      return {
+        "delete": "errorDelete",
+      };
+    } on TimeoutException catch (_) {
+      return {
+        "delete": "errorDelete",
+      };
+    } catch (_) {
+      return {
+        "delete": "errorDelete",
+      };
+    }
+  }
+
   // Method to init the connexion
   dynamic authentification(String relativeUrl, String apiAuthToken,
       String userToken, String apiBaseUrl) async {
