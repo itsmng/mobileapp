@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:mobileapp/UI/tickets_page.dart';
 import 'package:mobileapp/api/api_endpoints.dart';
 import 'package:mobileapp/common/dropdown.dart';
@@ -7,6 +8,7 @@ import 'package:mobileapp/form_fields.dart/button.dart';
 import 'package:mobileapp/form_fields.dart/form_fields_ticket.dart';
 import 'package:mobileapp/models/entity.dart';
 import 'package:mobileapp/models/itil_category.dart';
+import 'package:mobileapp/models/itil_followup.dart';
 import 'package:mobileapp/models/location.dart';
 import 'package:mobileapp/models/special_status.dart';
 import 'package:mobileapp/models/ticket_user.dart';
@@ -23,6 +25,7 @@ class DetailTicket extends StatefulWidget {
 
 class _DetailTicketState extends State<DetailTicket> {
   final GlobalKey<FormState> _formKeyTicket = GlobalKey<FormState>();
+  final GlobalKey<FormState> formKeyAlert = GlobalKey<FormState>();
 
   final formFieldsTicket = FormFieldsTicket();
   final buttonForm = Button();
@@ -30,13 +33,19 @@ class _DetailTicketState extends State<DetailTicket> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _contentController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _contentFollowupController =
+      TextEditingController();
+  bool isPrivateFollowup = false;
 
   final objectTicket = Tickets();
   dynamic responseAPI;
   dynamic responseAPIUpdateUserAssigned;
   dynamic responseAPIDelete;
+  dynamic responseAPIAddFollowup;
+
   Map updateData = {};
   Map updateTicketUserData = {};
+  Map addITILFollowupData = {};
 
   final messages = Messages();
   final dropdown = Dropdown();
@@ -58,6 +67,10 @@ class _DetailTicketState extends State<DetailTicket> {
 
   Map<int, String> listAssignedUsers = {};
   late String selectedAssignedUser;
+
+  List<ITILfollowup> listITILFollowup = [];
+
+  bool isVisibleButton = false;
 
   Map<int, String> listPriority = {
     1: "Very low",
@@ -86,6 +99,7 @@ class _DetailTicketState extends State<DetailTicket> {
     _titleController.text = widget.ticket.title.toString();
     _contentController.text = widget.ticket.content.toString();
     _dateController.text = widget.ticket.date.toString();
+    _contentFollowupController.clear();
 
     selectedPriority = widget.ticket.priority.toString();
     selectedStatus = widget.ticket.statusValue.toString();
@@ -101,6 +115,7 @@ class _DetailTicketState extends State<DetailTicket> {
     getAllITILCategory();
     getAllUsers();
     getAllAssignedUsers();
+    getAllITILFollowup();
     super.initState();
   }
 
@@ -117,6 +132,7 @@ class _DetailTicketState extends State<DetailTicket> {
             bottom: const TabBar(
               labelStyle: TextStyle(color: Colors.white),
               indicatorColor: Colors.white,
+              labelColor: Colors.white,
               tabs: [
                 Tab(text: 'Ticket'),
                 Tab(text: 'Followup'),
@@ -127,10 +143,37 @@ class _DetailTicketState extends State<DetailTicket> {
           body: TabBarView(
             children: [
               updateTicket(),
-              const Text('Follow up'),
+              followup(),
               const Text('Task'),
             ],
           ),
+          floatingActionButton: SpeedDial(
+              mini: true,
+              icon: Icons.add,
+              foregroundColor: Colors.white,
+              activeIcon: Icons.close,
+              visible: true,
+              animationDuration: const Duration(milliseconds: 5),
+              animatedIconTheme: const IconThemeData(color: Colors.white),
+              backgroundColor: const Color.fromARGB(255, 123, 8, 29),
+              children: [
+                SpeedDialChild(
+                  child: const Icon(Icons.follow_the_signs),
+                  label: 'Add followup',
+                  backgroundColor: const Color.fromARGB(255, 123, 8, 29),
+                  foregroundColor: Colors.white,
+                  onTap: () {
+                    showAddFollowup();
+                  },
+                ),
+                SpeedDialChild(
+                  child: const Icon(Icons.task),
+                  label: 'Add Task',
+                  backgroundColor: const Color.fromARGB(255, 123, 8, 29),
+                  foregroundColor: Colors.white,
+                  onTap: () {/* Do something */},
+                ),
+              ]),
         ));
   }
 
@@ -367,116 +410,123 @@ class _DetailTicketState extends State<DetailTicket> {
                   height: 20,
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const SizedBox(
-                      width: 20,
+                    Flexible(
+                      child: Container(
+                          padding: const EdgeInsets.all(20),
+                          child: buttonForm.buttonDelete(() async {
+                            responseAPIDelete = objectTicket.apiMgmt.delete(
+                                ApiEndpoint.apiDeleteTicket, widget.ticket.id!);
+
+                            final apiResponseValueDelete =
+                                await responseAPIDelete
+                                    .then((val) => val["delete"]);
+
+                            if (apiResponseValueDelete == "true") {
+                              if (!mounted) return;
+                              messages.messageBottomBar(
+                                  "Item successfully deleted: ${widget.ticket.title}",
+                                  context);
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => const TicketsPage(),
+                              ));
+                            } else if (apiResponseValueDelete == "errorDlete") {
+                              if (!mounted) return;
+                              messages.sendAlert(
+                                  "Error to delete: Check API connexion",
+                                  context);
+                            } else {
+                              if (!mounted) return;
+                              messages.sendAlert("Deleted cancelled", context);
+                            }
+                          })),
                     ),
-                    Expanded(
-                      child: buttonForm.buttonDelete(() async {
-                        responseAPIDelete = objectTicket.apiMgmt.delete(
-                            ApiEndpoint.apiDeleteTicket, widget.ticket.id!);
+                    Flexible(
+                      child: Container(
+                        padding: const EdgeInsets.all(20),
+                        child: buttonForm.buttonSave(
+                          () async {
+                            if (!_formKeyTicket.currentState!.validate()) {
+                              return;
+                            } else {
+                              var priorityID = listPriority.keys.where(
+                                  (element) =>
+                                      listPriority[element] ==
+                                      selectedPriority);
 
-                        final apiResponseValueDelete = await responseAPIDelete
-                            .then((val) => val["delete"]);
+                              var statusID = listStatus.keys.where((element) =>
+                                  listStatus[element] == selectedStatus);
 
-                        if (apiResponseValueDelete == "true") {
-                          if (!mounted) return;
-                          messages.messageBottomBar(
-                              "Item successfully deleted: ${widget.ticket.title}",
-                              context);
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const TicketsPage(),
-                          ));
-                        } else if (apiResponseValueDelete == "errorDlete") {
-                          if (!mounted) return;
-                          messages.sendAlert(
-                              "Error to delete: Check API connexion", context);
-                        } else {
-                          if (!mounted) return;
-                          messages.sendAlert("Deleted cancelled", context);
-                        }
-                      }),
-                    ),
-                    const SizedBox(
-                      width: 50,
-                    ),
-                    Expanded(child: buttonForm.buttonSave(
-                      () async {
-                        if (!_formKeyTicket.currentState!.validate()) {
-                          return;
-                        } else {
-                          var priorityID = listPriority.keys.where((element) =>
-                              listPriority[element] == selectedPriority);
+                              var entityID = listEntities.keys.where(
+                                  (element) =>
+                                      listEntities[element] == selectedEntity);
 
-                          var statusID = listStatus.keys.where((element) =>
-                              listStatus[element] == selectedStatus);
+                              var locationID = listLocations.keys.where(
+                                  (element) =>
+                                      listLocations[element] ==
+                                      selectedLocation);
 
-                          var entityID = listEntities.keys.where((element) =>
-                              listEntities[element] == selectedEntity);
+                              var itilCategoryID = listITILCategory.keys.where(
+                                  (element) =>
+                                      listITILCategory[element] ==
+                                      selectedITILCategory);
+                              var userRecipientID = listUsers.keys.where(
+                                  (element) =>
+                                      listUsers[element] ==
+                                      selectedUserRecipient);
+                              var assignedID = listUsers.keys.where((element) =>
+                                  listUsers[element] == selectedAssignedUser);
 
-                          var locationID = listLocations.keys.where((element) =>
-                              listLocations[element] == selectedLocation);
+                              updateData["name"] = _titleController.text;
+                              updateData["priority"] = priorityID.first;
+                              updateData["status"] = statusID.first;
+                              updateData["entities_id"] = entityID.first;
+                              updateData["locations_id"] = locationID.first;
+                              updateData["itilcategories_id"] =
+                                  itilCategoryID.first;
+                              updateData["users_id_recipient"] =
+                                  userRecipientID.first;
+                              updateData["content"] = _contentController.text;
 
-                          var itilCategoryID = listITILCategory.keys.where(
-                              (element) =>
-                                  listITILCategory[element] ==
-                                  selectedITILCategory);
-                          var userRecipientID = listUsers.keys.where(
-                              (element) =>
-                                  listUsers[element] == selectedUserRecipient);
-                          var assignedID = listUsers.keys.where((element) =>
-                              listUsers[element] == selectedAssignedUser);
+                              updateTicketUserData["users_id"] =
+                                  assignedID.first;
 
-                          updateData["name"] = _titleController.text;
-                          updateData["priority"] = priorityID.first;
-                          updateData["status"] = statusID.first;
-                          updateData["entities_id"] = entityID.first;
-                          updateData["locations_id"] = locationID.first;
-                          updateData["itilcategories_id"] =
-                              itilCategoryID.first;
-                          updateData["users_id_recipient"] =
-                              userRecipientID.first;
-                          updateData["content"] = _contentController.text;
+                              responseAPIUpdateUserAssigned =
+                                  objectTicket.apiMgmt.put(
+                                      ApiEndpoint.apiUpdateTicketUser,
+                                      widget.ticket.assignedUserID!,
+                                      updateTicketUserData);
 
-                          updateTicketUserData["users_id"] = assignedID.first;
+                              responseAPI = objectTicket.apiMgmt.put(
+                                  ApiEndpoint.apiUpdateTicket,
+                                  widget.ticket.id!,
+                                  updateData);
 
-                          responseAPIUpdateUserAssigned = objectTicket.apiMgmt
-                              .put(
-                                  ApiEndpoint.apiUpdateTicketUser,
-                                  widget.ticket.assignedUserID!,
-                                  updateTicketUserData);
+                              final apiResponseValue = await responseAPI
+                                  .then((val) => val["update"]);
 
-                          responseAPI = objectTicket.apiMgmt.put(
-                              ApiEndpoint.apiUpdateTicket,
-                              widget.ticket.id!,
-                              updateData);
-
-                          final apiResponseValue =
-                              await responseAPI.then((val) => val["update"]);
-
-                          if (apiResponseValue == "true") {
-                            if (!mounted) return;
-                            messages.messageBottomBar(
-                                "Item successfully updated: ${widget.ticket.title}",
-                                context);
-                            Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const TicketsPage(),
-                            ));
-                          } else if (apiResponseValue == "errorUpdate") {
-                            if (!mounted) return;
-                            messages.sendAlert(
-                                "Error to update: Check API connexion",
-                                context);
-                          } else {
-                            if (!mounted) return;
-                            messages.sendAlert("Update cancelled", context);
-                          }
-                        }
-                      },
-                    )),
-                    const SizedBox(
-                      width: 20,
+                              if (apiResponseValue == "true") {
+                                if (!mounted) return;
+                                messages.messageBottomBar(
+                                    "Item successfully updated: ${widget.ticket.title}",
+                                    context);
+                                Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => const TicketsPage(),
+                                ));
+                              } else if (apiResponseValue == "errorUpdate") {
+                                if (!mounted) return;
+                                messages.sendAlert(
+                                    "Error to update: Check API connexion",
+                                    context);
+                              } else {
+                                if (!mounted) return;
+                                messages.sendAlert("Update cancelled", context);
+                              }
+                            }
+                          },
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -563,5 +613,210 @@ class _DetailTicketState extends State<DetailTicket> {
         }
       }
     });
+  }
+
+  showAddFollowup() {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          isPrivateFollowup = false;
+          _contentFollowupController.clear();
+          return StatefulBuilder(builder: (context, setState) {
+            return AlertDialog(
+              scrollable: true,
+              title: const Text('Add Follow up'),
+              content: Padding(
+                padding: const EdgeInsets.all(3.0),
+                child: Form(
+                  key: formKeyAlert,
+                  child: Column(
+                    children: <Widget>[
+                      formFieldsTicket.buildTextAreaField(
+                        _contentFollowupController,
+                        Icons.text_fields,
+                        "Content",
+                        TextInputType.multiline,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: const [
+                              Icon(Icons.lock),
+                              Text("Private"),
+                            ],
+                          ),
+                          Switch(
+                              value: isPrivateFollowup,
+                              onChanged: (bool? checked) {
+                                setState(() {
+                                  isPrivateFollowup = checked!;
+                                });
+                              })
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              actions: [
+                Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      buttonForm.buttonExit(() {
+                        Navigator.of(context).pop();
+                      }),
+                      buttonForm.buttonSave(() async {
+                        addITILFollowupData["itemtype"] = "Ticket";
+                        addITILFollowupData["items_id"] =
+                            widget.ticket.id.toString();
+                        addITILFollowupData["content"] =
+                            _contentFollowupController.text;
+                        if (isPrivateFollowup) {
+                          addITILFollowupData["is_private"] = 1;
+                        } else {
+                          addITILFollowupData["is_private"] = 0;
+                        }
+
+                        responseAPIAddFollowup = objectTicket.apiMgmt.post(
+                            ApiEndpoint.apiRootTicketFollowup,
+                            addITILFollowupData);
+
+                        final apiResponseAddFollowup =
+                            await responseAPIAddFollowup
+                                .then((val) => val["add"]);
+
+                        if (apiResponseAddFollowup == "true") {
+                          if (!mounted) return;
+                          messages.messageBottomBar(
+                              "Item successfully added: ", context);
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const TicketsPage(),
+                          ));
+                        } else if (apiResponseAddFollowup == "errorAdd") {
+                          if (!mounted) return;
+                          messages.sendAlert(
+                              "Error to add: Check API connexion", context);
+                        } else {
+                          if (!mounted) return;
+                          messages.sendAlert("Add cancelled", context);
+                        }
+                      }),
+                    ],
+                  ),
+                ),
+              ],
+            );
+          });
+        });
+  }
+
+  getAllITILFollowup() async {
+    // Object of the Special Status class
+    final itilFollowup = ITILfollowup();
+
+    List<ITILfollowup> allITILfollowup =
+        await itilFollowup.getAllITILfollowup(widget.ticket.id!);
+
+    setState(() {
+      for (var e in allITILfollowup) {
+        listITILFollowup.add(e);
+      }
+    });
+  }
+
+  Widget followup() {
+    return ListView(
+      children: [
+        Column(
+          children: [
+            ListView.builder(
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: listITILFollowup.length,
+                itemBuilder: _itemBuilder),
+          ],
+        )
+      ],
+    );
+  }
+
+  Widget _itemBuilder(BuildContext context, int index) {
+    bool test = false;
+
+    if (listITILFollowup[index].isPrivate.toString() == "1") {
+      test = true;
+    }
+    // print("1: ${listITILFollowup[index].itemsID.toString()}");
+    //print("2: ${widget.ticket.title.toString()}");
+
+    if (listITILFollowup[index].itemsID.toString() ==
+        widget.ticket.title.toString()) {
+      return Card(
+        clipBehavior: Clip.antiAlias,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          side: BorderSide(
+            color: Theme.of(context).colorScheme.outline,
+          ),
+          borderRadius: const BorderRadius.all(Radius.circular(12)),
+        ),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: ListTile(
+                    leading: const Icon(
+                      Icons.person,
+                      size: 40,
+                      color: Colors.black,
+                    ),
+                    horizontalTitleGap: 5,
+                    title: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          listITILFollowup[index].userID.toString(),
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20),
+                        ),
+                        const SizedBox(
+                          width: 30,
+                        ),
+                        Text(
+                          listITILFollowup[index].date.toString(),
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 10),
+                        ),
+                      ],
+                    ),
+                    subtitle: Text(
+                      listITILFollowup[index].content.toString(),
+                      style: const TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ),
+                Icon(
+                  test ? Icons.lock : null,
+                  size: 30,
+                  color: const Color.fromARGB(255, 123, 8, 29),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+    } else {
+      return const InkWell(
+        child: Text(""),
+      );
+    }
   }
 }
