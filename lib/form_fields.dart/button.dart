@@ -32,4 +32,20 @@ class Button {
               fontWeight: FontWeight.bold),
         ));
   }
+
+  buttonExit(VoidCallback? onClicked) {
+    return ElevatedButton(
+        //MaterialButton
+        style: ElevatedButton.styleFrom(
+          backgroundColor:
+              const Color.fromARGB(255, 245, 183, 177), // background
+        ),
+        onPressed: onClicked,
+        child: const Text(
+          'Exit',
+          style: TextStyle(
+              color: Color.fromARGB(255, 143, 90, 10),
+              fontWeight: FontWeight.bold),
+        ));
+  }
 }
