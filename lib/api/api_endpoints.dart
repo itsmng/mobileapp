@@ -10,12 +10,17 @@ class ApiEndpoint {
   static const String apiGetMyTickets =
       "Ticket/?expand_dropdowns=true&range=0-500";
   static const String apiGetTicketsDetails = "Ticket/%s?expand_dropdowns=true";
-   static const String apiDeleteTicket = "Ticket/";
+  static const String apiDeleteTicket = "Ticket/";
 
   // Task API Endpoint
   static const String apiRootTicketTasks = "TicketTask/";
   static const String apiGetTicketTasks =
       "TicketTask/?expand_dropdowns=true&searchText[tickets_id]=%s";
+
+  // Followup API Endpoint
+  static const String apiRootTicketFollowup = "ITILFollowup/";
+  static const String apiGetTicketFollowup =
+      "ITILFollowup/?expand_dropdowns=true&searchText[items_id]=";
 
   // Ticket user Endpoint
   static const String apiGetTicketUsers =
@@ -48,5 +53,5 @@ class ApiEndpoint {
   // Ticket user API Endpoint
   static const String apiGetAllTicketUsers =
       "Ticket_User/?expand_dropdowns=true&searchText[type]=2";
-   static const String apiUpdateTicketUser = "Ticket_User/";
+  static const String apiUpdateTicketUser = "Ticket_User/";
 }
