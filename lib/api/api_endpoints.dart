@@ -22,6 +22,11 @@ class ApiEndpoint {
   static const String apiGetTicketFollowup =
       "ITILFollowup/?expand_dropdowns=true&searchText[items_id]=";
 
+   // Task API Endpoint
+  static const String apiRootTicketTask = "TicketTask/";
+  static const String apiGetTicketTask =
+      "TicketTask/?expand_dropdowns=true&searchText[tickets_id]=";
+
   // Ticket user Endpoint
   static const String apiGetTicketUsers =
       "Ticket_User/?expand_dropdowns=true&searchText[tickets_id]=%s&searchText[type]=2";
