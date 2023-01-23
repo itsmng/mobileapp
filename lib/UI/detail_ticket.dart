@@ -11,6 +11,7 @@ import 'package:mobileapp/models/itil_category.dart';
 import 'package:mobileapp/models/itil_followup.dart';
 import 'package:mobileapp/models/location.dart';
 import 'package:mobileapp/models/special_status.dart';
+import 'package:mobileapp/models/task.dart';
 import 'package:mobileapp/models/ticket_user.dart';
 import 'package:mobileapp/models/tickets_model.dart';
 import 'package:mobileapp/models/user.dart';
@@ -69,6 +70,7 @@ class _DetailTicketState extends State<DetailTicket> {
   late String selectedAssignedUser;
 
   List<ITILfollowup> listITILFollowup = [];
+  List<Task> listTask = [];
 
   bool isVisibleButton = false;
 
@@ -116,6 +118,7 @@ class _DetailTicketState extends State<DetailTicket> {
     getAllUsers();
     getAllAssignedUsers();
     getAllITILFollowup();
+    getAllTask();
     super.initState();
   }
 
@@ -144,7 +147,7 @@ class _DetailTicketState extends State<DetailTicket> {
             children: [
               updateTicket(),
               followup(),
-              const Text('Task'),
+              task(),
             ],
           ),
           floatingActionButton: SpeedDial(
@@ -729,6 +732,7 @@ class _DetailTicketState extends State<DetailTicket> {
     });
   }
 
+  // Display all followup
   Widget followup() {
     return ListView(
       children: [
@@ -738,21 +742,19 @@ class _DetailTicketState extends State<DetailTicket> {
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 itemCount: listITILFollowup.length,
-                itemBuilder: _itemBuilder),
+                itemBuilder: _itemBuilderFollowup),
           ],
         )
       ],
     );
   }
 
-  Widget _itemBuilder(BuildContext context, int index) {
+  Widget _itemBuilderFollowup(BuildContext context, int index) {
     bool test = false;
 
     if (listITILFollowup[index].isPrivate.toString() == "1") {
       test = true;
     }
-    // print("1: ${listITILFollowup[index].itemsID.toString()}");
-    //print("2: ${widget.ticket.title.toString()}");
 
     if (listITILFollowup[index].itemsID.toString() ==
         widget.ticket.title.toString()) {
@@ -797,6 +799,108 @@ class _DetailTicketState extends State<DetailTicket> {
                     ),
                     subtitle: Text(
                       listITILFollowup[index].content.toString(),
+                      style: const TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ),
+                Icon(
+                  test ? Icons.lock : null,
+                  size: 30,
+                  color: const Color.fromARGB(255, 123, 8, 29),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+    } else {
+      return const InkWell(
+        child: Text(""),
+      );
+    }
+  }
+
+  getAllTask() async {
+    // Object of the Special Status class
+    final task = Task();
+
+    List<Task> allTask = await task.getAllTask(widget.ticket.id!);
+
+    setState(() {
+      for (var ele in allTask) {
+        listTask.add(ele);
+      }
+    });
+  }
+
+  // Display all followup
+  Widget task() {
+    return ListView(
+      children: [
+        Column(
+          children: [
+            ListView.builder(
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: listTask.length,
+                itemBuilder: _itemBuilderTask),
+          ],
+        )
+      ],
+    );
+  }
+
+  Widget _itemBuilderTask(BuildContext context, int index) {
+    bool test = false;
+
+    if (listTask[index].isPrivate.toString() == "1") {
+      test = true;
+    }
+
+    if (listTask[index].ticketID.toString() == widget.ticket.title.toString()) {
+      return Card(
+        clipBehavior: Clip.antiAlias,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          side: BorderSide(
+            color: Theme.of(context).colorScheme.outline,
+          ),
+          borderRadius: const BorderRadius.all(Radius.circular(12)),
+        ),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: ListTile(
+                    leading: const Icon(
+                      Icons.person,
+                      size: 40,
+                      color: Colors.black,
+                    ),
+                    horizontalTitleGap: 5,
+                    title: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          listTask[index].userID.toString(),
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20),
+                        ),
+                        const SizedBox(
+                          width: 30,
+                        ),
+                        Text(
+                          listTask[index].date.toString(),
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 10),
+                        ),
+                      ],
+                    ),
+                    subtitle: Text(
+                      listTask[index].content.toString(),
                       style: const TextStyle(
                         color: Colors.black,
                       ),
