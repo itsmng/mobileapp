@@ -592,6 +592,11 @@ class _DetailTicketState extends State<DetailTicket> {
                       size: 40,
                       color: Colors.black,
                     ),
+                    trailing: Icon(
+                      testIsPrivate ? Icons.lock : null,
+                      size: 30,
+                      color: const Color.fromARGB(255, 123, 8, 29),
+                    ),
                     horizontalTitleGap: 5,
                     title: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -617,12 +622,13 @@ class _DetailTicketState extends State<DetailTicket> {
                         color: Colors.black,
                       ),
                     ),
+                    onTap: () {
+                      showUpdateFollowup(
+                          listITILFollowup[index].id!,
+                          listITILFollowup[index].content.toString(),
+                          listITILFollowup[index].isPrivate!);
+                    },
                   ),
-                ),
-                Icon(
-                  testIsPrivate ? Icons.lock : null,
-                  size: 30,
-                  color: const Color.fromARGB(255, 123, 8, 29),
                 ),
               ],
             ),
@@ -684,9 +690,15 @@ class _DetailTicketState extends State<DetailTicket> {
                       size: 40,
                       color: Colors.black,
                     ),
+                    trailing: Icon(
+                      testIsPrivate ? Icons.lock : null,
+                      size: 30,
+                      color: const Color.fromARGB(255, 123, 8, 29),
+                    ),
                     horizontalTitleGap: 5,
                     title: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
                           listTask[index].userID.toString(),
@@ -697,7 +709,7 @@ class _DetailTicketState extends State<DetailTicket> {
                           width: 10,
                         ),
                         Text(
-                          listTask[index].date.toString().split(" ")[0],
+                          listTask[index].date.toString(),
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 10),
                         ),
@@ -723,12 +735,7 @@ class _DetailTicketState extends State<DetailTicket> {
                       ),
                     ),
                   ),
-                ),
-                Icon(
-                  testIsPrivate ? Icons.lock : null,
-                  size: 30,
-                  color: const Color.fromARGB(255, 123, 8, 29),
-                ),
+                )
               ],
             ),
           ],
@@ -739,6 +746,109 @@ class _DetailTicketState extends State<DetailTicket> {
         child: Text(""),
       );
     }
+  }
+
+  showUpdateFollowup(int idFollowup, String userID, int private) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          final TextEditingController updateContentController =
+              TextEditingController();
+          bool updateIsPrivateFollowup = false;
+
+          updateContentController.text = userID;
+          if (private == 1) {
+            updateIsPrivateFollowup = true;
+          } else {
+            updateIsPrivateFollowup = false;
+          }
+
+          return StatefulBuilder(builder: (context, setState) {
+            return AlertDialog(
+              scrollable: true,
+              title: const Text('Update Follow up'),
+              content: Padding(
+                padding: const EdgeInsets.all(3.0),
+                child: Form(
+                  child: Column(
+                    children: <Widget>[
+                      formFieldsTicket.buildTextAreaField(
+                        updateContentController,
+                        Icons.text_fields,
+                        "Content",
+                        TextInputType.multiline,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: const [
+                              Icon(Icons.lock),
+                              Text("Private"),
+                            ],
+                          ),
+                          Switch(
+                              value: updateIsPrivateFollowup,
+                              onChanged: (bool? checked) {
+                                setState(() {
+                                  updateIsPrivateFollowup = checked!;
+                                });
+                              })
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              actions: [
+                Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      buttonForm.buttonExit(() {
+                        Navigator.of(context).pop();
+                      }),
+                      buttonForm.buttonSave(() async {
+                        Map<dynamic, dynamic> updateFollowupData = {};
+                        updateFollowupData["content"] =
+                            updateContentController.text;
+                        updateFollowupData["is_private"] =
+                            updateIsPrivateFollowup;
+
+                        dynamic response = objectTicket.apiMgmt.put(
+                            ApiEndpoint.apiRootTicketFollowup,
+                            idFollowup,
+                            updateFollowupData);
+
+                        final responseValue =
+                            await response.then((val) => val["update"]);
+
+                        if (responseValue == "true") {
+                          if (!mounted) return;
+                          messages.messageBottomBar(
+                              "Item successfully updated", context);
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const TicketsPage(),
+                          ));
+                        } else if (responseValue == "errorUpdate") {
+                          if (!mounted) return;
+                          messages.sendAlert(
+                              "Error to update: Check API connexion", context);
+                        } else {
+                          if (!mounted) return;
+                          messages.sendAlert("Update cancelled", context);
+                        }
+                      }),
+                    ],
+                  ),
+                ),
+              ],
+            );
+          });
+        });
   }
 
   showAddFollowup() {
