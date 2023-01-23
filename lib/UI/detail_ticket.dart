@@ -100,6 +100,22 @@ class _DetailTicketState extends State<DetailTicket> {
     return menuItem;
   }
 
+  Map<int, String> listToDo = {
+    0: "Information",
+    1: "To do",
+    2: "Done",
+  };
+  late String selectedToDo;
+
+  List<DropdownMenuItem<String>> get dropdownToDo {
+    List<DropdownMenuItem<String>> menuItem = [
+      const DropdownMenuItem(value: "Information", child: Text("Information")),
+      const DropdownMenuItem(value: "To do", child: Text("To do")),
+      const DropdownMenuItem(value: "Done", child: Text("Done")),
+    ];
+    return menuItem;
+  }
+
   @override
   void initState() {
     _titleController.text = widget.ticket.title.toString();
@@ -115,6 +131,7 @@ class _DetailTicketState extends State<DetailTicket> {
     selectedITILCategory = widget.ticket.category.toString();
     selectedUserRecipient = widget.ticket.recipient.toString();
     selectedAssignedUser = widget.ticket.assignedUser.toString();
+    selectedToDo = "To do";
 
     getAllStatus();
     getAllEntities();
@@ -662,11 +679,19 @@ class _DetailTicketState extends State<DetailTicket> {
   Widget _itemBuilderTask(BuildContext context, int index) {
     bool testIsPrivate = false;
     bool testDurationExist = false;
+    IconData iconState;
     if (listTask[index].isPrivate.toString() == "1") {
       testIsPrivate = true;
     }
     if (listTask[index].fullDuration.toString() != "") {
       testDurationExist = true;
+    }
+    if (listTask[index].state == 0) {
+      iconState = Icons.info;
+    } else if (listTask[index].state == 1) {
+      iconState = Icons.task;
+    } else {
+      iconState = Icons.done;
     }
 
     if (listTask[index].ticketID.toString() == widget.ticket.title.toString()) {
@@ -690,10 +715,20 @@ class _DetailTicketState extends State<DetailTicket> {
                       size: 40,
                       color: Colors.black,
                     ),
-                    trailing: Icon(
-                      testIsPrivate ? Icons.lock : null,
-                      size: 30,
-                      color: const Color.fromARGB(255, 123, 8, 29),
+                    trailing: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Icon(
+                          testIsPrivate ? Icons.lock : null,
+                          size: 20,
+                          color: const Color.fromARGB(255, 123, 8, 29),
+                        ),
+                        Icon(
+                          iconState,
+                          size: 20,
+                          color: const Color.fromARGB(255, 123, 8, 29),
+                        )
+                      ],
                     ),
                     horizontalTitleGap: 5,
                     title: Row(
@@ -738,7 +773,9 @@ class _DetailTicketState extends State<DetailTicket> {
                       showUpdateTask(
                           listTask[index].id!,
                           listTask[index].content.toString(),
-                          listTask[index].isPrivate!);
+                          listTask[index].isPrivate!,
+                          listTask[index].state!,
+                          listTask[index].stateVlaue!);
                     },
                   ),
                 )
@@ -857,7 +894,8 @@ class _DetailTicketState extends State<DetailTicket> {
         });
   }
 
-  showUpdateTask(int idTask, String content, int privacy) {
+  showUpdateTask(
+      int idTask, String content, int privacy, int state, String stateVlaue) {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -865,6 +903,7 @@ class _DetailTicketState extends State<DetailTicket> {
               TextEditingController();
           bool updateIsPrivateTask = false;
 
+          String seletedToDoVlaue = stateVlaue;
           updateTaskContentController.text = content;
           if (privacy == 1) {
             updateIsPrivateTask = true;
@@ -886,6 +925,28 @@ class _DetailTicketState extends State<DetailTicket> {
                         Icons.text_fields,
                         "Content",
                         TextInputType.multiline,
+                      ),
+                      DropdownButtonFormField(
+                        value: seletedToDoVlaue,
+                        items: dropdownToDo,
+                        onChanged: (String? value) {
+                          setState(() {
+                            seletedToDoVlaue = value!;
+                          });
+                        },
+                        decoration: const InputDecoration(
+                          labelText: 'To do',
+                          prefixIcon: Icon(Icons.add_task, color: Colors.black),
+                          focusColor: Colors.black,
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(width: 3, color: Colors.greenAccent),
+                          ),
+                          labelStyle: TextStyle(color: Colors.black),
+                          errorStyle: TextStyle(
+                              color: Color.fromARGB(255, 245, 183, 177),
+                              fontStyle: FontStyle.italic),
+                        ),
                       ),
                       const SizedBox(
                         height: 10,
@@ -925,6 +986,10 @@ class _DetailTicketState extends State<DetailTicket> {
                         updateTaskData["content"] =
                             updateTaskContentController.text;
                         updateTaskData["is_private"] = updateIsPrivateTask;
+
+                        var stateID = listToDo.keys.where(
+                            (element) => listToDo[element] == seletedToDoVlaue);
+                        updateTaskData["state"] = stateID.first;
 
                         dynamic response = objectTicket.apiMgmt.put(
                             ApiEndpoint.apiRootTicketTask,
@@ -1001,7 +1066,7 @@ class _DetailTicketState extends State<DetailTicket> {
                                 });
                               })
                         ],
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -1081,8 +1146,27 @@ class _DetailTicketState extends State<DetailTicket> {
                         "Content",
                         TextInputType.multiline,
                       ),
-                      const SizedBox(
-                        height: 10,
+                      DropdownButtonFormField(
+                        value: selectedToDo,
+                        items: dropdownToDo,
+                        onChanged: (String? value) {
+                          setState(() {
+                            selectedToDo = value!;
+                          });
+                        },
+                        decoration: const InputDecoration(
+                          labelText: 'To do',
+                          prefixIcon: Icon(Icons.add_task, color: Colors.black),
+                          focusColor: Colors.black,
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(width: 3, color: Colors.greenAccent),
+                          ),
+                          labelStyle: TextStyle(color: Colors.black),
+                          errorStyle: TextStyle(
+                              color: Color.fromARGB(255, 245, 183, 177),
+                              fontStyle: FontStyle.italic),
+                        ),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1122,6 +1206,7 @@ class _DetailTicketState extends State<DetailTicket> {
                         } else {
                           addTaskData["is_private"] = 0;
                         }
+                        addTaskData["state"] = selectedToDo;
 
                         responseAPIAddTask = objectTicket.apiMgmt
                             .post(ApiEndpoint.apiRootTicketTask, addTaskData);

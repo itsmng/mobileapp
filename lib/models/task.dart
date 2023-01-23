@@ -12,6 +12,8 @@ class Task {
   String? content;
   int? duration;
   String? fullDuration;
+  int? state;
+  String? stateVlaue;
 
   final apiMgmt = ApiMgmt();
 
@@ -23,6 +25,8 @@ class Task {
     this.isPrivate,
     this.content,
     this.duration,
+    this.state,
+    this.stateVlaue,
   });
 
   factory Task.fromMap(Map<String, dynamic> json) {
@@ -32,6 +36,16 @@ class Task {
     json["content"] =
         json["content"].toString().replaceAll(RegExp(r'&lt;/p&gt;'), "\n");
 
+    Map<int, String> listToDo = {
+      0: "Information",
+      1: "To do",
+      2: "Done",
+    };
+    String? stateVal;
+    if (listToDo.containsKey(json["state"])) {
+      stateVal = listToDo[json["state"]];
+    }
+
     return Task(
       id: json["id"],
       ticketID: json["tickets_id"],
@@ -40,6 +54,8 @@ class Task {
       isPrivate: json["is_private"],
       content: json["content"],
       duration: json["actiontime"],
+      state: json["state"],
+      stateVlaue: stateVal,
     );
   }
 
