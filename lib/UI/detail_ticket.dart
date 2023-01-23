@@ -734,6 +734,12 @@ class _DetailTicketState extends State<DetailTicket> {
                         color: Colors.black,
                       ),
                     ),
+                    onTap: () {
+                      showUpdateTask(
+                          listTask[index].id!,
+                          listTask[index].content.toString(),
+                          listTask[index].isPrivate!);
+                    },
                   ),
                 )
               ],
@@ -748,7 +754,7 @@ class _DetailTicketState extends State<DetailTicket> {
     }
   }
 
-  showUpdateFollowup(int idFollowup, String userID, int private) {
+  showUpdateFollowup(int idFollowup, String content, int privacy) {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -756,8 +762,8 @@ class _DetailTicketState extends State<DetailTicket> {
               TextEditingController();
           bool updateIsPrivateFollowup = false;
 
-          updateContentController.text = userID;
-          if (private == 1) {
+          updateContentController.text = content;
+          if (privacy == 1) {
             updateIsPrivateFollowup = true;
           } else {
             updateIsPrivateFollowup = false;
@@ -822,6 +828,108 @@ class _DetailTicketState extends State<DetailTicket> {
                             ApiEndpoint.apiRootTicketFollowup,
                             idFollowup,
                             updateFollowupData);
+
+                        final responseValue =
+                            await response.then((val) => val["update"]);
+
+                        if (responseValue == "true") {
+                          if (!mounted) return;
+                          messages.messageBottomBar(
+                              "Item successfully updated", context);
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const TicketsPage(),
+                          ));
+                        } else if (responseValue == "errorUpdate") {
+                          if (!mounted) return;
+                          messages.sendAlert(
+                              "Error to update: Check API connexion", context);
+                        } else {
+                          if (!mounted) return;
+                          messages.sendAlert("Update cancelled", context);
+                        }
+                      }),
+                    ],
+                  ),
+                ),
+              ],
+            );
+          });
+        });
+  }
+
+  showUpdateTask(int idTask, String content, int privacy) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          final TextEditingController updateTaskContentController =
+              TextEditingController();
+          bool updateIsPrivateTask = false;
+
+          updateTaskContentController.text = content;
+          if (privacy == 1) {
+            updateIsPrivateTask = true;
+          } else {
+            updateIsPrivateTask = false;
+          }
+
+          return StatefulBuilder(builder: (context, setState) {
+            return AlertDialog(
+              scrollable: true,
+              title: const Text('Update Task'),
+              content: Padding(
+                padding: const EdgeInsets.all(3.0),
+                child: Form(
+                  child: Column(
+                    children: <Widget>[
+                      formFieldsTicket.buildTextAreaField(
+                        updateTaskContentController,
+                        Icons.text_fields,
+                        "Content",
+                        TextInputType.multiline,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: const [
+                              Icon(Icons.lock),
+                              Text("Private"),
+                            ],
+                          ),
+                          Switch(
+                              value: updateIsPrivateTask,
+                              onChanged: (bool? checked) {
+                                setState(() {
+                                  updateIsPrivateTask = checked!;
+                                });
+                              })
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              actions: [
+                Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      buttonForm.buttonExit(() {
+                        Navigator.of(context).pop();
+                      }),
+                      buttonForm.buttonSave(() async {
+                        Map<dynamic, dynamic> updateTaskData = {};
+                        updateTaskData["content"] =
+                            updateTaskContentController.text;
+                        updateTaskData["is_private"] = updateIsPrivateTask;
+
+                        dynamic response = objectTicket.apiMgmt.put(
+                            ApiEndpoint.apiRootTicketTask,
+                            idTask,
+                            updateTaskData);
 
                         final responseValue =
                             await response.then((val) => val["update"]);
