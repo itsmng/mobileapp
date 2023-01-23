@@ -45,7 +45,7 @@ class Task {
       int h = task.duration! ~/ 3600;
       int m = (task.duration! - h * 3600) ~/ 60;
       if (task.duration != 0) {
-        task.fullDuration = "$h hours $m minutes";
+        task.fullDuration = "$h h $m m";
       } else {
         task.fullDuration = "";
       }

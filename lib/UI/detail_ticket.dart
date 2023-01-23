@@ -564,10 +564,10 @@ class _DetailTicketState extends State<DetailTicket> {
   }
 
   Widget _itemBuilderFollowup(BuildContext context, int index) {
-    bool test = false;
+    bool testIsPrivate = false;
 
     if (listITILFollowup[index].isPrivate.toString() == "1") {
-      test = true;
+      testIsPrivate = true;
     }
 
     if (listITILFollowup[index].itemsID.toString() ==
@@ -605,7 +605,7 @@ class _DetailTicketState extends State<DetailTicket> {
                           width: 30,
                         ),
                         Text(
-                          listITILFollowup[index].date.toString(),
+                          listITILFollowup[index].date.toString().split(" ")[0],
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 10),
                         ),
@@ -620,7 +620,7 @@ class _DetailTicketState extends State<DetailTicket> {
                   ),
                 ),
                 Icon(
-                  test ? Icons.lock : null,
+                  testIsPrivate ? Icons.lock : null,
                   size: 30,
                   color: const Color.fromARGB(255, 123, 8, 29),
                 ),
@@ -654,10 +654,13 @@ class _DetailTicketState extends State<DetailTicket> {
   }
 
   Widget _itemBuilderTask(BuildContext context, int index) {
-    bool test = false;
-
+    bool testIsPrivate = false;
+    bool testDurationExist = false;
     if (listTask[index].isPrivate.toString() == "1") {
-      test = true;
+      testIsPrivate = true;
+    }
+    if (listTask[index].fullDuration.toString() != "") {
+      testDurationExist = true;
     }
 
     if (listTask[index].ticketID.toString() == widget.ticket.title.toString()) {
@@ -691,10 +694,23 @@ class _DetailTicketState extends State<DetailTicket> {
                               fontWeight: FontWeight.bold, fontSize: 20),
                         ),
                         const SizedBox(
-                          width: 30,
+                          width: 10,
                         ),
                         Text(
-                          listTask[index].date.toString(),
+                          listTask[index].date.toString().split(" ")[0],
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 10),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Icon(
+                          testDurationExist ? Icons.timer : null,
+                          size: 15,
+                          color: const Color.fromARGB(255, 123, 8, 29),
+                        ),
+                        Text(
+                          listTask[index].fullDuration.toString(),
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 10),
                         ),
@@ -709,7 +725,7 @@ class _DetailTicketState extends State<DetailTicket> {
                   ),
                 ),
                 Icon(
-                  test ? Icons.lock : null,
+                  testIsPrivate ? Icons.lock : null,
                   size: 30,
                   color: const Color.fromARGB(255, 123, 8, 29),
                 ),
