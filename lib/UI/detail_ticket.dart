@@ -772,11 +772,13 @@ class _DetailTicketState extends State<DetailTicket> {
                     ),
                     onTap: () {
                       showUpdateTask(
-                          listTask[index].id!,
-                          listTask[index].content.toString(),
-                          listTask[index].isPrivate!,
-                          listTask[index].state!,
-                          listTask[index].stateVlaue!);
+                        listTask[index].id!,
+                        listTask[index].content.toString(),
+                        listTask[index].isPrivate!,
+                        listTask[index].state!,
+                        listTask[index].stateVlaue!,
+                        listTask[index].duration!,
+                      );
                     },
                   ),
                 )
@@ -895,8 +897,10 @@ class _DetailTicketState extends State<DetailTicket> {
         });
   }
 
-  showUpdateTask(
-      int idTask, String content, int privacy, int state, String stateVlaue) {
+  showUpdateTask(int idTask, String content, int privacy, int state,
+      String stateVlaue, int actionTime) {
+    Duration duration = Duration(seconds: actionTime);
+
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -949,6 +953,14 @@ class _DetailTicketState extends State<DetailTicket> {
                               fontStyle: FontStyle.italic),
                         ),
                       ),
+                      DurationPicker(
+                        duration: duration,
+                        baseUnit: BaseUnit.minute,
+                        onChange: (val) {
+                          setState(() => duration = val);
+                        },
+                        snapToMins: 15.0,
+                      ),
                       const SizedBox(
                         height: 10,
                       ),
@@ -991,6 +1003,7 @@ class _DetailTicketState extends State<DetailTicket> {
                         var stateID = listToDo.keys.where(
                             (element) => listToDo[element] == seletedToDoVlaue);
                         updateTaskData["state"] = stateID.first;
+                        updateTaskData["actiontime"] = duration.inSeconds;
 
                         dynamic response = objectTicket.apiMgmt.put(
                             ApiEndpoint.apiRootTicketTask,
@@ -1176,7 +1189,6 @@ class _DetailTicketState extends State<DetailTicket> {
                         baseUnit: BaseUnit.minute,
                         onChange: (val) {
                           setState(() => duration = val);
-                          print(duration.inSeconds);
                         },
                         snapToMins: 15.0,
                       ),
