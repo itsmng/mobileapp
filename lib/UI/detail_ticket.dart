@@ -36,17 +36,21 @@ class _DetailTicketState extends State<DetailTicket> {
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _contentFollowupController =
       TextEditingController();
+  final TextEditingController _contentTaskController = TextEditingController();
   bool isPrivateFollowup = false;
+  bool isPrivateTask = false;
 
   final objectTicket = Tickets();
   dynamic responseAPI;
   dynamic responseAPIUpdateUserAssigned;
   dynamic responseAPIDelete;
   dynamic responseAPIAddFollowup;
+  dynamic responseAPIAddTask;
 
   Map updateData = {};
   Map updateTicketUserData = {};
   Map addITILFollowupData = {};
+  Map addTaskData = {};
 
   final messages = Messages();
   final dropdown = Dropdown();
@@ -102,6 +106,7 @@ class _DetailTicketState extends State<DetailTicket> {
     _contentController.text = widget.ticket.content.toString();
     _dateController.text = widget.ticket.date.toString();
     _contentFollowupController.clear();
+    _contentTaskController.clear();
 
     selectedPriority = widget.ticket.priority.toString();
     selectedStatus = widget.ticket.statusValue.toString();
@@ -174,7 +179,9 @@ class _DetailTicketState extends State<DetailTicket> {
                   label: 'Add Task',
                   backgroundColor: const Color.fromARGB(255, 123, 8, 29),
                   foregroundColor: Colors.white,
-                  onTap: () {/* Do something */},
+                  onTap: () {
+                    showAddTaskForm();
+                  },
                 ),
               ]),
         ));
@@ -696,11 +703,106 @@ class _DetailTicketState extends State<DetailTicket> {
                         if (apiResponseAddFollowup == "true") {
                           if (!mounted) return;
                           messages.messageBottomBar(
-                              "Item successfully added: ", context);
+                              "Followup successfully added", context);
                           Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => const TicketsPage(),
                           ));
                         } else if (apiResponseAddFollowup == "errorAdd") {
+                          if (!mounted) return;
+                          messages.sendAlert(
+                              "Error to add: Check API connexion", context);
+                        } else {
+                          if (!mounted) return;
+                          messages.sendAlert("Add cancelled", context);
+                        }
+                      }),
+                    ],
+                  ),
+                ),
+              ],
+            );
+          });
+        });
+  }
+
+  showAddTaskForm() {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          isPrivateTask = false;
+          _contentTaskController.clear();
+          return StatefulBuilder(builder: (context, setState) {
+            return AlertDialog(
+              scrollable: true,
+              title: const Text('Add Task'),
+              content: Padding(
+                padding: const EdgeInsets.all(3.0),
+                child: Form(
+                  key: formKeyAlert,
+                  child: Column(
+                    children: <Widget>[
+                      formFieldsTicket.buildTextAreaField(
+                        _contentTaskController,
+                        Icons.text_fields,
+                        "Content",
+                        TextInputType.multiline,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: const [
+                              Icon(Icons.lock),
+                              Text("Private"),
+                            ],
+                          ),
+                          Switch(
+                              value: isPrivateTask,
+                              onChanged: (bool? checked) {
+                                setState(() {
+                                  isPrivateTask = checked!;
+                                });
+                              })
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              actions: [
+                Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      buttonForm.buttonExit(() {
+                        Navigator.of(context).pop();
+                      }),
+                      buttonForm.buttonSave(() async {
+                        addTaskData["tickets_id"] = widget.ticket.id.toString();
+                        addTaskData["content"] = _contentTaskController.text;
+                        if (isPrivateTask) {
+                          addTaskData["is_private"] = 1;
+                        } else {
+                          addTaskData["is_private"] = 0;
+                        }
+
+                        responseAPIAddTask = objectTicket.apiMgmt
+                            .post(ApiEndpoint.apiRootTicketTask, addTaskData);
+
+                        final apiResponseAddTask =
+                            await responseAPIAddTask.then((val) => val["add"]);
+
+                        if (apiResponseAddTask == "true") {
+                          if (!mounted) return;
+                          messages.messageBottomBar(
+                              "Task successfully added", context);
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const TicketsPage(),
+                          ));
+                        } else if (apiResponseAddTask == "errorAdd") {
                           if (!mounted) return;
                           messages.sendAlert(
                               "Error to add: Check API connexion", context);
