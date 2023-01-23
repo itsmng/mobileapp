@@ -25,6 +25,12 @@ class ITILfollowup {
   });
 
   factory ITILfollowup.fromMap(Map<String, dynamic> json) {
+    // Remove &lt;p&gt; and &lt;/p&gt; caracters adding by the API
+    json["content"] =
+        json["content"].toString().replaceAll(RegExp(r'&lt;p&gt;'), "");
+    json["content"] =
+        json["content"].toString().replaceAll(RegExp(r'&lt;/p&gt;'), "\n");
+
     return ITILfollowup(
       id: json["id"],
       itemtype: json["itemtype"],

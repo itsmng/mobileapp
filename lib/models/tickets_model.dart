@@ -71,7 +71,7 @@ class Tickets {
     json["content"] =
         json["content"].toString().replaceAll(RegExp(r'&lt;p&gt;'), "");
     json["content"] =
-        json["content"].toString().replaceAll(RegExp(r'&lt;/p&gt;'), "");
+        json["content"].toString().replaceAll(RegExp(r'&lt;/p&gt;'), "\n");
 
     return Tickets(
       date: json["date"],
