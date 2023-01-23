@@ -11,6 +11,7 @@ class Task {
   int? isPrivate;
   String? content;
   int? duration;
+  String? fullDuration;
 
   final apiMgmt = ApiMgmt();
 
@@ -38,8 +39,18 @@ class Task {
 
   Future<List<Task>> fetchTaskData(dynamic data) async {
     final parsed = json.decode(await data).cast<Map<String, dynamic>>();
+    var listTasks = parsed.map<Task>((json) => Task.fromMap(json)).toList();
 
-    return parsed.map<Task>((json) => Task.fromMap(json)).toList();
+    for (Task task in listTasks) {
+      int h = task.duration! ~/ 3600;
+      int m = (task.duration! - h * 3600) ~/ 60;
+      if (task.duration != 0) {
+        task.fullDuration = "$h hours $m minutes";
+      } else {
+        task.fullDuration = "";
+      }
+    }
+    return listTasks;
   }
 
   getAllTask(int itemID) async {
