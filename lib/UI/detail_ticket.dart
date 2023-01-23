@@ -546,83 +546,183 @@ class _DetailTicketState extends State<DetailTicket> {
     );
   }
 
-  getAllStatus() async {
-    // Object of the Special Status class
-    final specialStatus = SpecialStatus();
-    List<SpecialStatus> allSpecialStatus =
-        await specialStatus.getAllSpecialStatus();
-    setState(() {
-      for (var e in allSpecialStatus) {
-        listStatus[e.id!] = e.name.toString();
-      }
-    });
+  // Display all followup
+  Widget followup() {
+    return ListView(
+      children: [
+        Column(
+          children: [
+            ListView.builder(
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: listITILFollowup.length,
+                itemBuilder: _itemBuilderFollowup),
+          ],
+        )
+      ],
+    );
   }
 
-  getAllEntities() async {
-    // Object of the Special Status class
-    final entities = Entity();
-    List<Entity> allEntities = await entities.getAllEntities();
-    setState(() {
-      for (var e in allEntities) {
-        listEntities[e.id!] = e.name.toString();
-      }
-    });
+  Widget _itemBuilderFollowup(BuildContext context, int index) {
+    bool test = false;
+
+    if (listITILFollowup[index].isPrivate.toString() == "1") {
+      test = true;
+    }
+
+    if (listITILFollowup[index].itemsID.toString() ==
+        widget.ticket.title.toString()) {
+      return Card(
+        clipBehavior: Clip.antiAlias,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          side: BorderSide(
+            color: Theme.of(context).colorScheme.outline,
+          ),
+          borderRadius: const BorderRadius.all(Radius.circular(12)),
+        ),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: ListTile(
+                    leading: const Icon(
+                      Icons.person,
+                      size: 40,
+                      color: Colors.black,
+                    ),
+                    horizontalTitleGap: 5,
+                    title: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          listITILFollowup[index].userID.toString(),
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20),
+                        ),
+                        const SizedBox(
+                          width: 30,
+                        ),
+                        Text(
+                          listITILFollowup[index].date.toString(),
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 10),
+                        ),
+                      ],
+                    ),
+                    subtitle: Text(
+                      listITILFollowup[index].content.toString(),
+                      style: const TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ),
+                Icon(
+                  test ? Icons.lock : null,
+                  size: 30,
+                  color: const Color.fromARGB(255, 123, 8, 29),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+    } else {
+      return const InkWell(
+        child: Text(""),
+      );
+    }
   }
 
-  getAllLocations() async {
-    // Object of the Special Status class
-    final location = Location();
-    List<Location> allLocations = await location.getAllLocations();
-    setState(() {
-      listLocations[0] = "";
-      for (var e in allLocations) {
-        listLocations[e.id!] = e.name.toString();
-      }
-    });
+  // Display all followup
+  Widget task() {
+    return ListView(
+      children: [
+        Column(
+          children: [
+            ListView.builder(
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: listTask.length,
+                itemBuilder: _itemBuilderTask),
+          ],
+        )
+      ],
+    );
   }
 
-  getAllITILCategory() async {
-    // Object of the Special Status class
-    final itilCategory = ITILCategory();
-    List<ITILCategory> allITILCategories =
-        await itilCategory.getAllItilCategories();
-    setState(() {
-      listITILCategory[0] = "";
-      for (var e in allITILCategories) {
-        listITILCategory[e.id!] = e.name.toString();
-      }
-    });
-  }
+  Widget _itemBuilderTask(BuildContext context, int index) {
+    bool test = false;
 
-  getAllUsers() async {
-    // Object of the Special Status class
-    final user = User();
-    List<User> allUsers = await user.getAllUsers();
-    setState(() {
-      listUsers[0] = "";
-      for (var e in allUsers) {
-        listUsers[e.id!] = e.name.toString();
-      }
-    });
-  }
+    if (listTask[index].isPrivate.toString() == "1") {
+      test = true;
+    }
 
-  getAllAssignedUsers() async {
-    // Object of the Special Status class
-    final assignedUser = TicketUser();
-    List<TicketUser> allAssignedUsers = await assignedUser.getAllTicketUsers();
-    await getAllUsers();
-    setState(() {
-      listAssignedUsers[0] = "";
-      for (var e in allAssignedUsers) {
-        if (!listAssignedUsers.containsValue(e.userID.toString())) {
-          listUsers.forEach((key, value) {
-            if (value == e.userID.toString()) {
-              listAssignedUsers[key] = e.userID.toString();
-            }
-          });
-        }
-      }
-    });
+    if (listTask[index].ticketID.toString() == widget.ticket.title.toString()) {
+      return Card(
+        clipBehavior: Clip.antiAlias,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          side: BorderSide(
+            color: Theme.of(context).colorScheme.outline,
+          ),
+          borderRadius: const BorderRadius.all(Radius.circular(12)),
+        ),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: ListTile(
+                    leading: const Icon(
+                      Icons.person,
+                      size: 40,
+                      color: Colors.black,
+                    ),
+                    horizontalTitleGap: 5,
+                    title: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          listTask[index].userID.toString(),
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20),
+                        ),
+                        const SizedBox(
+                          width: 30,
+                        ),
+                        Text(
+                          listTask[index].date.toString(),
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 10),
+                        ),
+                      ],
+                    ),
+                    subtitle: Text(
+                      listTask[index].content.toString(),
+                      style: const TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ),
+                Icon(
+                  test ? Icons.lock : null,
+                  size: 30,
+                  color: const Color.fromARGB(255, 123, 8, 29),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+    } else {
+      return const InkWell(
+        child: Text(""),
+      );
+    }
   }
 
   showAddFollowup() {
@@ -820,6 +920,85 @@ class _DetailTicketState extends State<DetailTicket> {
         });
   }
 
+  getAllStatus() async {
+    // Object of the Special Status class
+    final specialStatus = SpecialStatus();
+    List<SpecialStatus> allSpecialStatus =
+        await specialStatus.getAllSpecialStatus();
+    setState(() {
+      for (var e in allSpecialStatus) {
+        listStatus[e.id!] = e.name.toString();
+      }
+    });
+  }
+
+  getAllEntities() async {
+    // Object of the Special Status class
+    final entities = Entity();
+    List<Entity> allEntities = await entities.getAllEntities();
+    setState(() {
+      for (var e in allEntities) {
+        listEntities[e.id!] = e.name.toString();
+      }
+    });
+  }
+
+  getAllLocations() async {
+    // Object of the Special Status class
+    final location = Location();
+    List<Location> allLocations = await location.getAllLocations();
+    setState(() {
+      listLocations[0] = "";
+      for (var e in allLocations) {
+        listLocations[e.id!] = e.name.toString();
+      }
+    });
+  }
+
+  getAllITILCategory() async {
+    // Object of the Special Status class
+    final itilCategory = ITILCategory();
+    List<ITILCategory> allITILCategories =
+        await itilCategory.getAllItilCategories();
+    setState(() {
+      listITILCategory[0] = "";
+      for (var e in allITILCategories) {
+        listITILCategory[e.id!] = e.name.toString();
+      }
+    });
+  }
+
+  getAllUsers() async {
+    // Object of the Special Status class
+    final user = User();
+    List<User> allUsers = await user.getAllUsers();
+    setState(() {
+      listUsers[0] = "";
+      for (var e in allUsers) {
+        listUsers[e.id!] = e.name.toString();
+      }
+    });
+  }
+
+  getAllAssignedUsers() async {
+    // Object of the Special Status class
+    final assignedUser = TicketUser();
+    List<TicketUser> allAssignedUsers = await assignedUser.getAllTicketUsers();
+    await getAllUsers();
+    setState(() {
+      listAssignedUsers[0] = "";
+      for (var e in allAssignedUsers) {
+        if (!listAssignedUsers.containsValue(e.userID.toString())) {
+          listUsers.forEach((key, value) {
+            if (value == e.userID.toString()) {
+              listAssignedUsers[key] = e.userID.toString();
+            }
+          });
+        }
+      }
+    });
+  }
+
   getAllITILFollowup() async {
     // Object of the Special Status class
     final itilFollowup = ITILfollowup();
@@ -834,96 +1013,6 @@ class _DetailTicketState extends State<DetailTicket> {
     });
   }
 
-  // Display all followup
-  Widget followup() {
-    return ListView(
-      children: [
-        Column(
-          children: [
-            ListView.builder(
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemCount: listITILFollowup.length,
-                itemBuilder: _itemBuilderFollowup),
-          ],
-        )
-      ],
-    );
-  }
-
-  Widget _itemBuilderFollowup(BuildContext context, int index) {
-    bool test = false;
-
-    if (listITILFollowup[index].isPrivate.toString() == "1") {
-      test = true;
-    }
-
-    if (listITILFollowup[index].itemsID.toString() ==
-        widget.ticket.title.toString()) {
-      return Card(
-        clipBehavior: Clip.antiAlias,
-        elevation: 0,
-        shape: RoundedRectangleBorder(
-          side: BorderSide(
-            color: Theme.of(context).colorScheme.outline,
-          ),
-          borderRadius: const BorderRadius.all(Radius.circular(12)),
-        ),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: ListTile(
-                    leading: const Icon(
-                      Icons.person,
-                      size: 40,
-                      color: Colors.black,
-                    ),
-                    horizontalTitleGap: 5,
-                    title: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          listITILFollowup[index].userID.toString(),
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20),
-                        ),
-                        const SizedBox(
-                          width: 30,
-                        ),
-                        Text(
-                          listITILFollowup[index].date.toString(),
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 10),
-                        ),
-                      ],
-                    ),
-                    subtitle: Text(
-                      listITILFollowup[index].content.toString(),
-                      style: const TextStyle(
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                ),
-                Icon(
-                  test ? Icons.lock : null,
-                  size: 30,
-                  color: const Color.fromARGB(255, 123, 8, 29),
-                ),
-              ],
-            ),
-          ],
-        ),
-      );
-    } else {
-      return const InkWell(
-        child: Text(""),
-      );
-    }
-  }
-
   getAllTask() async {
     // Object of the Special Status class
     final task = Task();
@@ -935,94 +1024,5 @@ class _DetailTicketState extends State<DetailTicket> {
         listTask.add(ele);
       }
     });
-  }
-
-  // Display all followup
-  Widget task() {
-    return ListView(
-      children: [
-        Column(
-          children: [
-            ListView.builder(
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemCount: listTask.length,
-                itemBuilder: _itemBuilderTask),
-          ],
-        )
-      ],
-    );
-  }
-
-  Widget _itemBuilderTask(BuildContext context, int index) {
-    bool test = false;
-
-    if (listTask[index].isPrivate.toString() == "1") {
-      test = true;
-    }
-
-    if (listTask[index].ticketID.toString() == widget.ticket.title.toString()) {
-      return Card(
-        clipBehavior: Clip.antiAlias,
-        elevation: 0,
-        shape: RoundedRectangleBorder(
-          side: BorderSide(
-            color: Theme.of(context).colorScheme.outline,
-          ),
-          borderRadius: const BorderRadius.all(Radius.circular(12)),
-        ),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: ListTile(
-                    leading: const Icon(
-                      Icons.person,
-                      size: 40,
-                      color: Colors.black,
-                    ),
-                    horizontalTitleGap: 5,
-                    title: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          listTask[index].userID.toString(),
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20),
-                        ),
-                        const SizedBox(
-                          width: 30,
-                        ),
-                        Text(
-                          listTask[index].date.toString(),
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 10),
-                        ),
-                      ],
-                    ),
-                    subtitle: Text(
-                      listTask[index].content.toString(),
-                      style: const TextStyle(
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                ),
-                Icon(
-                  test ? Icons.lock : null,
-                  size: 30,
-                  color: const Color.fromARGB(255, 123, 8, 29),
-                ),
-              ],
-            ),
-          ],
-        ),
-      );
-    } else {
-      return const InkWell(
-        child: Text(""),
-      );
-    }
   }
 }
