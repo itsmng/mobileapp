@@ -43,6 +43,7 @@ dependencies:
   shared_preferences: ^2.0.16
   intl: ^0.17.0
   flutter_speed_dial: ^6.2.0
+  duration_picker: ^1.1.1
   
 dev_dependencies:
   flutter_test:
