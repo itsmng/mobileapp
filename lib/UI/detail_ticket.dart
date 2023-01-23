@@ -1,3 +1,4 @@
+import 'package:duration_picker/duration_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:mobileapp/UI/tickets_page.dart';
@@ -1125,6 +1126,8 @@ class _DetailTicketState extends State<DetailTicket> {
   }
 
   showAddTaskForm() {
+    Duration duration =
+        const Duration(hours: 2, minutes: 0, seconds: 0, milliseconds: 0);
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -1168,6 +1171,15 @@ class _DetailTicketState extends State<DetailTicket> {
                               fontStyle: FontStyle.italic),
                         ),
                       ),
+                      DurationPicker(
+                        duration: duration,
+                        baseUnit: BaseUnit.minute,
+                        onChange: (val) {
+                          setState(() => duration = val);
+                          print(duration.inSeconds);
+                        },
+                        snapToMins: 15.0,
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -1207,6 +1219,7 @@ class _DetailTicketState extends State<DetailTicket> {
                           addTaskData["is_private"] = 0;
                         }
                         addTaskData["state"] = selectedToDo;
+                        addTaskData["actiontime"] = duration.inSeconds;
 
                         responseAPIAddTask = objectTicket.apiMgmt
                             .post(ApiEndpoint.apiRootTicketTask, addTaskData);
