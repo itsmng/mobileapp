@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:mobileapp/UI/home_page.dart';
 import 'package:mobileapp/api/model.dart';
-import 'package:mobileapp/locale/translations.dart';
+import 'package:mobileapp/translations.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:regexed_validator/regexed_validator.dart';
+
+
 
 class Authentification extends StatefulWidget {
   const Authentification({super.key});
@@ -88,7 +90,7 @@ class _AuthentificationState extends State<Authentification> {
                         const Color.fromARGB(255, 245, 183, 177), // background
                   ),
                   child: Text(
-                    Translations.of(context)!.text('button_envoyer'),
+                    Translations.of(context)!.text('button_send'),
                     style: const TextStyle(
                         color: Color.fromARGB(255, 143, 90, 10),
                         fontWeight: FontWeight.bold),

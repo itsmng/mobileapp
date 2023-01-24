@@ -5,7 +5,7 @@ import 'package:mobileapp/models/bar_model.dart';
 import 'package:mobileapp/models/computer_model.dart';
 import 'package:mobileapp/models/tickets_model.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:mobileapp/locale/translations.dart';
+import 'package:mobileapp/translations.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
