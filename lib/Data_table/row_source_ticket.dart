@@ -49,8 +49,10 @@ DataRow recentDataRow(Tickets data, String firstHeaderCustomizable,
                 ),
               )))),
       // Create dynamic values
-      DataCell(Text(data.getAttribute(firstHeaderCustomizable).toString())),
-      DataCell(Text(data.getAttribute(secondHeaderCustomizable).toString())),
+      DataCell(
+          Text(data.getAttribute(firstHeaderCustomizable, context).toString())),
+      DataCell(Text(
+          data.getAttribute(secondHeaderCustomizable, context).toString())),
     ],
   );
 }

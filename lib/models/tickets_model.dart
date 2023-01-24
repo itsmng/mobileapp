@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:mobileapp/api/api_mgmt.dart';
+import 'package:mobileapp/translations.dart';
 import 'package:mobileapp/models/special_status.dart';
 import 'package:mobileapp/models/ticket_user.dart';
 
@@ -143,34 +145,29 @@ class Tickets {
   }
 
   // Method to return Tickets's attributes by selected
-  getAttribute(String name) {
-    switch (name) {
-      case "Date":
-        return date;
-      case "Status":
-        return statusValue;
-      case "Time to resolve":
-        return timeToResolve;
-      case "Title":
-        return title;
-      case "Category":
-        return category;
-      case "Location":
-        return location;
-      case "Last update":
-        return lastUpdate;
-      case "Entity":
-        return entity;
-      case "Priority":
-        return priority;
-      case "ID":
-        return id;
-      case "Recipient":
-        return recipient;
-
-      // return by defaul the date if no choise
-      default:
-        return date;
+  getAttribute(String name, BuildContext context) {
+    if (name == Translations.of(context)!.text('title')) {
+      return title;
+    } else if (name == Translations.of(context)!.text('status')) {
+      return statusValue;
+    } else if (name == Translations.of(context)!.text('open_date')) {
+      return date;
+    } else if (name == Translations.of(context)!.text('category')) {
+      return category;
+    } else if (name == Translations.of(context)!.text('location')) {
+      return location;
+    } else if (name == Translations.of(context)!.text('entity')) {
+      return entity;
+    } else if (name == Translations.of(context)!.text('Priority')) {
+      return priority;
+    } else if (name == Translations.of(context)!.text('last_update')) {
+      return lastUpdate;
+    } else if (name == Translations.of(context)!.text('recipient')) {
+      return recipient;
+    } else if (name == "ID") {
+      return id;
+    } else if (name == Translations.of(context)!.text('auth_url')) {
+      return date;
     }
   }
 }

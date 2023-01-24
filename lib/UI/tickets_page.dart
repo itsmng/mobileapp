@@ -4,6 +4,7 @@ import 'package:mobileapp/UI/create_ticket.dart';
 import 'package:mobileapp/UI/navigation_drawer.dart';
 import 'package:mobileapp/api/api_endpoints.dart';
 import 'package:mobileapp/common/multi_select.dart';
+import 'package:mobileapp/translations.dart';
 import 'package:mobileapp/models/special_status.dart';
 import 'package:mobileapp/models/tickets_model.dart';
 
@@ -18,9 +19,12 @@ class _TicketsPageState extends State<TicketsPage> {
   List<String> _selectedItems = [];
 
   // Default values of the tables
-  late String firstHeaderNoCustomizable = "Title";
-  late String secondHeaderCustomizable = "Status";
-  late String thirdHeaderCustomizable = "Open_date";
+  late String firstHeaderNoCustomizable =
+      Translations.of(context)!.text('title');
+  late String secondHeaderCustomizable =
+      Translations.of(context)!.text('status');
+  late String thirdHeaderCustomizable =
+      Translations.of(context)!.text('open_date');
 
   // Object of the Special Status class
   final _specialStatus = SpecialStatus();
@@ -74,14 +78,13 @@ class _TicketsPageState extends State<TicketsPage> {
     // a list of selectable items
     final List<String> items = [
       "ID",
-      "Category",
-      "Location",
-      "Entity",
-      "Status",
-      "Priority",
-      "Open date",
-      "Last update",
-      "Recipient",
+      Translations.of(context)!.text('open_date'),
+      Translations.of(context)!.text('category'),
+      Translations.of(context)!.text('location'),
+      Translations.of(context)!.text('entity'),
+      Translations.of(context)!.text('Priority'),
+      Translations.of(context)!.text('last_update'),
+      Translations.of(context)!.text('recipient'),
     ];
 
     // Get the list of selected item
@@ -153,14 +156,14 @@ class _TicketsPageState extends State<TicketsPage> {
     return Scaffold(
       drawer: const NavigationDrawerMenu(),
       appBar: AppBar(
-        title: const Text('All tickets'),
+        title: Text(Translations.of(context)!.text('all_tickets')),
         centerTitle: true,
         backgroundColor: const Color.fromARGB(255, 123, 8, 29),
         foregroundColor: const Color.fromARGB(255, 255, 255, 255),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
-            tooltip: 'Create ticket',
+            tooltip: Translations.of(context)!.text('create_ticket'),
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => const CreateTicket(),
@@ -196,8 +199,8 @@ class _TicketsPageState extends State<TicketsPage> {
                   padding: const EdgeInsets.all(5),
                   child: TextField(
                     controller: _searchController,
-                    decoration: const InputDecoration(
-                      hintText: "Search",
+                    decoration: InputDecoration(
+                      hintText: Translations.of(context)!.text('search'),
                     ),
                     onChanged: (value) {
                       setState(() {
