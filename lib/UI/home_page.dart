@@ -43,7 +43,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 123, 8, 29),
         foregroundColor: const Color.fromARGB(255, 255, 255, 255),
-        title: const Text("Home"),
+        title: Text(Translations.of(context)!.text('home_title')),
       ),
       body: Center(
         child: ListView(
@@ -81,7 +81,7 @@ class _HomePageState extends State<HomePage> {
                       Column(
                         children: <Widget>[
                           Text(
-                            "Latest 24h",
+                            Translations.of(context)!.text('latest_24h'),
                             style: Theme.of(context).textTheme.bodyLarge,
                           ),
                           Text(
@@ -93,7 +93,7 @@ class _HomePageState extends State<HomePage> {
                       Column(
                         children: <Widget>[
                           Text(
-                            "Late tickets",
+                            Translations.of(context)!.text('late_tickets'),
                             style: Theme.of(context).textTheme.bodyLarge,
                           ),
                           Text(
@@ -115,7 +115,7 @@ class _HomePageState extends State<HomePage> {
                   padding: const EdgeInsets.all(5),
                   child: Column(children: <Widget>[
                     Text(
-                      "Computers status",
+                      Translations.of(context)!.text('computers_status_title'),
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                     Expanded(
@@ -176,10 +176,14 @@ class _HomePageState extends State<HomePage> {
       }
 
       setState(() {
-        listTicketsData["New"] = newTicket;
-        listTicketsData["Assigned"] = assignedTicket;
-        listTicketsData["Planned"] = plannedTickets;
-        listTicketsData["Pending"] = pendingTickets;
+        listTicketsData[Translations.of(context)!.text('new_ticket')] =
+            newTicket;
+        listTicketsData[Translations.of(context)!.text('assigned_ticket')] =
+            assignedTicket;
+        listTicketsData[Translations.of(context)!.text('planned_ticket')] =
+            plannedTickets;
+        listTicketsData[Translations.of(context)!.text('pending_ticket')] =
+            pendingTickets;
         listTicketsData["Latest tickets"] = latestTickets;
         listTicketsData["Late tickets"] = lateTickets;
       });
@@ -257,13 +261,15 @@ class _HomePageState extends State<HomePage> {
       });
     } else {
       data.add(BarMmodel(
-          "No item found", 1, charts.ColorUtil.fromDartColor(Colors.red)));
+          Translations.of(context)!.text('message_no_item_found'),
+          1,
+          charts.ColorUtil.fromDartColor(Colors.red)));
     }
 
     return [
       charts.Series<BarMmodel, String>(
         data: data,
-        id: 'graphTickets',
+        id: 'graphComputers',
         colorFn: (BarMmodel barModeel, _) => barModeel.barColor,
         domainFn: (BarMmodel barModeel, _) => barModeel.title,
         measureFn: (BarMmodel barModeel, _) => barModeel.value,

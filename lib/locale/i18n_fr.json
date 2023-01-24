@@ -1,4 +1,5 @@
 {
+    "Delimieter1": "------Authentification page------",
     "auth_title": "Authentification",
     "home_title": "Accueil",
     "ticket_status_title": "Status des tickets",
@@ -15,5 +16,13 @@
     "message_loading": "Chargement",
     "message_bad_api_token": "Le paramètre API token semble incorrecte",
     "message_bad_user_token": "Le paramètre User token semble incorrecte",
-    "message_bad_url": "Le paramètre URL semble incorrecte"
+    "message_bad_url": "Le paramètre URL semble incorrecte",
+    "Delimieter2": "------Home page------",
+    "latest_24h": "Dernier 24h",
+    "late_tickets": "ickets en retard",
+    "new_ticket": "Nouveau",
+    "assigned_ticket": "Assigné",
+    "planned_ticket": "Planifié",
+    "pending_ticket": "En cours",
+    "message_no_item_found": "Pas d'élément trouvé"
 }

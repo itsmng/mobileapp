@@ -1,4 +1,5 @@
 {
+    "Delimieter1": "------Authentification page------",
     "auth_title": "Authentification",
     "home_title": "Home",
     "ticket_status_title": "Tickets status",
@@ -15,5 +16,13 @@
     "message_loading": "Loading",
     "message_bad_api_token": "API token parameter seems incorrect",
     "message_bad_user_token": "API token parameter seems incorrect",
-    "message_bad_url": "URL parameter seems incorrect"
+    "message_bad_url": "URL parameter seems incorrect",
+    "Delimieter2": "------Home page------",
+    "latest_24h": "Latest 24h",
+    "late_tickets": "Late tickets",
+    "new_ticket": "New",
+    "assigned_ticket": "Assigned",
+    "planned_ticket": "Planned",
+    "pending_ticket": "Pending",
+    "message_no_item_found": "No item found"
 }
