@@ -70,9 +70,7 @@ flutter:
   uses-material-design: true
   assets:  
     - assets/login_logo_itsm.png
-    - locale/i18n_en.json
-    - locale/i18n_fr.json
-    - locale/application.dart
+
 
   # To add assets to your application, add an assets section, like this:
   # assets:
