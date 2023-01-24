@@ -2,8 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:mobileapp/UI/authentification.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:mobileapp/locale/application.dart';
-import 'package:mobileapp/locale/translations.dart';
+import 'application.dart';
+import 'translations.dart';
 
 void main() => runApp(const MyApp());
 
