@@ -1,5 +1,19 @@
 {
     "auth_title": "Authentification",
     "home_title": "Home",
-    "ticket_status_title": "Tickets status"
+    "ticket_status_title": "Tickets status",
+    "button_valider": "Save",
+    "button_send": "Send",
+    "auth_url": "URL API ITSM-NG",
+    "auth_url_required": "API URL is Required",
+    "auth_url_no_valid": "Enter a valid URL",
+    "auth_api_token": "API Token",
+    "auth_api_token_required": "API token is Required",
+    "auth_user_token": "User Token",
+    "auth_user_token_required": "User token is Required",
+    "auth_isValidSSL": "Check valid SSL",
+    "message_loading": "Loading",
+    "message_bad_api_token": "API token parameter seems incorrect",
+    "message_bad_user_token": "API token parameter seems incorrect",
+    "message_bad_url": "URL parameter seems incorrect"
 }

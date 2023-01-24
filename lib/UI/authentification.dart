@@ -87,9 +87,9 @@ class _AuthentificationState extends State<Authentification> {
                     backgroundColor:
                         const Color.fromARGB(255, 245, 183, 177), // background
                   ),
-                  child: const Text(
-                    'Valider',
-                    style: TextStyle(
+                  child: Text(
+                    Translations.of(context)!.text('button_envoyer'),
+                    style: const TextStyle(
                         color: Color.fromARGB(255, 143, 90, 10),
                         fontWeight: FontWeight.bold),
                   ),
@@ -113,25 +113,25 @@ class _AuthentificationState extends State<Authentification> {
     return TextFormField(
       controller: _urlController,
       // ignore: prefer_const_constructors
-      decoration: const InputDecoration(
-        prefixIcon: Icon(Icons.link, color: Colors.white),
+      decoration: InputDecoration(
+        prefixIcon: const Icon(Icons.link, color: Colors.white),
         focusColor: Colors.white,
-        enabledBorder: UnderlineInputBorder(
+        enabledBorder: const UnderlineInputBorder(
           borderSide: BorderSide(width: 3, color: Colors.greenAccent),
         ),
-        labelText: "URL de l'API ITSM",
-        labelStyle: TextStyle(color: Colors.white),
-        errorStyle: TextStyle(
+        labelText: Translations.of(context)!.text('auth_url'),
+        labelStyle: const TextStyle(color: Colors.white),
+        errorStyle: const TextStyle(
             color: Color.fromARGB(255, 245, 183, 177),
             fontStyle: FontStyle.italic),
       ),
       keyboardType: TextInputType.url,
       validator: (String? value) {
         if (value.toString().isEmpty) {
-          return 'API URL is Required';
+          return Translations.of(context)!.text('auth_url_required');
         }
         if (!validator.url(value.toString())) {
-          return 'Enter a valid URL';
+          return Translations.of(context)!.text('auth_url_no_valid');
         }
         return null;
       },
@@ -143,23 +143,23 @@ class _AuthentificationState extends State<Authentification> {
   Widget _buildApiToken() {
     return TextFormField(
       controller: _apiTokenController,
-      decoration: const InputDecoration(
-        prefixIcon: Icon(Icons.login, color: Colors.white),
+      decoration: InputDecoration(
+        prefixIcon: const Icon(Icons.login, color: Colors.white),
         focusColor: Colors.white,
-        enabledBorder: UnderlineInputBorder(
+        enabledBorder: const UnderlineInputBorder(
           //<-- SEE HERE
           borderSide: BorderSide(width: 3, color: Colors.greenAccent),
         ),
-        labelText: 'Token API de connexion',
-        labelStyle: TextStyle(color: Colors.white),
-        errorStyle: TextStyle(
+        labelText: Translations.of(context)!.text('auth_api_token'),
+        labelStyle: const TextStyle(color: Colors.white),
+        errorStyle: const TextStyle(
             color: Color.fromARGB(255, 245, 183, 177),
             fontStyle: FontStyle.italic),
       ),
       keyboardType: TextInputType.text,
       validator: (String? value) {
         if (value.toString().isEmpty) {
-          return 'API token is Required';
+          return Translations.of(context)!.text('auth_api_token_required');
         }
         return null;
       },
@@ -170,23 +170,23 @@ class _AuthentificationState extends State<Authentification> {
   Widget _buildUserToken() {
     return TextFormField(
       controller: _userTokenController,
-      decoration: const InputDecoration(
-        prefixIcon: Icon(Icons.person, color: Colors.white),
+      decoration: InputDecoration(
+        prefixIcon: const Icon(Icons.person, color: Colors.white),
         focusColor: Colors.white,
-        enabledBorder: UnderlineInputBorder(
+        enabledBorder: const UnderlineInputBorder(
           //<-- SEE HERE
           borderSide: BorderSide(width: 3, color: Colors.greenAccent),
         ),
-        labelText: 'Token user de connexion',
-        labelStyle: TextStyle(color: Colors.white),
-        errorStyle: TextStyle(
+        labelText: Translations.of(context)!.text('auth_user_token'),
+        labelStyle: const TextStyle(color: Colors.white),
+        errorStyle: const TextStyle(
             color: Color.fromARGB(255, 245, 183, 177),
             fontStyle: FontStyle.italic),
       ),
       keyboardType: TextInputType.text,
       validator: (String? value) {
         if (value.toString().isEmpty) {
-          return 'API token is Required';
+          return Translations.of(context)!.text('auth_user_token_required');
         }
         return null;
       },
@@ -209,9 +209,9 @@ class _AuthentificationState extends State<Authentification> {
             });
           },
         ),
-        const Text(
-          'Vérification du certificat SSL ',
-          style: TextStyle(fontSize: 17.0, color: Colors.white),
+        Text(
+          Translations.of(context)!.text('auth_isValidSSL'),
+          style: const TextStyle(fontSize: 17.0, color: Colors.white),
         ),
       ],
     );
@@ -219,9 +219,9 @@ class _AuthentificationState extends State<Authentification> {
 
   void controlAuthentification() async {
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      content: Text("Loading"),
-      duration: Duration(seconds: 1),
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(Translations.of(context)!.text('message_loading')),
+      duration: const Duration(seconds: 1),
     ));
     _formKey.currentState!.save();
     Future<dynamic> apiResponse = _initSession.apiMgmt.authentification(
@@ -239,7 +239,7 @@ class _AuthentificationState extends State<Authentification> {
       //alert error connexion
       Alert(
         context: context,
-        desc: "le paramètre app_token semble incorrect",
+        desc: Translations.of(context)!.text('message_bad_api_token'),
         style: const AlertStyle(isCloseButton: false),
         buttons: [
           DialogButton(
@@ -261,7 +261,7 @@ class _AuthentificationState extends State<Authentification> {
       //alert error connexion
       Alert(
         context: context,
-        desc: "le paramètre user_token semble incorrect",
+        desc: Translations.of(context)!.text('message_bad_user_token'),
         style: const AlertStyle(isCloseButton: false),
         buttons: [
           DialogButton(
@@ -282,7 +282,7 @@ class _AuthentificationState extends State<Authentification> {
       //alert error connexion
       Alert(
         context: context,
-        desc: "L'url semble incorrect",
+        desc: Translations.of(context)!.text('message_bad_url'),
         style: const AlertStyle(isCloseButton: false),
         buttons: [
           DialogButton(

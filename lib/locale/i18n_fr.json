@@ -1,5 +1,19 @@
 {
     "auth_title": "Authentification",
     "home_title": "Accueil",
-    "ticket_status_title": "Status des tickets"
+    "ticket_status_title": "Status des tickets",
+    "button_valider": "Sauvegarder",
+    "button_envoyer": "Envoyer",
+    "auth_url": "URL de l'API ITSM-NG",
+    "auth_url_required": "L'URL de l'API est requis",
+    "auth_url_no_valid": "Entrer un URL valide",
+    "auth_api_token": "Token de l'API",
+    "auth_api_token_required": "Le token de l'API est requis",
+    "auth_user_token": "Token de l'utilisateur",
+    "auth_user_token_required": "Le token de l'utilisateur est requis",
+    "auth_isValidSSL": "Validation SSL",
+    "message_loading": "Chargement",
+    "message_bad_api_token": "Le paramètre API token semble incorrecte",
+    "message_bad_user_token": "Le paramètre User token semble incorrecte",
+    "message_bad_url": "Le paramètre URL semble incorrecte"
 }
