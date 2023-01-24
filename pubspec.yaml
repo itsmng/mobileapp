@@ -44,6 +44,8 @@ dependencies:
   intl: ^0.17.0
   flutter_speed_dial: ^6.2.0
   duration_picker: ^1.1.1
+  flutter_localizations:
+    sdk: flutter
   
 dev_dependencies:
   flutter_test:
@@ -68,6 +70,9 @@ flutter:
   uses-material-design: true
   assets:  
     - assets/login_logo_itsm.png
+    - locale/i18n_en.json
+    - locale/i18n_fr.json
+    - locale/application.dart
 
   # To add assets to your application, add an assets section, like this:
   # assets:
