@@ -16,6 +16,7 @@ import 'package:mobileapp/models/task.dart';
 import 'package:mobileapp/models/ticket_user.dart';
 import 'package:mobileapp/models/tickets_model.dart';
 import 'package:mobileapp/models/user.dart';
+import 'package:mobileapp/translations.dart';
 
 class DetailTicket extends StatefulWidget {
   const DetailTicket({super.key, required this.ticket});
@@ -91,12 +92,24 @@ class _DetailTicketState extends State<DetailTicket> {
 
   List<DropdownMenuItem<String>> get dropdownPriority {
     List<DropdownMenuItem<String>> menuItem = [
-      const DropdownMenuItem(value: "Very low", child: Text("Very low")),
-      const DropdownMenuItem(value: "Low", child: Text("Low")),
-      const DropdownMenuItem(value: "Medium", child: Text("Medium")),
-      const DropdownMenuItem(value: "High", child: Text("High")),
-      const DropdownMenuItem(value: "Very high", child: Text("Very high")),
-      const DropdownMenuItem(value: "Major", child: Text("Major")),
+      DropdownMenuItem(
+          value: "Very low",
+          child: Text(Translations.of(context)!.text('priority_very_low'))),
+      DropdownMenuItem(
+          value: "Low",
+          child: Text(Translations.of(context)!.text('priority_low'))),
+      DropdownMenuItem(
+          value: "Medium",
+          child: Text(Translations.of(context)!.text('priority_medium'))),
+      DropdownMenuItem(
+          value: "High",
+          child: Text(Translations.of(context)!.text('priority_high'))),
+      DropdownMenuItem(
+          value: "Very high",
+          child: Text(Translations.of(context)!.text('priority_very_high'))),
+      DropdownMenuItem(
+          value: "Major",
+          child: Text(Translations.of(context)!.text('priority_major'))),
     ];
     return menuItem;
   }
@@ -111,8 +124,10 @@ class _DetailTicketState extends State<DetailTicket> {
   List<DropdownMenuItem<String>> get dropdownToDo {
     List<DropdownMenuItem<String>> menuItem = [
       const DropdownMenuItem(value: "Information", child: Text("Information")),
-      const DropdownMenuItem(value: "To do", child: Text("To do")),
-      const DropdownMenuItem(value: "Done", child: Text("Done")),
+      DropdownMenuItem(
+          value: "To do", child: Text(Translations.of(context)!.text('to_do'))),
+      DropdownMenuItem(
+          value: "Done", child: Text(Translations.of(context)!.text('done'))),
     ];
     return menuItem;
   }
@@ -151,18 +166,18 @@ class _DetailTicketState extends State<DetailTicket> {
         length: 3,
         child: Scaffold(
           appBar: AppBar(
-            title: const Text('Ticket'),
+            title: Text(Translations.of(context)!.text('ticket')),
             centerTitle: true,
             backgroundColor: const Color.fromARGB(255, 123, 8, 29),
             foregroundColor: const Color.fromARGB(255, 255, 255, 255),
-            bottom: const TabBar(
-              labelStyle: TextStyle(color: Colors.white),
+            bottom: TabBar(
+              labelStyle: const TextStyle(color: Colors.white),
               indicatorColor: Colors.white,
               labelColor: Colors.white,
               tabs: [
-                Tab(text: 'Ticket'),
-                Tab(text: 'Followup'),
-                Tab(text: 'Task'),
+                Tab(text: Translations.of(context)!.text('ticket')),
+                Tab(text: Translations.of(context)!.text('followup')),
+                Tab(text: Translations.of(context)!.text('task')),
               ],
             ),
           ),
@@ -185,7 +200,7 @@ class _DetailTicketState extends State<DetailTicket> {
               children: [
                 SpeedDialChild(
                   child: const Icon(Icons.follow_the_signs),
-                  label: 'Add followup',
+                  label: Translations.of(context)!.text('add_followup'),
                   backgroundColor: const Color.fromARGB(255, 123, 8, 29),
                   foregroundColor: Colors.white,
                   onTap: () {
@@ -194,7 +209,7 @@ class _DetailTicketState extends State<DetailTicket> {
                 ),
                 SpeedDialChild(
                   child: const Icon(Icons.task),
-                  label: 'Add Task',
+                  label: Translations.of(context)!.text('add_task'),
                   backgroundColor: const Color.fromARGB(255, 123, 8, 29),
                   foregroundColor: Colors.white,
                   onTap: () {
@@ -221,9 +236,12 @@ class _DetailTicketState extends State<DetailTicket> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 formFieldsTicket.buildTextField(
-                    _titleController, Icons.title, "Title", TextInputType.text),
-                formFieldsTicket.buildDateTimeField(
-                    _dateController, "Open date", context),
+                    _titleController,
+                    Icons.title,
+                    Translations.of(context)!.text('title'),
+                    TextInputType.text),
+                formFieldsTicket.buildDateTimeField(_dateController,
+                    Translations.of(context)!.text('open_date'), context),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
@@ -236,17 +254,17 @@ class _DetailTicketState extends State<DetailTicket> {
                             selectedPriority = value!;
                           });
                         },
-                        decoration: const InputDecoration(
-                          labelText: 'Priority',
-                          prefixIcon:
-                              Icon(Icons.priority_high, color: Colors.black),
+                        decoration: InputDecoration(
+                          labelText: Translations.of(context)!.text('Priority'),
+                          prefixIcon: const Icon(Icons.priority_high,
+                              color: Colors.black),
                           focusColor: Colors.black,
-                          enabledBorder: UnderlineInputBorder(
+                          enabledBorder: const UnderlineInputBorder(
                             borderSide:
                                 BorderSide(width: 3, color: Colors.greenAccent),
                           ),
-                          labelStyle: TextStyle(color: Colors.black),
-                          errorStyle: TextStyle(
+                          labelStyle: const TextStyle(color: Colors.black),
+                          errorStyle: const TextStyle(
                               color: Color.fromARGB(255, 245, 183, 177),
                               fontStyle: FontStyle.italic),
                         ),
@@ -264,17 +282,17 @@ class _DetailTicketState extends State<DetailTicket> {
                             selectedEntity = value!;
                           });
                         },
-                        decoration: const InputDecoration(
-                          labelText: 'Entity',
-                          prefixIcon:
-                              Icon(Icons.category_sharp, color: Colors.black),
+                        decoration: InputDecoration(
+                          labelText: Translations.of(context)!.text('entity'),
+                          prefixIcon: const Icon(Icons.category_sharp,
+                              color: Colors.black),
                           focusColor: Colors.black,
-                          enabledBorder: UnderlineInputBorder(
+                          enabledBorder: const UnderlineInputBorder(
                             borderSide:
                                 BorderSide(width: 3, color: Colors.greenAccent),
                           ),
-                          labelStyle: TextStyle(color: Colors.black),
-                          errorStyle: TextStyle(
+                          labelStyle: const TextStyle(color: Colors.black),
+                          errorStyle: const TextStyle(
                               color: Color.fromARGB(255, 245, 183, 177),
                               fontStyle: FontStyle.italic),
                         ),
@@ -294,17 +312,17 @@ class _DetailTicketState extends State<DetailTicket> {
                             selectedStatus = value!;
                           });
                         },
-                        decoration: const InputDecoration(
-                          labelText: 'Status',
-                          prefixIcon: Icon(Icons.query_stats_sharp,
+                        decoration: InputDecoration(
+                          labelText: Translations.of(context)!.text('status'),
+                          prefixIcon: const Icon(Icons.query_stats_sharp,
                               color: Colors.black),
                           focusColor: Colors.black,
-                          enabledBorder: UnderlineInputBorder(
+                          enabledBorder: const UnderlineInputBorder(
                             borderSide:
                                 BorderSide(width: 3, color: Colors.greenAccent),
                           ),
-                          labelStyle: TextStyle(color: Colors.black),
-                          errorStyle: TextStyle(
+                          labelStyle: const TextStyle(color: Colors.black),
+                          errorStyle: const TextStyle(
                               color: Color.fromARGB(255, 245, 183, 177),
                               fontStyle: FontStyle.italic),
                         ),
@@ -324,16 +342,17 @@ class _DetailTicketState extends State<DetailTicket> {
                             selectedLocation = value!;
                           });
                         },
-                        decoration: const InputDecoration(
-                          labelText: 'Location',
-                          prefixIcon: Icon(Icons.house, color: Colors.black),
+                        decoration: InputDecoration(
+                          labelText: Translations.of(context)!.text('location'),
+                          prefixIcon:
+                              const Icon(Icons.house, color: Colors.black),
                           focusColor: Colors.black,
-                          enabledBorder: UnderlineInputBorder(
+                          enabledBorder: const UnderlineInputBorder(
                             borderSide:
                                 BorderSide(width: 3, color: Colors.greenAccent),
                           ),
-                          labelStyle: TextStyle(color: Colors.black),
-                          errorStyle: TextStyle(
+                          labelStyle: const TextStyle(color: Colors.black),
+                          errorStyle: const TextStyle(
                               color: Color.fromARGB(255, 245, 183, 177),
                               fontStyle: FontStyle.italic),
                         ),
@@ -351,18 +370,18 @@ class _DetailTicketState extends State<DetailTicket> {
                             selectedITILCategory = value!;
                           });
                         },
-                        decoration: const InputDecoration(
-                          labelText: 'Category',
-                          prefixIcon: Icon(
+                        decoration: InputDecoration(
+                          labelText: Translations.of(context)!.text('category'),
+                          prefixIcon: const Icon(
                               Icons.integration_instructions_outlined,
                               color: Colors.black),
                           focusColor: Colors.black,
-                          enabledBorder: UnderlineInputBorder(
+                          enabledBorder: const UnderlineInputBorder(
                             borderSide:
                                 BorderSide(width: 3, color: Colors.greenAccent),
                           ),
-                          labelStyle: TextStyle(color: Colors.black),
-                          errorStyle: TextStyle(
+                          labelStyle: const TextStyle(color: Colors.black),
+                          errorStyle: const TextStyle(
                               color: Color.fromARGB(255, 245, 183, 177),
                               fontStyle: FontStyle.italic),
                         ),
@@ -382,17 +401,18 @@ class _DetailTicketState extends State<DetailTicket> {
                             selectedUserRecipient = value!;
                           });
                         },
-                        decoration: const InputDecoration(
-                          labelText: 'Recipient',
-                          prefixIcon: Icon(Icons.supervised_user_circle,
+                        decoration: InputDecoration(
+                          labelText:
+                              Translations.of(context)!.text('recipient'),
+                          prefixIcon: const Icon(Icons.supervised_user_circle,
                               color: Colors.black),
                           focusColor: Colors.black,
-                          enabledBorder: UnderlineInputBorder(
+                          enabledBorder: const UnderlineInputBorder(
                             borderSide:
                                 BorderSide(width: 3, color: Colors.greenAccent),
                           ),
-                          labelStyle: TextStyle(color: Colors.black),
-                          errorStyle: TextStyle(
+                          labelStyle: const TextStyle(color: Colors.black),
+                          errorStyle: const TextStyle(
                               color: Color.fromARGB(255, 245, 183, 177),
                               fontStyle: FontStyle.italic),
                         ),
@@ -410,17 +430,17 @@ class _DetailTicketState extends State<DetailTicket> {
                             selectedAssignedUser = value!;
                           });
                         },
-                        decoration: const InputDecoration(
-                          labelText: 'Assigned',
-                          prefixIcon:
-                              Icon(Icons.assignment_ind, color: Colors.black),
+                        decoration: InputDecoration(
+                          labelText: Translations.of(context)!.text('assigned'),
+                          prefixIcon: const Icon(Icons.assignment_ind,
+                              color: Colors.black),
                           focusColor: Colors.black,
-                          enabledBorder: UnderlineInputBorder(
+                          enabledBorder: const UnderlineInputBorder(
                             borderSide:
                                 BorderSide(width: 3, color: Colors.greenAccent),
                           ),
-                          labelStyle: TextStyle(color: Colors.black),
-                          errorStyle: TextStyle(
+                          labelStyle: const TextStyle(color: Colors.black),
+                          errorStyle: const TextStyle(
                               color: Color.fromARGB(255, 245, 183, 177),
                               fontStyle: FontStyle.italic),
                         ),
@@ -454,19 +474,25 @@ class _DetailTicketState extends State<DetailTicket> {
                             if (apiResponseValueDelete == "true") {
                               if (!mounted) return;
                               messages.messageBottomBar(
-                                  "Item successfully deleted: ${widget.ticket.title}",
+                                  Translations.of(context)!
+                                      .text('item_deleted'),
                                   context);
                               Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => const TicketsPage(),
                               ));
-                            } else if (apiResponseValueDelete == "errorDlete") {
+                            } else if (apiResponseValueDelete ==
+                                "errorDelete") {
                               if (!mounted) return;
                               messages.sendAlert(
-                                  "Error to delete: Check API connexion",
+                                  Translations.of(context)!
+                                      .text('error_delete'),
                                   context);
                             } else {
                               if (!mounted) return;
-                              messages.sendAlert("Deleted cancelled", context);
+                              messages.sendAlert(
+                                  Translations.of(context)!
+                                      .text('delete_canceled'),
+                                  context);
                             }
                           })),
                     ),
@@ -537,7 +563,8 @@ class _DetailTicketState extends State<DetailTicket> {
                               if (apiResponseValue == "true") {
                                 if (!mounted) return;
                                 messages.messageBottomBar(
-                                    "Item successfully updated: ${widget.ticket.title}",
+                                    Translations.of(context)!
+                                        .text('item_updated'),
                                     context);
                                 Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => const TicketsPage(),
@@ -545,11 +572,15 @@ class _DetailTicketState extends State<DetailTicket> {
                               } else if (apiResponseValue == "errorUpdate") {
                                 if (!mounted) return;
                                 messages.sendAlert(
-                                    "Error to update: Check API connexion",
+                                    Translations.of(context)!
+                                        .text('error_update'),
                                     context);
                               } else {
                                 if (!mounted) return;
-                                messages.sendAlert("Update cancelled", context);
+                                messages.sendAlert(
+                                    Translations.of(context)!
+                                        .text('update_canceled'),
+                                    context);
                               }
                             }
                           },
@@ -812,7 +843,7 @@ class _DetailTicketState extends State<DetailTicket> {
           return StatefulBuilder(builder: (context, setState) {
             return AlertDialog(
               scrollable: true,
-              title: const Text('Update Follow up'),
+              title: Text(Translations.of(context)!.text('update_followup')),
               content: Padding(
                 padding: const EdgeInsets.all(3.0),
                 child: Form(
@@ -821,7 +852,7 @@ class _DetailTicketState extends State<DetailTicket> {
                       formFieldsTicket.buildTextAreaField(
                         updateContentController,
                         Icons.text_fields,
-                        "Content",
+                        Translations.of(context)!.text('content'),
                         TextInputType.multiline,
                       ),
                       const SizedBox(
@@ -831,9 +862,9 @@ class _DetailTicketState extends State<DetailTicket> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Row(
-                            children: const [
-                              Icon(Icons.lock),
-                              Text("Private"),
+                            children: [
+                              const Icon(Icons.lock),
+                              Text(Translations.of(context)!.text('private')),
                             ],
                           ),
                           Switch(
@@ -875,17 +906,21 @@ class _DetailTicketState extends State<DetailTicket> {
                         if (responseValue == "true") {
                           if (!mounted) return;
                           messages.messageBottomBar(
-                              "Item successfully updated", context);
+                              Translations.of(context)!.text('item_updated'),
+                              context);
                           Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => const TicketsPage(),
                           ));
                         } else if (responseValue == "errorUpdate") {
                           if (!mounted) return;
                           messages.sendAlert(
-                              "Error to update: Check API connexion", context);
+                              Translations.of(context)!.text('error_update'),
+                              context);
                         } else {
                           if (!mounted) return;
-                          messages.sendAlert("Update cancelled", context);
+                          messages.sendAlert(
+                              Translations.of(context)!.text('update_canceled'),
+                              context);
                         }
                       }),
                     ],
@@ -919,7 +954,7 @@ class _DetailTicketState extends State<DetailTicket> {
           return StatefulBuilder(builder: (context, setState) {
             return AlertDialog(
               scrollable: true,
-              title: const Text('Update Task'),
+              title: Text(Translations.of(context)!.text('update_task')),
               content: Padding(
                 padding: const EdgeInsets.all(3.0),
                 child: Form(
@@ -928,7 +963,7 @@ class _DetailTicketState extends State<DetailTicket> {
                       formFieldsTicket.buildTextAreaField(
                         updateTaskContentController,
                         Icons.text_fields,
-                        "Content",
+                        Translations.of(context)!.text('content'),
                         TextInputType.multiline,
                       ),
                       DropdownButtonFormField(
@@ -939,16 +974,17 @@ class _DetailTicketState extends State<DetailTicket> {
                             seletedToDoVlaue = value!;
                           });
                         },
-                        decoration: const InputDecoration(
-                          labelText: 'To do',
-                          prefixIcon: Icon(Icons.add_task, color: Colors.black),
+                        decoration: InputDecoration(
+                          labelText: Translations.of(context)!.text('to_do'),
+                          prefixIcon:
+                              const Icon(Icons.add_task, color: Colors.black),
                           focusColor: Colors.black,
-                          enabledBorder: UnderlineInputBorder(
+                          enabledBorder: const UnderlineInputBorder(
                             borderSide:
                                 BorderSide(width: 3, color: Colors.greenAccent),
                           ),
-                          labelStyle: TextStyle(color: Colors.black),
-                          errorStyle: TextStyle(
+                          labelStyle: const TextStyle(color: Colors.black),
+                          errorStyle: const TextStyle(
                               color: Color.fromARGB(255, 245, 183, 177),
                               fontStyle: FontStyle.italic),
                         ),
@@ -968,9 +1004,9 @@ class _DetailTicketState extends State<DetailTicket> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Row(
-                            children: const [
-                              Icon(Icons.lock),
-                              Text("Private"),
+                            children: [
+                              const Icon(Icons.lock),
+                              Text(Translations.of(context)!.text('private')),
                             ],
                           ),
                           Switch(
@@ -1047,7 +1083,7 @@ class _DetailTicketState extends State<DetailTicket> {
           return StatefulBuilder(builder: (context, setState) {
             return AlertDialog(
               scrollable: true,
-              title: const Text('Add Follow up'),
+              title: Text(Translations.of(context)!.text('add_followup')),
               content: Padding(
                 padding: const EdgeInsets.all(3.0),
                 child: Form(
@@ -1057,7 +1093,7 @@ class _DetailTicketState extends State<DetailTicket> {
                       formFieldsTicket.buildTextAreaField(
                         _contentFollowupController,
                         Icons.text_fields,
-                        "Content",
+                        Translations.of(context)!.text('content'),
                         TextInputType.multiline,
                       ),
                       const SizedBox(
@@ -1067,9 +1103,9 @@ class _DetailTicketState extends State<DetailTicket> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Row(
-                            children: const [
-                              Icon(Icons.lock),
-                              Text("Private"),
+                            children: [
+                              const Icon(Icons.lock),
+                              Text(Translations.of(context)!.text('private')),
                             ],
                           ),
                           Switch(
@@ -1116,17 +1152,21 @@ class _DetailTicketState extends State<DetailTicket> {
                         if (apiResponseAddFollowup == "true") {
                           if (!mounted) return;
                           messages.messageBottomBar(
-                              "Followup successfully added", context);
+                              Translations.of(context)!.text('item_added'),
+                              context);
                           Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => const TicketsPage(),
                           ));
                         } else if (apiResponseAddFollowup == "errorAdd") {
                           if (!mounted) return;
                           messages.sendAlert(
-                              "Error to add: Check API connexion", context);
+                              Translations.of(context)!.text('error_add'),
+                              context);
                         } else {
                           if (!mounted) return;
-                          messages.sendAlert("Add cancelled", context);
+                          messages.sendAlert(
+                              Translations.of(context)!.text('add_canceled'),
+                              context);
                         }
                       }),
                     ],
@@ -1149,7 +1189,7 @@ class _DetailTicketState extends State<DetailTicket> {
           return StatefulBuilder(builder: (context, setState) {
             return AlertDialog(
               scrollable: true,
-              title: const Text('Add Task'),
+              title: Text(Translations.of(context)!.text('add_task')),
               content: Padding(
                 padding: const EdgeInsets.all(3.0),
                 child: Form(
@@ -1159,7 +1199,7 @@ class _DetailTicketState extends State<DetailTicket> {
                       formFieldsTicket.buildTextAreaField(
                         _contentTaskController,
                         Icons.text_fields,
-                        "Content",
+                         Translations.of(context)!.text('content'),
                         TextInputType.multiline,
                       ),
                       DropdownButtonFormField(
@@ -1170,16 +1210,17 @@ class _DetailTicketState extends State<DetailTicket> {
                             selectedToDo = value!;
                           });
                         },
-                        decoration: const InputDecoration(
-                          labelText: 'To do',
-                          prefixIcon: Icon(Icons.add_task, color: Colors.black),
+                        decoration: InputDecoration(
+                          labelText: Translations.of(context)!.text('to_do'),
+                          prefixIcon:
+                              const Icon(Icons.add_task, color: Colors.black),
                           focusColor: Colors.black,
-                          enabledBorder: UnderlineInputBorder(
+                          enabledBorder: const UnderlineInputBorder(
                             borderSide:
                                 BorderSide(width: 3, color: Colors.greenAccent),
                           ),
-                          labelStyle: TextStyle(color: Colors.black),
-                          errorStyle: TextStyle(
+                          labelStyle: const TextStyle(color: Colors.black),
+                          errorStyle: const TextStyle(
                               color: Color.fromARGB(255, 245, 183, 177),
                               fontStyle: FontStyle.italic),
                         ),
@@ -1196,9 +1237,9 @@ class _DetailTicketState extends State<DetailTicket> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Row(
-                            children: const [
-                              Icon(Icons.lock),
-                              Text("Private"),
+                            children:  [
+                             const Icon(Icons.lock),
+                              Text(Translations.of(context)!.text('private')),
                             ],
                           ),
                           Switch(
@@ -1242,17 +1283,21 @@ class _DetailTicketState extends State<DetailTicket> {
                         if (apiResponseAddTask == "true") {
                           if (!mounted) return;
                           messages.messageBottomBar(
-                              "Task successfully added", context);
+                              Translations.of(context)!.text('item_added'),
+                              context);
                           Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => const TicketsPage(),
                           ));
                         } else if (apiResponseAddTask == "errorAdd") {
                           if (!mounted) return;
                           messages.sendAlert(
-                              "Error to add: Check API connexion", context);
+                              Translations.of(context)!.text('error_add'),
+                              context);
                         } else {
                           if (!mounted) return;
-                          messages.sendAlert("Add cancelled", context);
+                          messages.sendAlert(
+                              Translations.of(context)!.text('add_canceled'),
+                              context);
                         }
                       }),
                     ],
