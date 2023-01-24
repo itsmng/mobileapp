@@ -13,6 +13,7 @@ import 'package:mobileapp/models/special_status.dart';
 import 'package:mobileapp/models/ticket_user.dart';
 import 'package:mobileapp/models/tickets_model.dart';
 import 'package:mobileapp/models/user.dart';
+import 'package:mobileapp/translations.dart';
 
 class CreateTicket extends StatefulWidget {
   const CreateTicket({super.key});
@@ -126,9 +127,9 @@ class _CreateTicketState extends State<CreateTicket> {
           child: Column(
             children: <Widget>[
               formFieldsTicket.buildTextField(
-                  _titleController, Icons.title, "Title", TextInputType.text),
+                  _titleController, Icons.title,  Translations.of(context)!.text('title'), TextInputType.text),
               formFieldsTicket.buildDateTimeField(
-                  _dateController, "Open date", context),
+                  _dateController,  Translations.of(context)!.text('open_date'), context),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -146,17 +147,17 @@ class _CreateTicketState extends State<CreateTicket> {
                           selectedStatus = val!;
                         });
                       },
-                      decoration: const InputDecoration(
-                        labelText: 'Status',
+                      decoration:  InputDecoration(
+                        labelText:  Translations.of(context)!.text('status'),
                         prefixIcon:
-                            Icon(Icons.query_stats_sharp, color: Colors.black),
+                            const Icon(Icons.query_stats_sharp, color: Colors.black),
                         focusColor: Colors.black,
-                        enabledBorder: UnderlineInputBorder(
+                        enabledBorder: const UnderlineInputBorder(
                           borderSide:
                               BorderSide(width: 3, color: Colors.greenAccent),
                         ),
-                        labelStyle: TextStyle(color: Colors.black),
-                        errorStyle: TextStyle(
+                        labelStyle: const TextStyle(color: Colors.black),
+                        errorStyle: const TextStyle(
                             color: Color.fromARGB(255, 245, 183, 177),
                             fontStyle: FontStyle.italic),
                       ),
@@ -180,17 +181,17 @@ class _CreateTicketState extends State<CreateTicket> {
                           selectedPriority = val!;
                         });
                       },
-                      decoration: const InputDecoration(
-                        labelText: 'Priority',
-                        prefixIcon:
-                            Icon(Icons.priority_high, color: Colors.black),
+                      decoration:  InputDecoration(
+                        labelText:  Translations.of(context)!.text('priority'),
+                        prefixIcon: 
+                            const Icon(Icons.priority_high, color: Colors.black),
                         focusColor: Colors.black,
-                        enabledBorder: UnderlineInputBorder(
+                        enabledBorder: const UnderlineInputBorder(
                           borderSide:
                               BorderSide(width: 3, color: Colors.greenAccent),
                         ),
-                        labelStyle: TextStyle(color: Colors.black),
-                        errorStyle: TextStyle(
+                        labelStyle: const TextStyle(color: Colors.black),
+                        errorStyle: const TextStyle(
                             color: Color.fromARGB(255, 245, 183, 177),
                             fontStyle: FontStyle.italic),
                       ),
@@ -213,17 +214,17 @@ class _CreateTicketState extends State<CreateTicket> {
                           selectedEntity = val!;
                         });
                       },
-                      decoration: const InputDecoration(
-                        labelText: 'Entity',
+                      decoration:  InputDecoration(
+                        labelText:  Translations.of(context)!.text('entity'),
                         prefixIcon:
-                            Icon(Icons.category_sharp, color: Colors.black),
+                            const Icon(Icons.category_sharp, color: Colors.black),
                         focusColor: Colors.black,
-                        enabledBorder: UnderlineInputBorder(
+                        enabledBorder: const UnderlineInputBorder(
                           borderSide:
                               BorderSide(width: 3, color: Colors.greenAccent),
                         ),
-                        labelStyle: TextStyle(color: Colors.black),
-                        errorStyle: TextStyle(
+                        labelStyle: const TextStyle(color: Colors.black),
+                        errorStyle: const TextStyle(
                             color: Color.fromARGB(255, 245, 183, 177),
                             fontStyle: FontStyle.italic),
                       ),
@@ -248,16 +249,16 @@ class _CreateTicketState extends State<CreateTicket> {
                           selectedLocation = val!;
                         });
                       },
-                      decoration: const InputDecoration(
-                        labelText: 'Location',
-                        prefixIcon: Icon(Icons.house, color: Colors.black),
+                      decoration:  InputDecoration(
+                        labelText: Translations.of(context)!.text('location'),
+                        prefixIcon: const Icon(Icons.house, color: Colors.black),
                         focusColor: Colors.black,
-                        enabledBorder: UnderlineInputBorder(
+                        enabledBorder: const UnderlineInputBorder(
                           borderSide:
                               BorderSide(width: 3, color: Colors.greenAccent),
                         ),
-                        labelStyle: TextStyle(color: Colors.black),
-                        errorStyle: TextStyle(
+                        labelStyle: const TextStyle(color: Colors.black),
+                        errorStyle: const TextStyle(
                             color: Color.fromARGB(255, 245, 183, 177),
                             fontStyle: FontStyle.italic),
                       ),
@@ -280,18 +281,18 @@ class _CreateTicketState extends State<CreateTicket> {
                           selectedITILCategory = val!;
                         });
                       },
-                      decoration: const InputDecoration(
-                        labelText: 'Category',
-                        prefixIcon: Icon(
+                      decoration:  InputDecoration(
+                        labelText:  Translations.of(context)!.text('category'),
+                        prefixIcon: const Icon(
                             Icons.integration_instructions_outlined,
                             color: Colors.black),
                         focusColor: Colors.black,
-                        enabledBorder: UnderlineInputBorder(
+                        enabledBorder: const UnderlineInputBorder(
                           borderSide:
                               BorderSide(width: 3, color: Colors.greenAccent),
                         ),
-                        labelStyle: TextStyle(color: Colors.black),
-                        errorStyle: TextStyle(
+                        labelStyle: const TextStyle(color: Colors.black),
+                        errorStyle: const TextStyle(
                             color: Color.fromARGB(255, 245, 183, 177),
                             fontStyle: FontStyle.italic),
                       ),
@@ -316,17 +317,17 @@ class _CreateTicketState extends State<CreateTicket> {
                           selectedUserRecipient = val!;
                         });
                       },
-                      decoration: const InputDecoration(
-                        labelText: 'Recipient',
-                        prefixIcon: Icon(Icons.supervised_user_circle,
+                      decoration:  InputDecoration(
+                        labelText:  Translations.of(context)!.text('recipient'),
+                        prefixIcon: const Icon(Icons.supervised_user_circle,
                             color: Colors.black),
                         focusColor: Colors.black,
-                        enabledBorder: UnderlineInputBorder(
+                        enabledBorder: const UnderlineInputBorder(
                           borderSide:
                               BorderSide(width: 3, color: Colors.greenAccent),
                         ),
-                        labelStyle: TextStyle(color: Colors.black),
-                        errorStyle: TextStyle(
+                        labelStyle: const TextStyle(color: Colors.black),
+                        errorStyle: const TextStyle(
                             color: Color.fromARGB(255, 245, 183, 177),
                             fontStyle: FontStyle.italic),
                       ),
@@ -349,17 +350,17 @@ class _CreateTicketState extends State<CreateTicket> {
                           selectedAssignedUser = val!;
                         });
                       },
-                      decoration: const InputDecoration(
-                        labelText: 'Assigned',
+                      decoration:  InputDecoration(
+                        labelText:  Translations.of(context)!.text('assigned'),
                         prefixIcon:
-                            Icon(Icons.assignment_ind, color: Colors.black),
+                            const Icon(Icons.assignment_ind, color: Colors.black),
                         focusColor: Colors.black,
-                        enabledBorder: UnderlineInputBorder(
+                        enabledBorder: const UnderlineInputBorder(
                           borderSide:
                               BorderSide(width: 3, color: Colors.greenAccent),
                         ),
-                        labelStyle: TextStyle(color: Colors.black),
-                        errorStyle: TextStyle(
+                        labelStyle: const TextStyle(color: Colors.black),
+                        errorStyle: const TextStyle(
                             color: Color.fromARGB(255, 245, 183, 177),
                             fontStyle: FontStyle.italic),
                       ),
@@ -373,7 +374,7 @@ class _CreateTicketState extends State<CreateTicket> {
               formFieldsTicket.buildTextAreaField(
                 _contentController,
                 Icons.text_fields,
-                "Content",
+                 Translations.of(context)!.text('content'),
                 TextInputType.multiline,
               ),
               const SizedBox(
@@ -424,17 +425,20 @@ class _CreateTicketState extends State<CreateTicket> {
                     if (apiResponseValue == "true") {
                       if (!mounted) return;
                       messages.messageBottomBar(
-                          "Item successfully added: ", context);
+                          Translations.of(context)!.text('item_added'),
+                          context);
                       Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => const TicketsPage(),
                       ));
                     } else if (apiResponseValue == "errorAdd") {
                       if (!mounted) return;
                       messages.sendAlert(
-                          "Error to add: Check API connexion", context);
+                          Translations.of(context)!.text('error_add'), context);
                     } else {
                       if (!mounted) return;
-                      messages.sendAlert("Add cancelled", context);
+                      messages.sendAlert(
+                          Translations.of(context)!.text('add_canceled'),
+                          context);
                     }
                   }
                 },
