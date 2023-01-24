@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobileapp/UI/home_page.dart';
 import 'package:mobileapp/api/model.dart';
+import 'package:mobileapp/locale/translations.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:regexed_validator/regexed_validator.dart';
 
@@ -40,7 +41,7 @@ class _AuthentificationState extends State<Authentification> {
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 123, 8, 29),
         foregroundColor: const Color.fromARGB(255, 255, 255, 255),
-        title: const Text("Authentification API ITSM-NG"),
+        title: Text(Translations.of(context)!.text('auth_title')),
       ),
       body: Container(
         margin: const EdgeInsets.only(bottom: 2, left: 24, top: 10, right: 24),
@@ -308,7 +309,8 @@ class _AuthentificationState extends State<Authentification> {
             .saveStringData("User-token", _userTokenController.text);
         _initSession.apiMgmt.saveStringData("URL", _urlController.text);
         _initSession.apiMgmt.saveBoolData("SSL", _checkSSL);
-        _initSession.apiMgmt.saveBoolData("Auth-status", _initSession.apiMgmt.authStatus);
+        _initSession.apiMgmt
+            .saveBoolData("Auth-status", _initSession.apiMgmt.authStatus);
 
         _initSession.apiMgmt.setApiSessionToken(data.sessionToken.toString());
         if (_initSession.apiMgmt.apiSessionToken != null) {

@@ -5,6 +5,7 @@ import 'package:mobileapp/models/bar_model.dart';
 import 'package:mobileapp/models/computer_model.dart';
 import 'package:mobileapp/models/tickets_model.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:mobileapp/locale/translations.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -55,7 +56,7 @@ class _HomePageState extends State<HomePage> {
                   padding: const EdgeInsets.all(10),
                   child: Column(children: <Widget>[
                     Text(
-                      "Tickets status",
+                      Translations.of(context)!.text('ticket_status_title'),
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                     Expanded(
