@@ -3,6 +3,8 @@ import 'package:mobileapp/UI/authentification.dart';
 import 'package:mobileapp/UI/home_page.dart';
 import 'package:mobileapp/UI/tickets_page.dart';
 import 'package:mobileapp/UI/computers_page.dart';
+import 'package:mobileapp/application.dart';
+import 'package:mobileapp/translations.dart';
 
 class NavigationDrawerMenu extends StatelessWidget {
   const NavigationDrawerMenu({super.key});
@@ -18,7 +20,7 @@ class NavigationDrawerMenu extends StatelessWidget {
           children: <Widget>[
             buildHeader(
               urlImage: "assets/login_logo_itsm.png",
-              text: "Application techniciens ITSM-NG",
+              text: Translations.of(context)!.text('description_application'),
             ),
             Container(
               padding: padding,
@@ -29,7 +31,7 @@ class NavigationDrawerMenu extends StatelessWidget {
                   ),
                   const SizedBox(height: 14),
                   buildMenuItem(
-                    text: 'Accueil',
+                    text: Translations.of(context)!.text('home_title'),
                     icon: Icons.add_to_home_screen,
                     onClicked: () => seletedItem(context, 0),
                   ),
@@ -45,7 +47,7 @@ class NavigationDrawerMenu extends StatelessWidget {
                     height: 16,
                   ),
                   buildMenuItem(
-                    text: 'Computers',
+                    text: Translations.of(context)!.text('computer'),
                     icon: Icons.computer,
                     onClicked: () => seletedItem(context, 2),
                   ),

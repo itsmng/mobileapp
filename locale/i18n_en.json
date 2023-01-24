@@ -66,6 +66,7 @@
     "update_task": "Update task",
     "add_task": "Add task",
     "private": "Private",
-    "content": "Content"
-
+    "content": "Content",
+    "computer": "Computer",
+    "description_application": "ITSM-NG technician application"
 }

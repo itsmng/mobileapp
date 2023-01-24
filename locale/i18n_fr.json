@@ -51,7 +51,7 @@
     "done": "Fait",
     "ticket": "Ticket",
     "followup": "Suivi",
-    "task": "Taâche",
+    "task": "Tâche",
     "add_followup": "Ajouter suivi",
     "item_added": "Elément ajouté : ",
     "item_deleted": "Elément supprimé : ",
@@ -67,4 +67,6 @@
     "add_task": "Ajouter tâche",
     "private": "Privé",
     "content": "Contenu",
+    "computer": "Ordinateurs",
+    "description_application": "Application technicien ITSM-NG"
 }
