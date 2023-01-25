@@ -545,6 +545,7 @@ class _DetailTicketState extends State<DetailTicket> {
 
                               updateTicketUserData["users_id"] =
                                   assignedID.first;
+                              widget.ticket.assignedUserID ??= 0;
 
                               responseAPIUpdateUserAssigned =
                                   objectTicket.apiMgmt.put(
