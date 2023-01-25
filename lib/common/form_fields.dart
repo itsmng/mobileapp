@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 /// Class to create a text form field
-class FormFieldsTicket {
+class BuildFormFields {
   Widget buildTextField(
     TextEditingController controllerField,
     IconData iconData,
