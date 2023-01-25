@@ -29,7 +29,7 @@
     "Delimieter3": "------Tickets page------",
     "title": "Title",
     "status": "Status",
-    "open_date": "Open_date",
+    "open_date": "Open date",
     "category": "Category",
     "location": "Location",
     "entity": "Entity",
@@ -68,5 +68,14 @@
     "private": "Private",
     "content": "Content",
     "computer": "Computer",
-    "description_application": "ITSM-NG technician application"
+    "description_application": "ITSM-NG technician application",
+    "Delimieter5": "------Detail tickets page------",
+    "name": "Name",
+    "serial": "Serial",
+    "inventory": "Inventory",
+    "user": "User",
+    "technician": "In charge",
+    "all_computers": "All computers",
+    "create_computer": "Create computer",
+    "source": "Update source"
 }

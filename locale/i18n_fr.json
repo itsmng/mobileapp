@@ -68,5 +68,14 @@
     "private": "Privé",
     "content": "Contenu",
     "computer": "Ordinateurs",
-    "description_application": "Application technicien ITSM-NG"
+    "description_application": "Application technicien ITSM-NG",
+    "Delimieter5": "------Detail tickets page------",
+    "name": "Nom",
+    "serial": "Serie",
+    "inventory": "Inventaire",
+    "user": "Utilisateur",
+    "technician": "Responsable",
+    "all_computers": "Tous les ordinateurs",
+    "create_computer": "Créer ordinateur",
+    "source": "Source de mise à jour"
 }
