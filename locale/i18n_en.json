@@ -69,7 +69,7 @@
     "content": "Content",
     "computer": "Computer",
     "description_application": "ITSM-NG technician application",
-    "Delimieter5": "------Detail tickets page------",
+    "Delimieter5": "------Detail computer page------",
     "name": "Name",
     "serial": "Serial",
     "inventory": "Inventory",
@@ -77,5 +77,6 @@
     "technician": "In charge",
     "all_computers": "All computers",
     "create_computer": "Create computer",
-    "source": "Update source"
+    "source": "Update source",
+    "comment": "Comments"
 }
