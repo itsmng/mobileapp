@@ -246,9 +246,7 @@ class _ComputersPageState extends State<ComputersPage> {
 
   getComputerData() async {
     dataComputers = await computer.fetchComputerData(apiRespComputer);
-    for (var element in dataComputers) {
-      print(element.statusValue);
-    }
+
     setState(() {
       dataComputers;
       filterData = dataComputers;
