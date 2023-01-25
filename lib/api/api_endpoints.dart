@@ -22,7 +22,7 @@ class ApiEndpoint {
   static const String apiGetTicketFollowup =
       "ITILFollowup/?expand_dropdowns=true&searchText[items_id]=";
 
-   // Task API Endpoint
+  // Task API Endpoint
   static const String apiRootTicketTask = "TicketTask/";
   static const String apiGetTicketTask =
       "TicketTask/?expand_dropdowns=true&searchText[tickets_id]=";
@@ -59,4 +59,7 @@ class ApiEndpoint {
   static const String apiGetAllTicketUsers =
       "Ticket_User/?expand_dropdowns=true&searchText[type]=2";
   static const String apiUpdateTicketUser = "Ticket_User/";
+
+  // State API Endpoint
+  static const String apiGetAllStateComputer = "State";
 }
