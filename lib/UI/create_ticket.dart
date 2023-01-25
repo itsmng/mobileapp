@@ -4,8 +4,8 @@ import 'package:mobileapp/UI/tickets_page.dart';
 import 'package:mobileapp/api/api_endpoints.dart';
 import 'package:mobileapp/common/dropdown.dart';
 import 'package:mobileapp/common/message.dart';
-import 'package:mobileapp/form_fields.dart/button.dart';
-import 'package:mobileapp/form_fields.dart/form_fields_ticket.dart';
+import 'package:mobileapp/common/button.dart';
+import 'package:mobileapp/common/form_fields.dart';
 import 'package:mobileapp/models/entity.dart';
 import 'package:mobileapp/models/itil_category.dart';
 import 'package:mobileapp/models/location.dart';
@@ -25,7 +25,7 @@ class CreateTicket extends StatefulWidget {
 class _CreateTicketState extends State<CreateTicket> {
   final GlobalKey<FormState> _formKeyTicket = GlobalKey<FormState>();
 
-  final formFieldsTicket = FormFieldsTicket();
+  final formFieldsTicket = BuildFormFields();
   final buttonForm = Button();
 
   final TextEditingController _titleController = TextEditingController();
