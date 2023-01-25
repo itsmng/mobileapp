@@ -68,6 +68,37 @@ class NavigationDrawerMenu extends StatelessWidget {
                     icon: Icons.settings,
                     onClicked: () => seletedItem(context, 3),
                   ),
+                  Container(
+                    padding: const EdgeInsets.only(bottom: 5, top: 50),
+                    child: Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.language),
+                          color: Colors.white,
+                          iconSize: 30,
+                          tooltip: 'French language',
+                          onPressed: () {
+                            applic.onLocaleChanged!(const Locale('fr', ''));
+                          },
+                        ),
+                        const Text('French',
+                            style: TextStyle(color: Colors.white)),
+                        IconButton(
+                          icon: const Icon(Icons.language),
+                          color: Colors.white,
+                          iconSize: 30,
+                          tooltip: 'English language',
+                          onPressed: () {
+                            applic.onLocaleChanged!(const Locale('en', ''));
+                          },
+                        ),
+                        const Text(
+                          'English',
+                          style: TextStyle(color: Colors.white),
+                        )
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
