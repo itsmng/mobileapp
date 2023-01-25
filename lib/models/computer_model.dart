@@ -104,12 +104,14 @@ class Computer {
       return userID;
     } else if (title == Translations.of(context)!.text('last_update')) {
       return lastUpdate;
-    } else if (name == Translations.of(context)!.text('technician')) {
+    } else if (title == Translations.of(context)!.text('technician')) {
       return userIdTech;
     } else if (title == "ID") {
       return id;
     } else if (title == Translations.of(context)!.text('status')) {
       return statusValue;
+    } else if (title == Translations.of(context)!.text('source')) {
+      return source;
     }
   }
 }
