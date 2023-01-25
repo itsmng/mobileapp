@@ -227,12 +227,12 @@ class _HomePageState extends State<HomePage> {
     for (var element in futureComputer) {
       int cpt = 0;
       for (var ele in futureComputer) {
-        if (ele.status == element.status) {
+        if (ele.statusID == element.statusID) {
           cpt++;
         }
       }
       setState(() {
-        listComputerData[element.status.toString()] = cpt;
+        listComputerData[element.statusID.toString()] = cpt;
       });
     }
   }
