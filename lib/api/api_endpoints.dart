@@ -39,6 +39,7 @@ class ApiEndpoint {
   static const String apiGetAllComputersByName =
       "Computer/?expand_dropdowns=true&searchText[name]=^%s&range=0-500";
   static const String apiGetOneComputers = "Computer/%s?expand_dropdowns=true";
+  static const String apiRootComputer = "Computer/";
 
   // Special status API Endpoint
   static const String apiGetAllSpecialStatus = "SpecialStatus";
@@ -62,4 +63,7 @@ class ApiEndpoint {
 
   // State API Endpoint
   static const String apiGetAllStateComputer = "State";
+
+  // Update source API Endpoint
+  static const String apiGetRootUpdateSource = "Autoupdatesystem";
 }
