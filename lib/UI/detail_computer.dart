@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:mobileapp/UI/computers_page.dart';
+import 'package:mobileapp/UI/detail_ticket.dart';
 import 'package:mobileapp/api/api_endpoints.dart';
 import 'package:mobileapp/common/button.dart';
 import 'package:mobileapp/common/dropdown.dart';
@@ -8,6 +9,7 @@ import 'package:mobileapp/common/form_fields.dart';
 import 'package:mobileapp/common/message.dart';
 import 'package:mobileapp/models/computer_model.dart';
 import 'package:mobileapp/models/entity.dart';
+import 'package:mobileapp/models/item_ticket.dart';
 import 'package:mobileapp/models/location.dart';
 import 'package:mobileapp/models/state_computer.dart';
 import 'package:mobileapp/models/tickets_model.dart';
@@ -56,7 +58,10 @@ class _DetailComputerState extends State<DetailComputer> {
   Map<int, String> listUsers = {};
   late String selectedUser;
 
-  List<Tickets> allTickets = [];
+  List<ItemTicket> allItemsTickets = [];
+  dynamic responseAPIAddFollowup;
+
+  List<Tickets> allTicketsWithComputer = [];
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _serialController = TextEditingController();
@@ -85,7 +90,7 @@ class _DetailComputerState extends State<DetailComputer> {
     getAllUpdateSource();
     getAllUsersInCharge();
     getAllUsers();
-
+    getAllItemsTickets();
     super.initState();
   }
 
@@ -112,7 +117,7 @@ class _DetailComputerState extends State<DetailComputer> {
           body: TabBarView(
             children: [
               updateComputer(),
-              listTickets(),
+              displayAllItemsTickets(),
             ],
           ),
           floatingActionButton: SpeedDial(
@@ -498,7 +503,7 @@ class _DetailComputerState extends State<DetailComputer> {
   }
 
   // Display all followup
-  Widget listTickets() {
+  Widget displayAllItemsTickets() {
     return ListView(
       children: [
         Column(
@@ -506,7 +511,7 @@ class _DetailComputerState extends State<DetailComputer> {
             ListView.builder(
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
-                itemCount: allTickets.length,
+                itemCount: allItemsTickets.length,
                 itemBuilder: _itemBuilderListTickets),
           ],
         )
@@ -515,7 +520,74 @@ class _DetailComputerState extends State<DetailComputer> {
   }
 
   Widget _itemBuilderListTickets(BuildContext context, int index) {
-    return const Card();
+    var ticketData = allTicketsWithComputer.where((element) =>
+        element.title == allItemsTickets[index].ticketsID.toString());
+
+    if (allItemsTickets[index].itemsID.toString() ==
+        widget.computer.name.toString()) {
+      return Card(
+        clipBehavior: Clip.antiAlias,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          side: BorderSide(
+            color: Theme.of(context).colorScheme.outline,
+          ),
+          borderRadius: const BorderRadius.all(Radius.circular(12)),
+        ),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: ListTile(
+                    leading: const Icon(
+                      Icons.error_outline,
+                      size: 40,
+                      color: Colors.black,
+                    ),
+                    horizontalTitleGap: 5,
+                    title: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          allItemsTickets[index].ticketsID.toString(),
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20),
+                        ),
+                        const SizedBox(
+                          width: 30,
+                        ),
+                      ],
+                    ),
+                    subtitle: Text(
+                      allItemsTickets[index].dateTicket.toString(),
+                      style: const TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
+                    trailing: Text(
+                      allItemsTickets[index].statusTicket.toString(),
+                      style: const TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) =>
+                              DetailTicket(ticket: ticketData.first)));
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+    } else {
+      return const InkWell(
+        child: Text(""),
+      );
+    }
   }
 
   getAllStatus() async {
@@ -586,6 +658,30 @@ class _DetailComputerState extends State<DetailComputer> {
       listUsersInCharge[0] = "";
       for (var e in allUsers) {
         listUsersInCharge[e.id!] = e.name.toString();
+      }
+    });
+  }
+
+  getAllItemsTickets() async {
+    // Object of the Special Status class
+    final itemsTcikets = ItemTicket();
+    List<ItemTicket> allItems = await itemsTcikets.getAllItemTicket();
+
+    final ticket = Tickets();
+    var apires = ticket.apiMgmt.get(ApiEndpoint.apiGetAllTickets);
+    List<Tickets> allTickets = await ticket.fetchTicketsData(apires);
+
+    setState(() {
+      for (var e in allItems) {
+        for (Tickets ele in allTickets) {
+          if (e.ticketsID == ele.title) {
+            e.dateTicket = ele.date;
+            e.statusTicket = ele.statusValue;
+            allTicketsWithComputer.add(ele);
+          }
+        }
+
+        allItemsTickets.add(e);
       }
     });
   }
