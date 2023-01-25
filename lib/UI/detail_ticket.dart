@@ -255,7 +255,7 @@ class _DetailTicketState extends State<DetailTicket> {
                           });
                         },
                         decoration: InputDecoration(
-                          labelText: Translations.of(context)!.text('Priority'),
+                          labelText: Translations.of(context)!.text('priority'),
                           prefixIcon: const Icon(Icons.priority_high,
                               color: Colors.black),
                           focusColor: Colors.black,
@@ -1199,7 +1199,7 @@ class _DetailTicketState extends State<DetailTicket> {
                       formFieldsTicket.buildTextAreaField(
                         _contentTaskController,
                         Icons.text_fields,
-                         Translations.of(context)!.text('content'),
+                        Translations.of(context)!.text('content'),
                         TextInputType.multiline,
                       ),
                       DropdownButtonFormField(
@@ -1237,8 +1237,8 @@ class _DetailTicketState extends State<DetailTicket> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Row(
-                            children:  [
-                             const Icon(Icons.lock),
+                            children: [
+                              const Icon(Icons.lock),
                               Text(Translations.of(context)!.text('private')),
                             ],
                           ),

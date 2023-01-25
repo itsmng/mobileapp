@@ -158,7 +158,7 @@ class Tickets {
       return location;
     } else if (name == Translations.of(context)!.text('entity')) {
       return entity;
-    } else if (name == Translations.of(context)!.text('Priority')) {
+    } else if (name == Translations.of(context)!.text('priority')) {
       return priority;
     } else if (name == Translations.of(context)!.text('last_update')) {
       return lastUpdate;

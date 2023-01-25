@@ -33,7 +33,7 @@
     "category": "Catégorie",
     "location": "Lieu",
     "entity": "Entité",
-    "Priority": "Priorité",
+    "priority": "Priorité",
     "last_update": "Dernière modif",
     "recipient": "Par",
     "all_tickets": "Tous les tickets",

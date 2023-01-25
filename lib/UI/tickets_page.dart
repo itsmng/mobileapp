@@ -82,7 +82,7 @@ class _TicketsPageState extends State<TicketsPage> {
       Translations.of(context)!.text('category'),
       Translations.of(context)!.text('location'),
       Translations.of(context)!.text('entity'),
-      Translations.of(context)!.text('Priority'),
+      Translations.of(context)!.text('priority'),
       Translations.of(context)!.text('last_update'),
       Translations.of(context)!.text('recipient'),
     ];

@@ -126,10 +126,10 @@ class _CreateTicketState extends State<CreateTicket> {
           key: _formKeyTicket,
           child: Column(
             children: <Widget>[
-              formFieldsTicket.buildTextField(
-                  _titleController, Icons.title,  Translations.of(context)!.text('title'), TextInputType.text),
-              formFieldsTicket.buildDateTimeField(
-                  _dateController,  Translations.of(context)!.text('open_date'), context),
+              formFieldsTicket.buildTextField(_titleController, Icons.title,
+                  Translations.of(context)!.text('title'), TextInputType.text),
+              formFieldsTicket.buildDateTimeField(_dateController,
+                  Translations.of(context)!.text('open_date'), context),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -147,10 +147,10 @@ class _CreateTicketState extends State<CreateTicket> {
                           selectedStatus = val!;
                         });
                       },
-                      decoration:  InputDecoration(
-                        labelText:  Translations.of(context)!.text('status'),
-                        prefixIcon:
-                            const Icon(Icons.query_stats_sharp, color: Colors.black),
+                      decoration: InputDecoration(
+                        labelText: Translations.of(context)!.text('status'),
+                        prefixIcon: const Icon(Icons.query_stats_sharp,
+                            color: Colors.black),
                         focusColor: Colors.black,
                         enabledBorder: const UnderlineInputBorder(
                           borderSide:
@@ -181,10 +181,10 @@ class _CreateTicketState extends State<CreateTicket> {
                           selectedPriority = val!;
                         });
                       },
-                      decoration:  InputDecoration(
-                        labelText:  Translations.of(context)!.text('priority'),
-                        prefixIcon: 
-                            const Icon(Icons.priority_high, color: Colors.black),
+                      decoration: InputDecoration(
+                        labelText: Translations.of(context)!.text('priority'),
+                        prefixIcon: const Icon(Icons.priority_high,
+                            color: Colors.black),
                         focusColor: Colors.black,
                         enabledBorder: const UnderlineInputBorder(
                           borderSide:
@@ -214,10 +214,10 @@ class _CreateTicketState extends State<CreateTicket> {
                           selectedEntity = val!;
                         });
                       },
-                      decoration:  InputDecoration(
-                        labelText:  Translations.of(context)!.text('entity'),
-                        prefixIcon:
-                            const Icon(Icons.category_sharp, color: Colors.black),
+                      decoration: InputDecoration(
+                        labelText: Translations.of(context)!.text('entity'),
+                        prefixIcon: const Icon(Icons.category_sharp,
+                            color: Colors.black),
                         focusColor: Colors.black,
                         enabledBorder: const UnderlineInputBorder(
                           borderSide:
@@ -249,9 +249,10 @@ class _CreateTicketState extends State<CreateTicket> {
                           selectedLocation = val!;
                         });
                       },
-                      decoration:  InputDecoration(
+                      decoration: InputDecoration(
                         labelText: Translations.of(context)!.text('location'),
-                        prefixIcon: const Icon(Icons.house, color: Colors.black),
+                        prefixIcon:
+                            const Icon(Icons.house, color: Colors.black),
                         focusColor: Colors.black,
                         enabledBorder: const UnderlineInputBorder(
                           borderSide:
@@ -281,8 +282,8 @@ class _CreateTicketState extends State<CreateTicket> {
                           selectedITILCategory = val!;
                         });
                       },
-                      decoration:  InputDecoration(
-                        labelText:  Translations.of(context)!.text('category'),
+                      decoration: InputDecoration(
+                        labelText: Translations.of(context)!.text('category'),
                         prefixIcon: const Icon(
                             Icons.integration_instructions_outlined,
                             color: Colors.black),
@@ -317,8 +318,8 @@ class _CreateTicketState extends State<CreateTicket> {
                           selectedUserRecipient = val!;
                         });
                       },
-                      decoration:  InputDecoration(
-                        labelText:  Translations.of(context)!.text('recipient'),
+                      decoration: InputDecoration(
+                        labelText: Translations.of(context)!.text('recipient'),
                         prefixIcon: const Icon(Icons.supervised_user_circle,
                             color: Colors.black),
                         focusColor: Colors.black,
@@ -350,10 +351,10 @@ class _CreateTicketState extends State<CreateTicket> {
                           selectedAssignedUser = val!;
                         });
                       },
-                      decoration:  InputDecoration(
-                        labelText:  Translations.of(context)!.text('assigned'),
-                        prefixIcon:
-                            const Icon(Icons.assignment_ind, color: Colors.black),
+                      decoration: InputDecoration(
+                        labelText: Translations.of(context)!.text('assigned'),
+                        prefixIcon: const Icon(Icons.assignment_ind,
+                            color: Colors.black),
                         focusColor: Colors.black,
                         enabledBorder: const UnderlineInputBorder(
                           borderSide:
@@ -374,7 +375,7 @@ class _CreateTicketState extends State<CreateTicket> {
               formFieldsTicket.buildTextAreaField(
                 _contentController,
                 Icons.text_fields,
-                 Translations.of(context)!.text('content'),
+                Translations.of(context)!.text('content'),
                 TextInputType.multiline,
               ),
               const SizedBox(
