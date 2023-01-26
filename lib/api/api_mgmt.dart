@@ -249,7 +249,7 @@ class ApiMgmt {
   }
 
   // Metod to logged out
-  void logoutFromItsmAPI(String relativeUrl) async {
+  dynamic logoutFromItsmAPI(String relativeUrl) async {
     // obtain shared preferences
     final prefs = await SharedPreferences.getInstance();
 
@@ -266,6 +266,9 @@ class ApiMgmt {
       // If the server did return a 200 OK response,
       // then parse the JSON.
       authStatus = false;
+      return {
+        "session": "killed",
+      };
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
