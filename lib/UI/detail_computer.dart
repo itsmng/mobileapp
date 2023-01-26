@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:mobileapp/UI/computers_page.dart';
+import 'package:mobileapp/UI/create_ticket.dart';
 import 'package:mobileapp/UI/detail_ticket.dart';
 import 'package:mobileapp/api/api_endpoints.dart';
 import 'package:mobileapp/common/button.dart';
@@ -96,6 +97,9 @@ class _DetailComputerState extends State<DetailComputer> {
 
   @override
   Widget build(BuildContext context) {
+    final Tickets linkedTicket = Tickets(
+        associatedElement: widget.computer.name,
+      );
     return DefaultTabController(
         length: 2,
         child: Scaffold(
@@ -142,7 +146,11 @@ class _DetailComputerState extends State<DetailComputer> {
                   label: Translations.of(context)!.text('create_ticket'),
                   backgroundColor: const Color.fromARGB(255, 123, 8, 29),
                   foregroundColor: Colors.white,
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) =>
+                            CreateTicket(ticket: linkedTicket)));
+                  },
                 ),
               ]),
         ));
@@ -542,7 +550,7 @@ class _DetailComputerState extends State<DetailComputer> {
                   child: ListTile(
                     leading: const Icon(
                       Icons.error_outline,
-                      size: 40,
+                      size: 30,
                       color: Colors.black,
                     ),
                     horizontalTitleGap: 5,
@@ -592,11 +600,11 @@ class _DetailComputerState extends State<DetailComputer> {
 
   getAllStatus() async {
     // Object of the Special Status class
-    final specialStatus = StateComputer();
-    List<StateComputer> allSpecialStatus =
-        await specialStatus.getAllStateComputer();
+    final itemsTicket = StateComputer();
+    List<StateComputer> allItemsTickets =
+        await itemsTicket.getAllStateComputer();
     setState(() {
-      for (var e in allSpecialStatus) {
+      for (var e in allItemsTickets) {
         listStatus[e.id!] = e.name.toString();
       }
     });

@@ -153,6 +153,7 @@ class _TicketsPageState extends State<TicketsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final ticket = Tickets();
     return Scaffold(
       drawer: const NavigationDrawerMenu(),
       appBar: AppBar(
@@ -166,7 +167,7 @@ class _TicketsPageState extends State<TicketsPage> {
             tooltip: Translations.of(context)!.text('create_ticket'),
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => const CreateTicket(),
+                builder: (context) => CreateTicket(ticket: ticket),
               ));
             },
           )
