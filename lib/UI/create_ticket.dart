@@ -6,7 +6,9 @@ import 'package:mobileapp/common/dropdown.dart';
 import 'package:mobileapp/common/message.dart';
 import 'package:mobileapp/common/button.dart';
 import 'package:mobileapp/common/form_fields.dart';
+import 'package:mobileapp/models/computer_model.dart';
 import 'package:mobileapp/models/entity.dart';
+import 'package:mobileapp/models/item_ticket.dart';
 import 'package:mobileapp/models/itil_category.dart';
 import 'package:mobileapp/models/location.dart';
 import 'package:mobileapp/models/special_status.dart';
@@ -16,7 +18,8 @@ import 'package:mobileapp/models/user.dart';
 import 'package:mobileapp/translations.dart';
 
 class CreateTicket extends StatefulWidget {
-  const CreateTicket({super.key});
+  const CreateTicket({super.key, required this.ticket});
+  final Tickets ticket;
 
   @override
   State<CreateTicket> createState() => _CreateTicketState();
@@ -33,10 +36,13 @@ class _CreateTicketState extends State<CreateTicket> {
   final TextEditingController _dateController = TextEditingController();
 
   final objectTicket = Tickets();
+  final objectItemsTicket = ItemTicket();
   dynamic responseAPIAddTicket;
   dynamic responseAPIAddUserAssigned;
   Map addTicketData = {};
   Map addTicketUserData = {};
+  dynamic responseAPIAddItemsTicket;
+  Map addItemsTicketData = {};
 
   final messages = Messages();
   final dropdown = Dropdown();
@@ -81,6 +87,9 @@ class _CreateTicketState extends State<CreateTicket> {
     return menuItem;
   }
 
+  Map<int, String> listComputer = {};
+  late String? selectedComputer;
+
   @override
   void initState() {
     _titleController.text = "";
@@ -95,6 +104,7 @@ class _CreateTicketState extends State<CreateTicket> {
     selectedITILCategory = "";
     selectedUserRecipient = "";
     selectedAssignedUser = "";
+    selectedComputer = widget.ticket.associatedElement;
 
     getAllStatus();
     getAllEntities();
@@ -102,6 +112,7 @@ class _CreateTicketState extends State<CreateTicket> {
     getAllITILCategory();
     getAllUsers();
     getAllAssignedUsers();
+    getAllItemsTicket();
     super.initState();
   }
 
@@ -109,7 +120,7 @@ class _CreateTicketState extends State<CreateTicket> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add ticket'),
+        title: Text(Translations.of(context)!.text('create_ticket')),
         centerTitle: true,
         backgroundColor: const Color.fromARGB(255, 123, 8, 29),
         foregroundColor: const Color.fromARGB(255, 255, 255, 255),
@@ -369,6 +380,42 @@ class _CreateTicketState extends State<CreateTicket> {
                   ),
                 ],
               ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Expanded(
+                    child: DropdownButtonFormField(
+                      value: selectedComputer,
+                      items: dropdown.dropdownItem(listComputer),
+                      onChanged: (String? value) {
+                        setState(() {
+                          selectedComputer = value!;
+                        });
+                      },
+                      onSaved: (String? val) {
+                        setState(() {
+                          selectedComputer = val!;
+                        });
+                      },
+                      decoration: InputDecoration(
+                        labelText: Translations.of(context)!
+                            .text('associated_element'),
+                        prefixIcon: const Icon(Icons.dataset_linked,
+                            color: Colors.black),
+                        focusColor: Colors.black,
+                        enabledBorder: const UnderlineInputBorder(
+                          borderSide:
+                              BorderSide(width: 3, color: Colors.greenAccent),
+                        ),
+                        labelStyle: const TextStyle(color: Colors.black),
+                        errorStyle: const TextStyle(
+                            color: Color.fromARGB(255, 245, 183, 177),
+                            fontStyle: FontStyle.italic),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
               const SizedBox(
                 height: 20,
               ),
@@ -403,6 +450,8 @@ class _CreateTicketState extends State<CreateTicket> {
                             listITILCategory[element] == selectedITILCategory);
                     var userRecipientID = listUsers.keys.where((element) =>
                         listUsers[element] == selectedUserRecipient);
+                    var associatedElementID = listComputer.keys.where(
+                        (element) => listComputer[element] == selectedComputer);
                     /*
                     var assignedID = listUsers.keys.where((element) =>
                         listUsers[element] == selectedAssignedUser);
@@ -424,6 +473,17 @@ class _CreateTicketState extends State<CreateTicket> {
                         await responseAPIAddTicket.then((val) => val["add"]);
 
                     if (apiResponseValue == "true") {
+                      if (associatedElementID.isNotEmpty) {
+                        // Get the Id of the new ticket
+                        final getIDValue =
+                            await responseAPIAddTicket.then((val) => val["id"]);
+                        addItemsTicketData["items_id"] =
+                            associatedElementID.first;
+                        addItemsTicketData["itemtype"] = "Computer";
+                        addItemsTicketData["tickets_id"] = getIDValue;
+                        objectItemsTicket.apiMgmt.post(
+                            ApiEndpoint.apiRootItemTicket, addItemsTicketData);
+                      }
                       if (!mounted) return;
                       messages.messageBottomBar(
                           Translations.of(context)!.text('item_added'),
@@ -533,6 +593,22 @@ class _CreateTicketState extends State<CreateTicket> {
         }
       }
       selectedAssignedUser = listAssignedUsers[0].toString();
+    });
+  }
+
+  getAllItemsTicket() async {
+    // Object of the Special Status class
+    final computer = Computer();
+    dynamic apiResponseComputer =
+        computer.apiMgmt.get(ApiEndpoint.apiGetAllComputers);
+    List<Computer> futureComputer =
+        await computer.fetchComputerData(apiResponseComputer);
+
+    setState(() {
+      listComputer[0] = "";
+      for (var e in futureComputer) {
+        listComputer[e.id!] = e.name.toString();
+      }
     });
   }
 }

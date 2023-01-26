@@ -25,6 +25,7 @@ class Tickets {
   String? content;
   String? assignedUser;
   int? assignedUserID;
+  String? associatedElement;
 
   final apiMgmt = ApiMgmt();
 
@@ -43,6 +44,7 @@ class Tickets {
     this.recipient,
     this.content,
     this.assignedUser,
+    this.associatedElement,
   });
 
   factory Tickets.fromMap(Map<String, dynamic> json) {
@@ -90,6 +92,7 @@ class Tickets {
       recipient: json["users_id_recipient"],
       content: json["content"],
       assignedUser: "",
+      associatedElement: "",
     );
   }
 
