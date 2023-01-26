@@ -78,5 +78,6 @@
     "all_computers": "Tous les ordinateurs",
     "create_computer": "Créer ordinateur",
     "source": "Source de mise à jour",
-    "comment": "Commentaires"
+    "comment": "Commentaires",
+    "associated_element": "Éléments associés"
 }

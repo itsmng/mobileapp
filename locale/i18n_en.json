@@ -78,5 +78,6 @@
     "all_computers": "All computers",
     "create_computer": "Create computer",
     "source": "Update source",
-    "comment": "Comments"
+    "comment": "Comments",
+    "associated_element": "Associated elements"
 }
