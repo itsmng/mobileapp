@@ -4,11 +4,11 @@ import 'package:intl/intl.dart';
 /// Class to create a text form field
 class BuildFormFields {
   Widget buildTextField(
-    TextEditingController controllerField,
-    IconData iconData,
-    String labelTextField,
-    TextInputType inputType,
-  ) {
+      TextEditingController controllerField,
+      IconData iconData,
+      String labelTextField,
+      TextInputType inputType,
+      bool isRequired) {
     // This function is triggered when the clear buttion is pressed
     void clearTextField() {
       // Clear everything in the text field
@@ -37,7 +37,7 @@ class BuildFormFields {
       ),
       keyboardType: inputType,
       validator: (String? value) {
-        if (value.toString().isEmpty) {
+        if (value.toString().isEmpty && isRequired == true) {
           return '$labelTextField is Required';
         }
         return null;
@@ -50,11 +50,11 @@ class BuildFormFields {
   }
 
   Widget buildTextAreaField(
-    TextEditingController controllerField,
-    IconData iconData,
-    String labelTextField,
-    TextInputType inputType,
-  ) {
+      TextEditingController controllerField,
+      IconData iconData,
+      String labelTextField,
+      TextInputType inputType,
+      bool isRequired) {
     // This function is triggered when the clear buttion is pressed
     void clearTextField() {
       // Clear everything in the text field
@@ -85,7 +85,7 @@ class BuildFormFields {
       ),
       keyboardType: inputType,
       validator: (String? value) {
-        if (value.toString().isEmpty) {
+        if (value.toString().isEmpty && isRequired == true) {
           return '$labelTextField is Required';
         }
         return null;

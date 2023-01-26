@@ -107,8 +107,12 @@ class _CreateComputerState extends State<CreateComputer> {
           key: _formKeyAddComputer,
           child: Column(
             children: <Widget>[
-              formFieldsComputer.buildTextField(_nameController, Icons.title,
-                  Translations.of(context)!.text('name'), TextInputType.text),
+              formFieldsComputer.buildTextField(
+                  _nameController,
+                  Icons.title,
+                  Translations.of(context)!.text('name'),
+                  TextInputType.text,
+                  true),
               formFieldsComputer.buildDateTimeField(_dateController,
                   Translations.of(context)!.text('open_date'), context),
               Row(
@@ -293,7 +297,8 @@ class _CreateComputerState extends State<CreateComputer> {
                         _serialController,
                         Icons.numbers,
                         Translations.of(context)!.text('serial'),
-                        TextInputType.text),
+                        TextInputType.text,
+                        false),
                   ),
                   const SizedBox(
                     width: 15,
@@ -303,16 +308,13 @@ class _CreateComputerState extends State<CreateComputer> {
                         _otherSerialController,
                         Icons.numbers,
                         Translations.of(context)!.text('inventory'),
-                        TextInputType.text),
+                        TextInputType.text,
+                        false),
                   )
                 ],
               ),
-              formFieldsComputer.buildTextAreaField(
-                _commentController,
-                Icons.text_fields,
-                "comment",
-                TextInputType.multiline,
-              ),
+              formFieldsComputer.buildTextAreaField(_commentController,
+                  Icons.text_fields, "comment", TextInputType.multiline, false),
               const SizedBox(
                 height: 20,
               ),

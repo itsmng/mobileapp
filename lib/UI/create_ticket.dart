@@ -137,8 +137,12 @@ class _CreateTicketState extends State<CreateTicket> {
           key: _formKeyTicket,
           child: Column(
             children: <Widget>[
-              formFieldsTicket.buildTextField(_titleController, Icons.title,
-                  Translations.of(context)!.text('title'), TextInputType.text),
+              formFieldsTicket.buildTextField(
+                  _titleController,
+                  Icons.title,
+                  Translations.of(context)!.text('title'),
+                  TextInputType.text,
+                  true),
               formFieldsTicket.buildDateTimeField(_dateController,
                   Translations.of(context)!.text('open_date'), context),
               Row(
@@ -420,11 +424,11 @@ class _CreateTicketState extends State<CreateTicket> {
                 height: 20,
               ),
               formFieldsTicket.buildTextAreaField(
-                _contentController,
-                Icons.text_fields,
-                Translations.of(context)!.text('content'),
-                TextInputType.multiline,
-              ),
+                  _contentController,
+                  Icons.text_fields,
+                  Translations.of(context)!.text('content'),
+                  TextInputType.multiline,
+                  true),
               const SizedBox(
                 height: 50,
               ),

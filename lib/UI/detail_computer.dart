@@ -171,8 +171,12 @@ class _DetailComputerState extends State<DetailComputer> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                formFieldsComputer.buildTextField(_nameController, Icons.title,
-                    Translations.of(context)!.text('name'), TextInputType.text),
+                formFieldsComputer.buildTextField(
+                    _nameController,
+                    Icons.title,
+                    Translations.of(context)!.text('name'),
+                    TextInputType.text,
+                    true),
                 formFieldsComputer.buildDateTimeField(_dateController,
                     Translations.of(context)!.text('open_date'), context),
                 Row(
@@ -358,7 +362,8 @@ class _DetailComputerState extends State<DetailComputer> {
                           _serialController,
                           Icons.numbers,
                           Translations.of(context)!.text('serial'),
-                          TextInputType.text),
+                          TextInputType.text,
+                          false),
                     ),
                     const SizedBox(
                       width: 15,
@@ -368,16 +373,17 @@ class _DetailComputerState extends State<DetailComputer> {
                           _otherSerialController,
                           Icons.numbers,
                           Translations.of(context)!.text('inventory'),
-                          TextInputType.text),
+                          TextInputType.text,
+                          false),
                     )
                   ],
                 ),
                 formFieldsComputer.buildTextAreaField(
-                  _commentController,
-                  Icons.text_fields,
-                  Translations.of(context)!.text("comment"),
-                  TextInputType.multiline,
-                ),
+                    _commentController,
+                    Icons.text_fields,
+                    Translations.of(context)!.text("comment"),
+                    TextInputType.multiline,
+                    false),
                 const SizedBox(
                   height: 20,
                 ),

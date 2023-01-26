@@ -239,7 +239,8 @@ class _DetailTicketState extends State<DetailTicket> {
                     _titleController,
                     Icons.title,
                     Translations.of(context)!.text('title'),
-                    TextInputType.text),
+                    TextInputType.text,
+                    true),
                 formFieldsTicket.buildDateTimeField(_dateController,
                     Translations.of(context)!.text('open_date'), context),
                 Row(
@@ -449,11 +450,11 @@ class _DetailTicketState extends State<DetailTicket> {
                   ],
                 ),
                 formFieldsTicket.buildTextAreaField(
-                  _contentController,
-                  Icons.text_fields,
-                  "Content",
-                  TextInputType.multiline,
-                ),
+                    _contentController,
+                    Icons.text_fields,
+                    Translations.of(context)!.text("content"),
+                    TextInputType.multiline,
+                    true),
                 const SizedBox(
                   height: 20,
                 ),
@@ -851,11 +852,11 @@ class _DetailTicketState extends State<DetailTicket> {
                   child: Column(
                     children: <Widget>[
                       formFieldsTicket.buildTextAreaField(
-                        updateContentController,
-                        Icons.text_fields,
-                        Translations.of(context)!.text('content'),
-                        TextInputType.multiline,
-                      ),
+                          updateContentController,
+                          Icons.text_fields,
+                          Translations.of(context)!.text('content'),
+                          TextInputType.multiline,
+                          true),
                       const SizedBox(
                         height: 10,
                       ),
@@ -962,11 +963,11 @@ class _DetailTicketState extends State<DetailTicket> {
                   child: Column(
                     children: <Widget>[
                       formFieldsTicket.buildTextAreaField(
-                        updateTaskContentController,
-                        Icons.text_fields,
-                        Translations.of(context)!.text('content'),
-                        TextInputType.multiline,
-                      ),
+                          updateTaskContentController,
+                          Icons.text_fields,
+                          Translations.of(context)!.text('content'),
+                          TextInputType.multiline,
+                          true),
                       DropdownButtonFormField(
                         value: seletedToDoVlaue,
                         items: dropdownToDo,
@@ -1092,11 +1093,11 @@ class _DetailTicketState extends State<DetailTicket> {
                   child: Column(
                     children: <Widget>[
                       formFieldsTicket.buildTextAreaField(
-                        _contentFollowupController,
-                        Icons.text_fields,
-                        Translations.of(context)!.text('content'),
-                        TextInputType.multiline,
-                      ),
+                          _contentFollowupController,
+                          Icons.text_fields,
+                          Translations.of(context)!.text('content'),
+                          TextInputType.multiline,
+                          true),
                       const SizedBox(
                         height: 10,
                       ),
@@ -1198,11 +1199,11 @@ class _DetailTicketState extends State<DetailTicket> {
                   child: Column(
                     children: <Widget>[
                       formFieldsTicket.buildTextAreaField(
-                        _contentTaskController,
-                        Icons.text_fields,
-                        Translations.of(context)!.text('content'),
-                        TextInputType.multiline,
-                      ),
+                          _contentTaskController,
+                          Icons.text_fields,
+                          Translations.of(context)!.text('content'),
+                          TextInputType.multiline,
+                          true),
                       DropdownButtonFormField(
                         value: selectedToDo,
                         items: dropdownToDo,
