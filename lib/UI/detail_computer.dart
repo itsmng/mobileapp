@@ -98,8 +98,8 @@ class _DetailComputerState extends State<DetailComputer> {
   @override
   Widget build(BuildContext context) {
     final Tickets linkedTicket = Tickets(
-        associatedElement: widget.computer.name,
-      );
+      associatedElement: widget.computer.name,
+    );
     return DefaultTabController(
         length: 2,
         child: Scaffold(
@@ -375,7 +375,7 @@ class _DetailComputerState extends State<DetailComputer> {
                 formFieldsComputer.buildTextAreaField(
                   _commentController,
                   Icons.text_fields,
-                  "comment",
+                  Translations.of(context)!.text("comment"),
                   TextInputType.multiline,
                 ),
                 const SizedBox(
@@ -604,6 +604,7 @@ class _DetailComputerState extends State<DetailComputer> {
     List<StateComputer> allItemsTickets =
         await itemsTicket.getAllStateComputer();
     setState(() {
+      listStatus[0] = "";
       for (var e in allItemsTickets) {
         listStatus[e.id!] = e.name.toString();
       }
