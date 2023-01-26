@@ -169,8 +169,10 @@ class ApiMgmt {
           response.statusCode == 206 ||
           response.statusCode == 201) {
         // If the server did return a 200 OK response,
+        var getID = await jsonDecode(response.body);
         return {
           "add": "true",
+          "id": getID["id"],
         };
       } else {
         // If the server did not return a 200 OK response,
