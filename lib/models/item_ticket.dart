@@ -21,12 +21,16 @@ class ItemTicket {
   });
 
   factory ItemTicket.fromMap(Map<String, dynamic> json) {
-    return ItemTicket(
-      id: json["id"],
-      ticketsID: json["tickets_id"],
-      itemsID: json["items_id"],
-      itemsType: json["itemtype"],
-    );
+    try {
+      return ItemTicket(
+        id: json["id"],
+        ticketsID: json["tickets_id"],
+        itemsID: json["items_id"],
+        itemsType: json["itemtype"],
+      );
+    } catch (e) {
+      return ItemTicket();
+    }
   }
 
   Future<List<ItemTicket>> fetchItemTicketData(dynamic data) async {
@@ -39,7 +43,7 @@ class ItemTicket {
     List<ItemTicket> futureItemTicket;
     dynamic apiResp;
 
-    apiResp = apiMgmt.get(ApiEndpoint.apiRoottemTicket);
+    apiResp = apiMgmt.get(ApiEndpoint.apiRootItemTicket);
     futureItemTicket = await fetchItemTicketData(apiResp);
 
     return futureItemTicket;
