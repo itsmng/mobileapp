@@ -182,7 +182,7 @@ class _DetailComputerState extends State<DetailComputer> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    Expanded(
+                    Flexible(
                       child: DropdownButtonFormField(
                         value: selectedUserInCharge,
                         items: dropdown.dropdownItem(listUsersInCharge),
@@ -211,7 +211,7 @@ class _DetailComputerState extends State<DetailComputer> {
                     const SizedBox(
                       width: 15,
                     ),
-                    Expanded(
+                    Flexible(
                       child: DropdownButtonFormField(
                         value: selectedUser,
                         items: dropdown.dropdownItem(listUsers),
@@ -241,7 +241,7 @@ class _DetailComputerState extends State<DetailComputer> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Expanded(
+                    Flexible(
                       child: DropdownButtonFormField(
                         value: selectedStatus,
                         items: dropdown.dropdownItem(listStatus),
@@ -269,7 +269,7 @@ class _DetailComputerState extends State<DetailComputer> {
                     const SizedBox(
                       width: 15,
                     ),
-                    Expanded(
+                    Flexible(
                       child: DropdownButtonFormField(
                         value: selectedUpdateSource,
                         items: dropdown.dropdownItem(listUpdateSource),
@@ -299,7 +299,7 @@ class _DetailComputerState extends State<DetailComputer> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Expanded(
+                    Flexible(
                       child: DropdownButtonFormField(
                         value: selectedLocation,
                         items: dropdown.dropdownItem(listLocations),
@@ -327,7 +327,7 @@ class _DetailComputerState extends State<DetailComputer> {
                     const SizedBox(
                       width: 15,
                     ),
-                    Expanded(
+                    Flexible(
                       child: DropdownButtonFormField(
                         value: selectedEntity,
                         items: dropdown.dropdownItem(listEntities),
@@ -357,7 +357,7 @@ class _DetailComputerState extends State<DetailComputer> {
                 ),
                 Row(
                   children: [
-                    Expanded(
+                    Flexible(
                       child: formFieldsComputer.buildTextField(
                           _serialController,
                           Icons.numbers,
@@ -368,7 +368,7 @@ class _DetailComputerState extends State<DetailComputer> {
                     const SizedBox(
                       width: 15,
                     ),
-                    Expanded(
+                    Flexible(
                       child: formFieldsComputer.buildTextField(
                           _otherSerialController,
                           Icons.numbers,
@@ -560,18 +560,10 @@ class _DetailComputerState extends State<DetailComputer> {
                       color: Colors.black,
                     ),
                     horizontalTitleGap: 5,
-                    title: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          allItemsTickets[index].ticketsID.toString(),
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20),
-                        ),
-                        const SizedBox(
-                          width: 30,
-                        ),
-                      ],
+                    title: Text(
+                      allItemsTickets[index].ticketsID.toString(),
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20),
                     ),
                     subtitle: Text(
                       allItemsTickets[index].dateTicket.toString(),

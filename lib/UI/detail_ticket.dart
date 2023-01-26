@@ -769,19 +769,21 @@ class _DetailTicketState extends State<DetailTicket> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text(
+                        Flexible(
+                            child: Text(
                           listTask[index].userID.toString(),
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 20),
-                        ),
+                        )),
                         const SizedBox(
                           width: 10,
                         ),
-                        Text(
+                        Flexible(
+                            child: Text(
                           listTask[index].date.toString(),
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 10),
-                        ),
+                        )),
                         const SizedBox(
                           width: 10,
                         ),

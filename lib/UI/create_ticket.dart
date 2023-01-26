@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:mobileapp/UI/computers_page.dart';
 import 'package:mobileapp/UI/tickets_page.dart';
 import 'package:mobileapp/api/api_endpoints.dart';
 import 'package:mobileapp/common/dropdown.dart';
@@ -487,14 +488,23 @@ class _CreateTicketState extends State<CreateTicket> {
                         addItemsTicketData["tickets_id"] = getIDValue;
                         objectItemsTicket.apiMgmt.post(
                             ApiEndpoint.apiRootItemTicket, addItemsTicketData);
+                        if (widget.ticket.associatedElement != null) {
+                          if (!mounted) return;
+                          messages.messageBottomBar(
+                              Translations.of(context)!.text('item_added'),
+                              context);
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => const ComputersPage()));
+                        }
+                      } else {
+                        if (!mounted) return;
+                        messages.messageBottomBar(
+                            Translations.of(context)!.text('item_added'),
+                            context);
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const TicketsPage(),
+                        ));
                       }
-                      if (!mounted) return;
-                      messages.messageBottomBar(
-                          Translations.of(context)!.text('item_added'),
-                          context);
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const TicketsPage(),
-                      ));
                     } else if (apiResponseValue == "errorAdd") {
                       if (!mounted) return;
                       messages.sendAlert(
