@@ -68,5 +68,5 @@ class ApiEndpoint {
   static const String apiGetRootUpdateSource = "Autoupdatesystem";
 
   // Item ticket API Endpoint
-  static const String apiRoottemTicket = "Item_Ticket/?expand_dropdowns=true";
+  static const String apiRootItemTicket = "Item_Ticket/?expand_dropdowns=true";
 }

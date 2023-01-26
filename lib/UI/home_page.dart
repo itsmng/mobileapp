@@ -29,7 +29,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     apiResponseTicket = ticket.apiMgmt.get(ApiEndpoint.apiGetAllTickets);
-    apiResponseComputer = ticket.apiMgmt.get(ApiEndpoint.apiGetAllComputers);
+    apiResponseComputer = computer.apiMgmt.get(ApiEndpoint.apiGetAllComputers);
 
     handleTickets();
     handleComputers();
