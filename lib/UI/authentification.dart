@@ -4,8 +4,7 @@ import 'package:mobileapp/api/model.dart';
 import 'package:mobileapp/translations.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:regexed_validator/regexed_validator.dart';
-
-
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Authentification extends StatefulWidget {
   const Authentification({super.key});
@@ -26,14 +25,34 @@ class _AuthentificationState extends State<Authentification> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _urlController = TextEditingController();
   final TextEditingController _apiTokenController = TextEditingController();
-  final TextEditingController _userTokenController = TextEditingController();
+  late final TextEditingController _userTokenController =
+      TextEditingController();
 
   @override
   void initState() {
     _urlController.text = _initSession.apiMgmt.urlAPI;
     _apiTokenController.text = _initSession.apiMgmt.appTokenAPI;
     _userTokenController.text = _initSession.apiMgmt.userTokenAPI;
+    setParameters();
     return super.initState();
+  }
+
+  setParameters() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    if (prefs.getString("URL") != null &&
+        prefs.getString("App-token") != null &&
+        prefs.getString("User-token") != null) {
+      setState(() {
+        _urlController.text = prefs.getString("URL").toString();
+        _apiTokenController.text = prefs.getString("App-token").toString();
+        _userTokenController.text = prefs.getString("User-token").toString();
+      });
+    } else {
+      _urlController.text = "";
+      _apiTokenController.text = "";
+      _userTokenController.text = "";
+    }
   }
 
   @override
