@@ -3,12 +3,15 @@ import 'package:mobileapp/UI/authentification.dart';
 import 'package:mobileapp/UI/home_page.dart';
 import 'package:mobileapp/UI/tickets_page.dart';
 import 'package:mobileapp/UI/computers_page.dart';
+import 'package:mobileapp/api/model.dart';
 import 'package:mobileapp/application.dart';
 import 'package:mobileapp/translations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class NavigationDrawerMenu extends StatelessWidget {
   const NavigationDrawerMenu({super.key});
   final padding = const EdgeInsets.symmetric(horizontal: 20);
+  static final _initSession = InitSession();
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +22,7 @@ class NavigationDrawerMenu extends StatelessWidget {
         child: ListView(
           children: <Widget>[
             buildHeader(
+              context: context,
               urlImage: "assets/login_logo_itsm.png",
               text: Translations.of(context)!.text('description_application'),
             ),
@@ -156,6 +160,7 @@ class NavigationDrawerMenu extends StatelessWidget {
   }
 
   Widget buildHeader({
+    required BuildContext context,
     required String urlImage,
     required String text,
   }) {
@@ -179,7 +184,33 @@ class NavigationDrawerMenu extends StatelessWidget {
                   ),
                 )
               ],
-            )
+            ),
+            IconButton(
+              icon: const Icon(
+                Icons.logout,
+                color: Colors.white,
+              ),
+              onPressed: () async {
+                var respos =
+                    await _initSession.apiMgmt.logoutFromItsmAPI("killSession");
+                if (respos["session"] == "killed") {
+                  final prefs = await SharedPreferences.getInstance();
+                  await prefs.remove("URL");
+                  await prefs.remove("Session-token");
+                  await prefs.remove("App-token");
+                  await prefs.remove("User-token");
+
+                  if (context.mounted) {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const Authentification()),
+                      (Route<dynamic> route) => false,
+                    );
+                  }
+                }
+              },
+            ),
           ],
         ),
       ),
