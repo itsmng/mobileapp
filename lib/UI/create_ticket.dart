@@ -30,7 +30,6 @@ class _CreateTicketState extends State<CreateTicket> {
   final GlobalKey<FormState> _formKeyTicket = GlobalKey<FormState>();
 
   final formFieldsTicket = BuildFormFields();
-  final buttonForm = Button();
 
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _contentController = TextEditingController();
@@ -119,6 +118,7 @@ class _CreateTicketState extends State<CreateTicket> {
 
   @override
   Widget build(BuildContext context) {
+    final buttonForm = Button(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(Translations.of(context)!.text('create_ticket')),

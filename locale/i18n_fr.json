@@ -4,6 +4,8 @@
     "home_title": "Accueil",
     "ticket_status_title": "Statut des tickets",
     "button_valider": "Sauvegarder",
+    "button_exit": "Quitter",
+    "button_delete": "Supprimer",
     "button_send": "Envoyer",
     "auth_url": "URL de l'API ITSM-NG",
     "auth_url_required": "L'URL de l'API est requis",

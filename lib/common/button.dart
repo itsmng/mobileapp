@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:mobileapp/translations.dart';
 
 class Button {
+  BuildContext context;
+  Button(this.context);
   buttonSave(VoidCallback? onClicked) {
     return ElevatedButton(
         //MaterialButton
@@ -9,9 +12,9 @@ class Button {
               const Color.fromARGB(255, 245, 183, 177), // background
         ),
         onPressed: onClicked,
-        child: const Text(
-          'Save',
-          style: TextStyle(
+        child: Text(
+          Translations.of(context)!.text('button_valider'),
+          style: const TextStyle(
               color: Color.fromARGB(255, 143, 90, 10),
               fontWeight: FontWeight.bold),
         ));
@@ -25,9 +28,9 @@ class Button {
               const Color.fromARGB(255, 245, 183, 177), // background
         ),
         onPressed: onClicked,
-        child: const Text(
-          'Delete',
-          style: TextStyle(
+        child: Text(
+          Translations.of(context)!.text('button_delete'),
+          style: const TextStyle(
               color: Color.fromARGB(255, 143, 90, 10),
               fontWeight: FontWeight.bold),
         ));
@@ -41,9 +44,9 @@ class Button {
               const Color.fromARGB(255, 245, 183, 177), // background
         ),
         onPressed: onClicked,
-        child: const Text(
-          'Exit',
-          style: TextStyle(
+        child: Text(
+          Translations.of(context)!.text('button_exit'),
+          style: const TextStyle(
               color: Color.fromARGB(255, 143, 90, 10),
               fontWeight: FontWeight.bold),
         ));

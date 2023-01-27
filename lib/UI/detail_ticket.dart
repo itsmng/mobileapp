@@ -31,7 +31,6 @@ class _DetailTicketState extends State<DetailTicket> {
   final GlobalKey<FormState> formKeyAlert = GlobalKey<FormState>();
 
   final formFieldsTicket = BuildFormFields();
-  final buttonForm = Button();
 
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _contentController = TextEditingController();
@@ -222,6 +221,7 @@ class _DetailTicketState extends State<DetailTicket> {
 
   // Method to update and delete the selected ticket
   Widget updateTicket() {
+    final buttonForm = Button(context);
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).canvasColor,
@@ -830,6 +830,7 @@ class _DetailTicketState extends State<DetailTicket> {
   }
 
   showUpdateFollowup(int idFollowup, String content, int privacy) {
+    final buttonForm = Button(context);
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -956,6 +957,7 @@ class _DetailTicketState extends State<DetailTicket> {
           }
 
           return StatefulBuilder(builder: (context, setState) {
+            final buttonForm = Button(context);
             return AlertDialog(
               scrollable: true,
               title: Text(Translations.of(context)!.text('update_task')),
@@ -1079,6 +1081,7 @@ class _DetailTicketState extends State<DetailTicket> {
   }
 
   showAddFollowup() {
+    final buttonForm = Button(context);
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -1183,6 +1186,7 @@ class _DetailTicketState extends State<DetailTicket> {
   }
 
   showAddTaskForm() {
+    final buttonForm = Button(context);
     Duration duration =
         const Duration(hours: 2, minutes: 0, seconds: 0, milliseconds: 0);
     return showDialog(

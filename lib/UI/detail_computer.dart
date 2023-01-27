@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:mobileapp/UI/computers_page.dart';
+import 'package:mobileapp/UI/create_computer.dart';
 import 'package:mobileapp/UI/create_ticket.dart';
 import 'package:mobileapp/UI/detail_ticket.dart';
 import 'package:mobileapp/api/api_endpoints.dart';
@@ -30,7 +31,6 @@ class _DetailComputerState extends State<DetailComputer> {
   final GlobalKey<FormState> _formKeyComputer = GlobalKey<FormState>();
 
   final formFieldsComputer = BuildFormFields();
-  final buttonForm = Button();
 
   final objectComputer = Computer();
   dynamic responseAPI;
@@ -100,6 +100,7 @@ class _DetailComputerState extends State<DetailComputer> {
     final Tickets linkedTicket = Tickets(
       associatedElement: widget.computer.name,
     );
+
     return DefaultTabController(
         length: 2,
         child: Scaffold(
@@ -139,7 +140,10 @@ class _DetailComputerState extends State<DetailComputer> {
                   label: Translations.of(context)!.text('create_computer'),
                   backgroundColor: const Color.fromARGB(255, 123, 8, 29),
                   foregroundColor: Colors.white,
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const CreateComputer()));
+                  },
                 ),
                 SpeedDialChild(
                   child: const Icon(Icons.task),
@@ -158,6 +162,7 @@ class _DetailComputerState extends State<DetailComputer> {
 
   // Method to update and delete the selected computer
   Widget updateComputer() {
+    final buttonForm = Button(context);
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).canvasColor,

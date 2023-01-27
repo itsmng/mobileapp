@@ -4,6 +4,8 @@
     "home_title": "Home",
     "ticket_status_title": "Tickets status",
     "button_valider": "Save",
+    "button_exit": "Exit",
+    "button_delete": "Delete",
     "button_send": "Send",
     "auth_url": "URL API ITSM-NG",
     "auth_url_required": "API URL is Required",

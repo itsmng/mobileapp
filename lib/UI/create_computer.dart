@@ -25,7 +25,7 @@ class _CreateComputerState extends State<CreateComputer> {
   final GlobalKey<FormState> _formKeyAddComputer = GlobalKey<FormState>();
 
   final formFieldsComputer = BuildFormFields();
-  final buttonForm = Button();
+ 
 
   final objectComputer = Computer();
   dynamic responseAPIAddComputer;
@@ -88,6 +88,7 @@ class _CreateComputerState extends State<CreateComputer> {
 
   @override
   Widget build(BuildContext context) {
+     final buttonForm = Button(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(Translations.of(context)!.text('create_computer')),
