@@ -151,6 +151,8 @@ class _TicketsPageState extends State<TicketsPage> {
     super.initState();
   }
 
+  double progress = 0.5;
+
   @override
   Widget build(BuildContext context) {
     final ticket = Tickets();
@@ -173,60 +175,65 @@ class _TicketsPageState extends State<TicketsPage> {
           )
         ],
       ),
-      body: Container(
-          padding: const EdgeInsets.all(8.0),
-          decoration: BoxDecoration(
-            color: Theme.of(context).canvasColor,
-            borderRadius: const BorderRadius.all(Radius.circular(10)),
-          ),
-          width: double.infinity,
-          child: SingleChildScrollView(
-            child: PaginatedDataTable(
-              actions: <IconButton>[
-                IconButton(
-                  color: const Color.fromARGB(255, 123, 8, 29),
-                  icon: const Icon(Icons.filter_alt_outlined),
-                  onPressed: _showMultiSelectFilter,
-                ),
-                IconButton(
-                  color: const Color.fromARGB(255, 123, 8, 29),
-                  icon: const Icon(Icons.mode_edit),
-                  onPressed: _showMultiSelectEditFiled,
-                ),
-              ],
-              sortColumnIndex: sortColumnIndex,
-              sortAscending: isAscending,
-              header: Container(
-                  padding: const EdgeInsets.all(5),
-                  child: TextField(
-                    controller: _searchController,
-                    decoration: InputDecoration(
-                      hintText: Translations.of(context)!.text('search'),
-                    ),
-                    onChanged: (value) {
-                      setState(() {
-                        dataTickets = filterData!
-                            .where((element) => element.title!.contains(value))
-                            .toList();
-                      });
-                    },
-                  )),
-              source: RowSourceTicket(
-                myData: dataTickets,
-                count: dataTickets.length,
-                customSecondHeader: secondHeaderCustomizable,
-                customThirdHeader: thirdHeaderCustomizable,
-                context: context,
+      body: dataTickets.isEmpty
+          ? Center(
+              child: CircularProgressIndicator(value: progress),
+            )
+          : Container(
+              padding: const EdgeInsets.all(8.0),
+              decoration: BoxDecoration(
+                color: Theme.of(context).canvasColor,
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
               ),
-              rowsPerPage: rowPerPage,
-              columnSpacing: 8,
-              columns: [
-                tableHeaders(firstHeaderNoCustomizable),
-                tableHeaders(secondHeaderCustomizable),
-                tableHeaders(thirdHeaderCustomizable),
-              ],
-            ),
-          )),
+              width: double.infinity,
+              child: SingleChildScrollView(
+                child: PaginatedDataTable(
+                  actions: <IconButton>[
+                    IconButton(
+                      color: const Color.fromARGB(255, 123, 8, 29),
+                      icon: const Icon(Icons.filter_alt_outlined),
+                      onPressed: _showMultiSelectFilter,
+                    ),
+                    IconButton(
+                      color: const Color.fromARGB(255, 123, 8, 29),
+                      icon: const Icon(Icons.mode_edit),
+                      onPressed: _showMultiSelectEditFiled,
+                    ),
+                  ],
+                  sortColumnIndex: sortColumnIndex,
+                  sortAscending: isAscending,
+                  header: Container(
+                      padding: const EdgeInsets.all(5),
+                      child: TextField(
+                        controller: _searchController,
+                        decoration: InputDecoration(
+                          hintText: Translations.of(context)!.text('search'),
+                        ),
+                        onChanged: (value) {
+                          setState(() {
+                            dataTickets = filterData!
+                                .where(
+                                    (element) => element.title!.contains(value))
+                                .toList();
+                          });
+                        },
+                      )),
+                  source: RowSourceTicket(
+                    myData: dataTickets,
+                    count: dataTickets.length,
+                    customSecondHeader: secondHeaderCustomizable,
+                    customThirdHeader: thirdHeaderCustomizable,
+                    context: context,
+                  ),
+                  rowsPerPage: rowPerPage,
+                  columnSpacing: 8,
+                  columns: [
+                    tableHeaders(firstHeaderNoCustomizable),
+                    tableHeaders(secondHeaderCustomizable),
+                    tableHeaders(thirdHeaderCustomizable),
+                  ],
+                ),
+              )),
     );
   }
 
