@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 ///Class to manage api call
 class ApiMgmt {
+  // Variables retrieved from app configuration
   String urlAPI = "";
   String appTokenAPI = "";
   String userTokenAPI = "";
@@ -15,8 +16,14 @@ class ApiMgmt {
   bool authStatus = false;
   final String headerType = "application/json;charset=UTF-8";
 
+  /// Empty constructor
   ApiMgmt();
 
+  /// Send a GET request to URL
+  ///
+  /// @param relativeUrl : URL to contact
+  ///
+  /// @return JSONObject : Reponse body to JSON
   dynamic get(String relativeUrl) async {
     try {
       // obtain shared preferences
@@ -50,6 +57,13 @@ class ApiMgmt {
     }
   }
 
+  /// Send put request to URL
+  ///
+  /// @param relativeUrl : URL to contact
+  ///
+  /// @param dataToJson : JSON as a Map
+  ///
+  /// @param id : id of the element
   dynamic put(String relativeUrl, int id, Map dataToJson) async {
     try {
       // obtain shared preferences
@@ -100,6 +114,12 @@ class ApiMgmt {
     }
   }
 
+  /// Send delete request to URL
+  ///
+  /// @param relativeUrl : URL to contact
+  ///
+  ///
+  /// @param id : id of the element
   dynamic delete(String relativeUrl, int id) async {
     try {
       // obtain shared preferences
@@ -143,6 +163,13 @@ class ApiMgmt {
     }
   }
 
+  /// Send put request to URL
+  ///
+  /// @param relativeUrl : URL to contact
+  ///
+  /// @param dataToJson : JSON as a Map
+  ///
+  ///
   dynamic post(String relativeUrl, Map dataToJson) async {
     try {
       // obtain shared preferences
@@ -195,7 +222,16 @@ class ApiMgmt {
     }
   }
 
-  // Method to init the connexion
+  /// Send initSession request to URL
+  ///
+  /// @param relativeUrl : URL to contact
+  ///
+  /// @param apiAuthToken : apiAuthToken api token
+  ///
+  /// @param userToken : userToken user token
+  ///
+  /// @param apiBaseUrl : apiBaseUrl api base url
+
   dynamic authentification(String relativeUrl, String apiAuthToken,
       String userToken, String apiBaseUrl) async {
     try {
@@ -248,7 +284,10 @@ class ApiMgmt {
     }
   }
 
-  // Metod to logged out
+  /// Send killSession request to URL
+  ///
+  /// @param relativeUrl : URL to contact
+
   dynamic logoutFromItsmAPI(String relativeUrl) async {
     // obtain shared preferences
     final prefs = await SharedPreferences.getInstance();
@@ -276,38 +315,67 @@ class ApiMgmt {
     }
   }
 
-  // return the the url with API url + endpoind as parameter
+  /// Get absolute URL (ITSMG Base API URL + endpoint)
+  ///
+  /// @param apiBaseUrl : api base url
+  ///
+  /// @param endpoint : API endpoint
+  ///
+  /// @return String : Relative URL
+
   String getAbsoluteUrl(String apiBaseUrl, String endpoint) {
     final String uri = apiBaseUrl + endpoint;
     return uri;
   }
 
-  // return the the url with API url + endpoind as parameter
+  /// Get absolute URL (ITSMG Base API URL + endpoint + id)
+  ///
+  /// @param apiBaseUrl : api base url
+  ///
+  /// @param endpoint : API endpoint
+  ///
+  /// @return String : Relative URL
+
   String getAbsoluteUrlWithID(String apiBaseUrl, String endpoint, int id) {
     final String uri = apiBaseUrl + endpoint + id.toString();
     return uri;
   }
 
-  // Save data on the disk
+  /// Save string data on the disk
+  ///
+  /// @param key
+  ///
+  /// @param value
+
   Future<void> saveStringData(String key, String value) async {
     final prefs = await SharedPreferences.getInstance();
     // set value
     await prefs.setString(key, value);
   }
 
-  // Save data on the disk
+  /// Save bool data on the disk
+  ///
+  /// @param key
+  ///
+  /// @param value
   Future<void> saveBoolData(String key, bool value) async {
     final prefs = await SharedPreferences.getInstance();
     // set value
     await prefs.setBool(key, value);
   }
 
-  // Set api session token
+  /// Set api session token
+  ///
+  /// @param sessionToken : session token
+
   void setApiSessionToken(String sessionToken) {
     apiSessionToken = sessionToken;
   }
 
-  // Set the the ssl check
+  ///Set the the ssl check
+  ///
+  /// @param sessionToken : session token
+
   void setCheckSSL(bool checkSSL) {
     this.checkSSL = checkSSL;
   }

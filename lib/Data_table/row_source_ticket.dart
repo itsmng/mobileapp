@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobileapp/UI/detail_ticket.dart';
 import 'package:mobileapp/models/tickets_model.dart';
 
+/// Display all data of a table
 class RowSourceTicket extends DataTableSource {
   dynamic myData;
   final int count;
@@ -35,6 +36,7 @@ class RowSourceTicket extends DataTableSource {
   int get selectedRowCount => 0;
 }
 
+/// Display a row of a table
 DataRow recentDataRow(Tickets data, String firstHeaderCustomizable,
     String secondHeaderCustomizable, BuildContext context) {
   return DataRow(

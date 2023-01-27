@@ -3,7 +3,12 @@ import 'package:mobileapp/translations.dart';
 
 class Button {
   BuildContext context;
+
+  /// Constructor
   Button(this.context);
+
+
+  /// Save button
   buttonSave(VoidCallback? onClicked) {
     return ElevatedButton(
         //MaterialButton
@@ -20,6 +25,7 @@ class Button {
         ));
   }
 
+  /// Delete button
   buttonDelete(VoidCallback? onClicked) {
     return ElevatedButton(
         //MaterialButton
@@ -36,6 +42,7 @@ class Button {
         ));
   }
 
+  /// Exit button
   buttonExit(VoidCallback? onClicked) {
     return ElevatedButton(
         //MaterialButton

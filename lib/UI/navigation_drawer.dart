@@ -83,6 +83,9 @@ class NavigationDrawerMenu extends StatelessWidget {
                           tooltip: 'French language',
                           onPressed: () {
                             applic.onLocaleChanged!(const Locale('fr', ''));
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => const HomePage(),
+                            ));
                           },
                         ),
                         const Text('French',
@@ -94,6 +97,9 @@ class NavigationDrawerMenu extends StatelessWidget {
                           tooltip: 'English language',
                           onPressed: () {
                             applic.onLocaleChanged!(const Locale('en', ''));
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => const HomePage(),
+                            ));
                           },
                         ),
                         const Text(

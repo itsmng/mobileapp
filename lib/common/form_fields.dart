@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-/// Class to create a text form field
+/// Class to create a field in a form
 class BuildFormFields {
   Widget buildTextField(
       TextEditingController controllerField,
@@ -15,6 +15,7 @@ class BuildFormFields {
       controllerField.clear();
     }
 
+    /// Create a text field in a form
     return TextFormField(
       controller: controllerField,
       decoration: InputDecoration(
@@ -49,6 +50,7 @@ class BuildFormFields {
     );
   }
 
+  /// Create text area in a form
   Widget buildTextAreaField(
       TextEditingController controllerField,
       IconData iconData,
@@ -97,6 +99,8 @@ class BuildFormFields {
     );
   }
 
+
+  /// Create date time field in a form
   Widget buildDateTimeField(TextEditingController controllerField,
       String labelTextField, BuildContext context) {
     return TextFormField(

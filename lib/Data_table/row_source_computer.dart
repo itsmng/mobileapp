@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobileapp/UI/detail_computer.dart';
 import 'package:mobileapp/models/computer_model.dart';
 
+/// Display all data of a table
 class RowSourceComputer extends DataTableSource {
   dynamic myData;
   final int count;
@@ -34,6 +35,8 @@ class RowSourceComputer extends DataTableSource {
   @override
   int get selectedRowCount => 0;
 }
+
+/// Display a row of a table
 
 DataRow recentDataRow(Computer data, String firstHeaderCustomizable,
     String secondHeaderCustomizable, BuildContext context) {

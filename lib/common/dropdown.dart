@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// Manage list of items and display them in a dropdown
 class Dropdown {
   List<DropdownMenuItem<String>> dropdownItem(Map<int, String> listItems) {
     List<DropdownMenuItem<String>> menuItems = [];
