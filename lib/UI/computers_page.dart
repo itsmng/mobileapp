@@ -8,6 +8,7 @@ import 'package:mobileapp/common/multi_select.dart';
 import 'package:mobileapp/models/computer_model.dart';
 import 'package:mobileapp/models/state_computer.dart';
 import 'package:mobileapp/translations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ComputersPage extends StatefulWidget {
   const ComputersPage({super.key});
@@ -122,6 +123,7 @@ class _ComputersPageState extends State<ComputersPage> {
         );
       },
     );
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
     // Update UI
     if (results != null) {
@@ -139,11 +141,18 @@ class _ComputersPageState extends State<ComputersPage> {
               .saveListStringData("customHeadersComputer", selectedList);
         } else {
           // If we select one element it's fixed in the third postion of the table
-          thirdHeaderCustomizable = _selectedItems[0];
-          selectedList.add(secondHeaderCustomizable);
-          selectedList.add(_selectedItems[0]);
-          _initSession.apiMgmt
-              .saveListStringData("customHeadersComputer", selectedList);
+          if (secondHeaderCustomizable ==
+              prefs.getStringList("customHeadersTicket")![0]) {
+            secondHeaderCustomizable =
+                prefs.getStringList("customHeadersTicket")![0];
+            thirdHeaderCustomizable =
+                prefs.getStringList("customHeadersTicket")![1];
+          } else {
+            secondHeaderCustomizable =
+                prefs.getStringList("customHeadersTicket")![1];
+            thirdHeaderCustomizable =
+                prefs.getStringList("customHeadersTicket")![0];
+          }
         }
       });
     }

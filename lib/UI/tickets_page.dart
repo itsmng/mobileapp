@@ -8,6 +8,7 @@ import 'package:mobileapp/common/multi_select.dart';
 import 'package:mobileapp/translations.dart';
 import 'package:mobileapp/models/special_status.dart';
 import 'package:mobileapp/models/tickets_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class TicketsPage extends StatefulWidget {
   const TicketsPage({super.key});
@@ -109,6 +110,7 @@ class _TicketsPageState extends State<TicketsPage> {
         );
       },
     );
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
     // Update UI
     if (results != null) {
@@ -126,11 +128,18 @@ class _TicketsPageState extends State<TicketsPage> {
               .saveListStringData("customHeadersTicket", selectedList);
         } else {
           // If we select one element it's fixed in the third postion of the table
-          thirdHeaderCustomizable = _selectedItems[0];
-          selectedList.add(secondHeaderCustomizable);
-          selectedList.add(_selectedItems[0]);
-          _initSession.apiMgmt
-              .saveListStringData("customHeadersTicket", selectedList);
+          if (secondHeaderCustomizable ==
+              prefs.getStringList("customHeadersTicket")![0]) {
+            secondHeaderCustomizable =
+                prefs.getStringList("customHeadersTicket")![0];
+            thirdHeaderCustomizable =
+                prefs.getStringList("customHeadersTicket")![1];
+          } else {
+            secondHeaderCustomizable =
+                prefs.getStringList("customHeadersTicket")![1];
+            thirdHeaderCustomizable =
+                prefs.getStringList("customHeadersTicket")![0];
+          }
         }
       });
     }

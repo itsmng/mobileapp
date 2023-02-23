@@ -7,7 +7,6 @@ import 'package:mobileapp/common/dropdown.dart';
 import 'package:mobileapp/common/message.dart';
 import 'package:mobileapp/common/button.dart';
 import 'package:mobileapp/common/form_fields.dart';
-import 'package:mobileapp/models/entity.dart';
 import 'package:mobileapp/models/itil_category.dart';
 import 'package:mobileapp/models/itil_followup.dart';
 import 'package:mobileapp/models/location.dart';
