@@ -17,7 +17,7 @@
     "auth_isValidSSL": "Check valid SSL",
     "message_loading": "Loading",
     "message_bad_api_token": "API token parameter seems incorrect",
-    "message_bad_user_token": "API token parameter seems incorrect",
+    "message_bad_user_token": "User token parameter seems incorrect",
     "message_bad_url": "URL parameter seems incorrect",
     "Delimieter2": "------Home page------",
     "latest_24h": "Latest 24h",
