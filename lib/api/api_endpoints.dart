@@ -6,9 +6,9 @@ class ApiEndpoint {
   static const String apiRootTicket = "Ticket/?expand_dropdowns=true";
   static const String apiUpdateTicket = "Ticket/";
   static const String apiGetAllTickets =
-      "Ticket/?expand_dropdowns=true&range=0-500";
+      "Ticket/?expand_dropdowns=true&range=0-40000";
   static const String apiGetMyTickets =
-      "Ticket/?expand_dropdowns=true&range=0-500";
+      "Ticket/?expand_dropdowns=true&range=0-40000";
   static const String apiGetTicketsDetails = "Ticket/%s?expand_dropdowns=true";
   static const String apiDeleteTicket = "Ticket/";
 
@@ -35,9 +35,9 @@ class ApiEndpoint {
 
   // Computer API Endpoint
   static const String apiGetAllComputers =
-      "Computer/?expand_dropdowns=true&range=0-500";
+      "Computer/?expand_dropdowns=true&range=0-40000";
   static const String apiGetAllComputersByName =
-      "Computer/?expand_dropdowns=true&searchText[name]=^%s&range=0-500";
+      "Computer/?expand_dropdowns=true&searchText[name]=^%s&range=0-40000";
   static const String apiGetOneComputers = "Computer/%s?expand_dropdowns=true";
   static const String apiRootComputer = "Computer/";
 
