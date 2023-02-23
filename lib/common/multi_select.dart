@@ -2,8 +2,7 @@
 // This widget is reusable
 import 'package:flutter/material.dart';
 import 'package:mobileapp/api/model.dart';
-import 'package:mobileapp/common/message.dart';
-import 'package:mobileapp/translations.dart';
+import 'package:mobileapp/common/button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MultiSelect extends StatefulWidget {
@@ -24,7 +23,6 @@ class _MultiSelectState extends State<MultiSelect> {
   final List<String> _selectedHeaders = [];
   final List<String> _selectedfilter = [];
   late List<String> _listSelected = [];
-  final message = Messages();
 
   @override
   void initState() {
@@ -80,13 +78,20 @@ class _MultiSelectState extends State<MultiSelect> {
     if (_selectedItems.isNotEmpty) {
       Navigator.pop(context, _selectedItems);
     } else {
-      message.sendAlert(
-          Translations.of(context)!.text('message_no_item_selected'), context);
+      if (widget.type == "Editor") {
+        _selectedItems.addAll(_selectedHeaders);
+        Navigator.pop(context, _selectedItems);
+      } else {
+        _selectedItems.addAll(_selectedfilter);
+        Navigator.pop(context, _selectedItems);
+      }
+      
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final button = Button(context);
     if (widget.type == "Editor") {
       var initSession = InitSession();
       initSession.apiMgmt
@@ -111,14 +116,12 @@ class _MultiSelectState extends State<MultiSelect> {
         ),
       ),
       actions: [
-        TextButton(
-          onPressed: _cancel,
-          child: const Text('Cancel'),
+        button.buttonExit(
+          () => _cancel(),
         ),
-        ElevatedButton(
-          onPressed: _submit,
-          child: const Text('Submit'),
-        ),
+        button.buttonSave(() {
+          _submit();
+        }),
       ],
     );
   }
