@@ -41,6 +41,7 @@
     "all_tickets": "Tous les tickets",
     "create_ticket": "Créer un ticket",
     "search": "Rechercher",
+    "message_no_item_selected": "Aucun élément sélectionné",
     "Delimieter4": "------Detail tickets page------",
     "assigned": "Assigné",
     "priority_very_low": "Très basse",

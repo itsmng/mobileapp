@@ -1,6 +1,9 @@
 // Multi Select widget
 // This widget is reusable
 import 'package:flutter/material.dart';
+import 'package:mobileapp/api/model.dart';
+import 'package:mobileapp/common/message.dart';
+import 'package:mobileapp/translations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MultiSelect extends StatefulWidget {
@@ -21,6 +24,7 @@ class _MultiSelectState extends State<MultiSelect> {
   final List<String> _selectedHeaders = [];
   final List<String> _selectedfilter = [];
   late List<String> _listSelected = [];
+  final message = Messages();
 
   @override
   void initState() {
@@ -73,12 +77,20 @@ class _MultiSelectState extends State<MultiSelect> {
 
 // this function is called when the Submit button is tapped
   void _submit() {
-    Navigator.pop(context, _selectedItems);
+    if (_selectedItems.isNotEmpty) {
+      Navigator.pop(context, _selectedItems);
+    } else {
+      message.sendAlert(
+          Translations.of(context)!.text('message_no_item_selected'), context);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     if (widget.type == "Editor") {
+      var initSession = InitSession();
+      initSession.apiMgmt
+          .saveListStringData("customHeadersTicket", _selectedHeaders);
       _listSelected = _selectedHeaders;
     } else if (widget.type == "Filter") {
       _listSelected = _selectedfilter;
