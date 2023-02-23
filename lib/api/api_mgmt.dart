@@ -353,6 +353,18 @@ class ApiMgmt {
     await prefs.setString(key, value);
   }
 
+  /// Save list string data on the disk
+  ///
+  /// @param key
+  ///
+  /// @param value
+
+  Future<void> saveListStringData(String key, List<String> value) async {
+    final prefs = await SharedPreferences.getInstance();
+    // set value
+    await prefs.setStringList(key, value);
+  }
+
   /// Save bool data on the disk
   ///
   /// @param key
