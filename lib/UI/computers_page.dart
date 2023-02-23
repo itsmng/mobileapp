@@ -152,12 +152,18 @@ class _ComputersPageState extends State<ComputersPage> {
   void onsortColoumn(int columnIndex, bool ascending) {
     if (columnIndex == 0) {
       dataComputers.sort((a, b) => compareString(ascending, a.name!, b.name!));
-    } else if (columnIndex == 1) {
-      dataComputers.sort(
-          (a, b) => compareString(ascending, a.statusValue!, b.statusValue!));
-    } else if (columnIndex == 2) {
-      dataComputers
-          .sort((a, b) => compareString(ascending, a.location!, b.location!));
+    } else if (columnIndex == 1 &&
+        (secondHeaderCustomizable ==
+                Translations.of(context)!.text('open_date') ||
+            secondHeaderCustomizable ==
+                Translations.of(context)!.text('last_update'))) {
+      dataComputers.sort((a, b) => compareString(ascending, a.date!, b.date!));
+    } else if (columnIndex == 2 &&
+        (thirdHeaderCustomizable ==
+                Translations.of(context)!.text('open_date') ||
+            thirdHeaderCustomizable ==
+                Translations.of(context)!.text('last_update'))) {
+      dataComputers.sort((a, b) => compareString(ascending, a.date!, b.date!));
     }
     setState(() {
       sortColumnIndex = columnIndex;

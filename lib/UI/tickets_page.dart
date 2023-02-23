@@ -151,12 +151,18 @@ class _TicketsPageState extends State<TicketsPage> {
   void onsortColoumn(int columnIndex, bool ascending) {
     if (columnIndex == 0) {
       dataTickets.sort((a, b) => compareString(ascending, a.title!, b.title!));
-    } else if (columnIndex == 1) {
-      dataTickets
-          .sort((a, b) => compareString(ascending, a.category!, b.category!));
-    } else if (columnIndex == 2) {
-      dataTickets
-          .sort((a, b) => compareString(ascending, a.location!, b.location!));
+    } else if (columnIndex == 1 &&
+        (secondHeaderCustomizable ==
+                Translations.of(context)!.text('open_date') ||
+            secondHeaderCustomizable ==
+                Translations.of(context)!.text('last_update'))) {
+      dataTickets.sort((a, b) => compareString(ascending, a.date!, b.date!));
+    } else if (columnIndex == 2 &&
+        (thirdHeaderCustomizable ==
+                Translations.of(context)!.text('open_date') ||
+            thirdHeaderCustomizable ==
+                Translations.of(context)!.text('last_update'))) {
+      dataTickets.sort((a, b) => compareString(ascending, a.date!, b.date!));
     }
     setState(() {
       sortColumnIndex = columnIndex;
