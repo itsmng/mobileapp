@@ -3,6 +3,7 @@ import 'package:mobileapp/Data_table/row_source_ticket.dart';
 import 'package:mobileapp/UI/create_ticket.dart';
 import 'package:mobileapp/UI/navigation_drawer.dart';
 import 'package:mobileapp/api/api_endpoints.dart';
+import 'package:mobileapp/api/model.dart';
 import 'package:mobileapp/common/multi_select.dart';
 import 'package:mobileapp/translations.dart';
 import 'package:mobileapp/models/special_status.dart';
@@ -17,6 +18,7 @@ class TicketsPage extends StatefulWidget {
 
 class _TicketsPageState extends State<TicketsPage> {
   List<String> _selectedItems = [];
+  static final _initSession = InitSession();
 
   // Default values of the tables
   late String firstHeaderNoCustomizable =
@@ -41,13 +43,16 @@ class _TicketsPageState extends State<TicketsPage> {
     for (var specialStatus in allSpecialStatus) {
       items.add(specialStatus.name.toString());
     }
-
+    final List<String> listSelectedFilter = [];
     if (!mounted) return;
     // Get the list of selected item
     final List<String>? results = await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return MultiSelect(items: items);
+        return MultiSelect(
+          items: items,
+          type: 'Filter',
+        );
       },
     );
 
@@ -66,6 +71,9 @@ class _TicketsPageState extends State<TicketsPage> {
               dataTickets.addAll(filterData!
                   .where((element) => element.statusID == stat.id)
                   .toList());
+              listSelectedFilter.add(element);
+              _initSession.apiMgmt
+                  .saveListStringData("selectedFilter", listSelectedFilter);
             }
           }
         }
@@ -79,6 +87,7 @@ class _TicketsPageState extends State<TicketsPage> {
     final List<String> items = [
       "ID",
       Translations.of(context)!.text('open_date'),
+      Translations.of(context)!.text('status'),
       Translations.of(context)!.text('category'),
       Translations.of(context)!.text('location'),
       Translations.of(context)!.text('entity'),
@@ -86,12 +95,16 @@ class _TicketsPageState extends State<TicketsPage> {
       Translations.of(context)!.text('last_update'),
       Translations.of(context)!.text('recipient'),
     ];
+    final List<String> selectedList = [];
 
     // Get the list of selected item
     final List<String>? results = await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return MultiSelect(items: items);
+        return MultiSelect(
+          items: items,
+          type: 'Editor',
+        );
       },
     );
 
@@ -100,13 +113,22 @@ class _TicketsPageState extends State<TicketsPage> {
       setState(() {
         _selectedItems = results;
 
-        // If we select one element it's fixed in the third postion of the table
-        thirdHeaderCustomizable = _selectedItems[0];
-
         // If we select two element
         if (_selectedItems.length == 2) {
           secondHeaderCustomizable = _selectedItems[0];
           thirdHeaderCustomizable = _selectedItems[1];
+
+          selectedList.add(_selectedItems[0]);
+          selectedList.add(_selectedItems[1]);
+          _initSession.apiMgmt
+              .saveListStringData("customHeaders", selectedList);
+        } else {
+          // If we select one element it's fixed in the third postion of the table
+          thirdHeaderCustomizable = _selectedItems[0];
+          selectedList.add(secondHeaderCustomizable);
+          selectedList.add(_selectedItems[0]);
+          _initSession.apiMgmt
+              .saveListStringData("customHeaders", selectedList);
         }
       });
     }
@@ -148,6 +170,9 @@ class _TicketsPageState extends State<TicketsPage> {
   void initState() {
     apiRespTicket = ticket.apiMgmt.get(ApiEndpoint.apiGetAllTickets);
     getTicketData();
+    _initSession.apiMgmt
+        .saveListStringData("customHeaders", ["Status", "Open date"]);
+    _initSession.apiMgmt.saveListStringData("selectedFilter", ["New"]);
     super.initState();
   }
 
