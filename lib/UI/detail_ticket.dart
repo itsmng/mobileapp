@@ -248,16 +248,16 @@ class _DetailTicketState extends State<DetailTicket> {
                   children: <Widget>[
                     Expanded(
                       child: DropdownButtonFormField(
-                        value: selectedPriority,
-                        items: dropdownPriority,
+                        value: selectedEntity,
+                        items: dropdown.dropdownItem(listEntities),
                         onChanged: (String? value) {
                           setState(() {
-                            selectedPriority = value!;
+                            selectedEntity = value!;
                           });
                         },
                         decoration: InputDecoration(
-                          labelText: Translations.of(context)!.text('priority'),
-                          prefixIcon: const Icon(Icons.priority_high,
+                          labelText: Translations.of(context)!.text('entity'),
+                          prefixIcon: const Icon(Icons.category_sharp,
                               color: Colors.black),
                           focusColor: Colors.black,
                           enabledBorder: const UnderlineInputBorder(
@@ -271,21 +271,23 @@ class _DetailTicketState extends State<DetailTicket> {
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      width: 15,
-                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
                     Expanded(
                       child: DropdownButtonFormField(
-                        value: selectedEntity,
-                        items: dropdown.dropdownItem(listEntities),
+                        value: selectedPriority,
+                        items: dropdownPriority,
                         onChanged: (String? value) {
                           setState(() {
-                            selectedEntity = value!;
+                            selectedPriority = value!;
                           });
                         },
                         decoration: InputDecoration(
-                          labelText: Translations.of(context)!.text('entity'),
-                          prefixIcon: const Icon(Icons.category_sharp,
+                          labelText: Translations.of(context)!.text('priority'),
+                          prefixIcon: const Icon(Icons.priority_high,
                               color: Colors.black),
                           focusColor: Colors.black,
                           enabledBorder: const UnderlineInputBorder(
