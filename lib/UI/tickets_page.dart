@@ -52,6 +52,7 @@ class _TicketsPageState extends State<TicketsPage> {
         return MultiSelect(
           items: items,
           type: 'Filter',
+          model: "Ticket",
         );
       },
     );
@@ -72,8 +73,8 @@ class _TicketsPageState extends State<TicketsPage> {
                   .where((element) => element.statusID == stat.id)
                   .toList());
               listSelectedFilter.add(element);
-              _initSession.apiMgmt
-                  .saveListStringData("selectedFilter", listSelectedFilter);
+              _initSession.apiMgmt.saveListStringData(
+                  "selectedFilterTicket", listSelectedFilter);
             }
           }
         }
@@ -104,6 +105,7 @@ class _TicketsPageState extends State<TicketsPage> {
         return MultiSelect(
           items: items,
           type: 'Editor',
+          model: 'Ticket',
         );
       },
     );
@@ -121,14 +123,14 @@ class _TicketsPageState extends State<TicketsPage> {
           selectedList.add(_selectedItems[0]);
           selectedList.add(_selectedItems[1]);
           _initSession.apiMgmt
-              .saveListStringData("customHeaders", selectedList);
+              .saveListStringData("customHeadersTicket", selectedList);
         } else {
           // If we select one element it's fixed in the third postion of the table
           thirdHeaderCustomizable = _selectedItems[0];
           selectedList.add(secondHeaderCustomizable);
           selectedList.add(_selectedItems[0]);
           _initSession.apiMgmt
-              .saveListStringData("customHeaders", selectedList);
+              .saveListStringData("customHeadersTicket", selectedList);
         }
       });
     }
@@ -171,8 +173,8 @@ class _TicketsPageState extends State<TicketsPage> {
     apiRespTicket = ticket.apiMgmt.get(ApiEndpoint.apiGetAllTickets);
     getTicketData();
     _initSession.apiMgmt
-        .saveListStringData("customHeaders", ["Status", "Open date"]);
-    _initSession.apiMgmt.saveListStringData("selectedFilter", ["New"]);
+        .saveListStringData("customHeadersTicket", ["Status", "Open date"]);
+    _initSession.apiMgmt.saveListStringData("selectedFilterTicket", ["New"]);
     super.initState();
   }
 

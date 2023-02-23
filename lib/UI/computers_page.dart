@@ -3,6 +3,7 @@ import 'package:mobileapp/Data_table/row_source_computer.dart';
 import 'package:mobileapp/UI/create_computer.dart';
 import 'package:mobileapp/UI/navigation_drawer.dart';
 import 'package:mobileapp/api/api_endpoints.dart';
+import 'package:mobileapp/api/model.dart';
 import 'package:mobileapp/common/multi_select.dart';
 import 'package:mobileapp/models/computer_model.dart';
 import 'package:mobileapp/models/state_computer.dart';
@@ -19,6 +20,7 @@ class _ComputersPageState extends State<ComputersPage> {
   final computer = Computer();
   late List<Computer> dataComputers = [];
   dynamic apiRespComputer;
+  static final _initSession = InitSession();
 
   List<Computer>? filterData;
 
@@ -53,12 +55,17 @@ class _ComputersPageState extends State<ComputersPage> {
       items.add(state.name.toString());
     }
 
+    final List<String> listSelectedFilter = [];
     if (!mounted) return;
     // Get the list of selected item
     final List<String>? results = await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return MultiSelect(items: items);
+        return MultiSelect(
+          items: items,
+          type: 'Filter',
+          model: 'Computer',
+        );
       },
     );
 
@@ -77,6 +84,9 @@ class _ComputersPageState extends State<ComputersPage> {
               dataComputers.addAll(filterData!
                   .where((element) => element.statusValue == stat.name)
                   .toList());
+              listSelectedFilter.add(element);
+              _initSession.apiMgmt.saveListStringData(
+                  "selectedFilterComputer", listSelectedFilter);
             }
           }
         }
@@ -99,12 +109,17 @@ class _ComputersPageState extends State<ComputersPage> {
       Translations.of(context)!.text('user'),
       Translations.of(context)!.text('status'),
     ];
+    final List<String> selectedList = [];
 
     // Get the list of selected item
     final List<String>? results = await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return MultiSelect(items: items);
+        return MultiSelect(
+          items: items,
+          type: 'Editor',
+          model: 'Computer',
+        );
       },
     );
 
@@ -113,13 +128,22 @@ class _ComputersPageState extends State<ComputersPage> {
       setState(() {
         _selectedItems = results;
 
-        // If we select one element it's fixed in the third postion of the table
-        thirdHeaderCustomizable = _selectedItems[0];
-
         // If we select two element
         if (_selectedItems.length == 2) {
           secondHeaderCustomizable = _selectedItems[0];
           thirdHeaderCustomizable = _selectedItems[1];
+
+          selectedList.add(_selectedItems[0]);
+          selectedList.add(_selectedItems[1]);
+          _initSession.apiMgmt
+              .saveListStringData("customHeadersComputer", selectedList);
+        } else {
+          // If we select one element it's fixed in the third postion of the table
+          thirdHeaderCustomizable = _selectedItems[0];
+          selectedList.add(secondHeaderCustomizable);
+          selectedList.add(_selectedItems[0]);
+          _initSession.apiMgmt
+              .saveListStringData("customHeadersComputer", selectedList);
         }
       });
     }
@@ -149,6 +173,10 @@ class _ComputersPageState extends State<ComputersPage> {
   void initState() {
     apiRespComputer = computer.apiMgmt.get(ApiEndpoint.apiGetAllComputers);
     getComputerData();
+    _initSession.apiMgmt
+        .saveListStringData("customHeadersComputer", ["Status", "Open date"]);
+    _initSession.apiMgmt
+        .saveListStringData("selectedFilterComputer", ["Production"]);
     super.initState();
   }
 

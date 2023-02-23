@@ -6,7 +6,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 class MultiSelect extends StatefulWidget {
   final List<String> items;
   final String type;
-  const MultiSelect({Key? key, required this.items, required this.type})
+  final String model;
+  const MultiSelect(
+      {Key? key, required this.items, required this.type, required this.model})
       : super(key: key);
 
   @override
@@ -30,14 +32,22 @@ class _MultiSelectState extends State<MultiSelect> {
   _setSelectedFields() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      _selectedHeaders.addAll(prefs.getStringList("customHeaders")!);
+      if (widget.model == "Ticket") {
+        _selectedHeaders.addAll(prefs.getStringList("customHeadersTicket")!);
+      } else if (widget.model == "Computer") {
+        _selectedHeaders.addAll(prefs.getStringList("customHeadersComputer")!);
+      }
     });
   }
 
   _setSelectedFilter() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      _selectedfilter.addAll(prefs.getStringList("selectedFilter")!);
+      if (widget.model == "Ticket") {
+        _selectedfilter.addAll(prefs.getStringList("selectedFilterTicket")!);
+      } else if (widget.model == "Computer") {
+        _selectedfilter.addAll(prefs.getStringList("selectedFilterComputer")!);
+      }
     });
   }
 
