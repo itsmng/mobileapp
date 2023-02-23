@@ -1330,13 +1330,8 @@ class _DetailTicketState extends State<DetailTicket> {
   }
 
   getAllEntities() async {
-    // Object of the Special Status class
-    final entities = Entity();
-    List<Entity> allEntities = await entities.getAllEntities();
     setState(() {
-      for (var e in allEntities) {
-        listEntities[e.id!] = e.name.toString();
-      }
+      listEntities[1] = selectedEntity;
     });
   }
 
