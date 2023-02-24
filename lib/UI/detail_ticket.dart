@@ -168,6 +168,14 @@ class _DetailTicketState extends State<DetailTicket> {
             centerTitle: true,
             backgroundColor: const Color.fromARGB(255, 123, 8, 29),
             foregroundColor: const Color.fromARGB(255, 255, 255, 255),
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back_ios),
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const TicketsPage(),
+                ));
+              },
+            ),
             bottom: TabBar(
               labelStyle: const TextStyle(color: Colors.white),
               indicatorColor: Colors.white,
@@ -1163,8 +1171,22 @@ class _DetailTicketState extends State<DetailTicket> {
                           messages.messageBottomBar(
                               Translations.of(context)!.text('item_added'),
                               context);
+                           var ticket = Tickets(
+                              id: widget.ticket.id,
+                              date: _dateController.text,
+                              statusValue: selectedStatus,
+                              title: _titleController.text,
+                              entity: selectedEntity,
+                              priority: selectedPriority,
+                              location: selectedLocation,
+                              category: selectedITILCategory,
+                              recipient: selectedUserRecipient,
+                              assignedUser: selectedAssignedUser,
+                              content: _contentController.text);
                           Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const TicketsPage(),
+                            builder: (context) => DetailTicket(
+                              ticket: ticket,
+                            ),
                           ));
                         } else if (apiResponseAddFollowup == "errorAdd") {
                           if (!mounted) return;
@@ -1190,7 +1212,7 @@ class _DetailTicketState extends State<DetailTicket> {
   showAddTaskForm() {
     final buttonForm = Button(context);
     Duration duration =
-        const Duration(hours: 2, minutes: 0, seconds: 0, milliseconds: 0);
+        const Duration(hours: 0, minutes: 0, seconds: 0, milliseconds: 0);
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -1295,8 +1317,22 @@ class _DetailTicketState extends State<DetailTicket> {
                           messages.messageBottomBar(
                               Translations.of(context)!.text('item_added'),
                               context);
+                          var ticket = Tickets(
+                              id: widget.ticket.id,
+                              date: _dateController.text,
+                              statusValue: selectedStatus,
+                              title: _titleController.text,
+                              entity: selectedEntity,
+                              priority: selectedPriority,
+                              location: selectedLocation,
+                              category: selectedITILCategory,
+                              recipient: selectedUserRecipient,
+                              assignedUser: selectedAssignedUser,
+                              content: _contentController.text);
                           Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const TicketsPage(),
+                            builder: (context) => DetailTicket(
+                              ticket: ticket,
+                            ),
                           ));
                         } else if (apiResponseAddTask == "errorAdd") {
                           if (!mounted) return;
