@@ -5,6 +5,7 @@ import 'package:mobileapp/UI/navigation_drawer.dart';
 import 'package:mobileapp/api/api_endpoints.dart';
 import 'package:mobileapp/api/model.dart';
 import 'package:mobileapp/common/multi_select.dart';
+import 'package:mobileapp/models/computer_model.dart';
 import 'package:mobileapp/translations.dart';
 import 'package:mobileapp/models/special_status.dart';
 import 'package:mobileapp/models/tickets_model.dart';
@@ -198,6 +199,7 @@ class _TicketsPageState extends State<TicketsPage> {
   @override
   Widget build(BuildContext context) {
     final ticket = Tickets();
+    final computer = Computer();
     return Scaffold(
       drawer: const NavigationDrawerMenu(),
       appBar: AppBar(
@@ -211,7 +213,10 @@ class _TicketsPageState extends State<TicketsPage> {
             tooltip: Translations.of(context)!.text('create_ticket'),
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => CreateTicket(ticket: ticket),
+                builder: (context) => CreateTicket(
+                  ticket: ticket,
+                  computer: computer,
+                ),
               ));
             },
           )

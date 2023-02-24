@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:mobileapp/UI/computers_page.dart';
+import 'package:mobileapp/UI/detail_computer.dart';
 import 'package:mobileapp/UI/tickets_page.dart';
 import 'package:mobileapp/api/api_endpoints.dart';
 import 'package:mobileapp/common/dropdown.dart';
@@ -19,8 +19,9 @@ import 'package:mobileapp/models/user.dart';
 import 'package:mobileapp/translations.dart';
 
 class CreateTicket extends StatefulWidget {
-  const CreateTicket({super.key, required this.ticket});
+  const CreateTicket({super.key, required this.ticket, required this.computer});
   final Tickets ticket;
+  final Computer computer;
 
   @override
   State<CreateTicket> createState() => _CreateTicketState();
@@ -494,7 +495,9 @@ class _CreateTicketState extends State<CreateTicket> {
                               Translations.of(context)!.text('item_added'),
                               context);
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const ComputersPage()));
+                              builder: (context) => DetailComputer(
+                                    computer: widget.computer,
+                                  )));
                         }
                       } else {
                         if (!mounted) return;

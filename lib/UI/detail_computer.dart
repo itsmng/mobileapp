@@ -99,7 +99,6 @@ class _DetailComputerState extends State<DetailComputer> {
     final Tickets linkedTicket = Tickets(
       associatedElement: widget.computer.name,
     );
-
     return DefaultTabController(
         length: 2,
         child: Scaffold(
@@ -141,8 +140,10 @@ class _DetailComputerState extends State<DetailComputer> {
                   foregroundColor: Colors.white,
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) =>
-                            CreateTicket(ticket: linkedTicket)));
+                        builder: (context) => CreateTicket(
+                              ticket: linkedTicket,
+                              computer: widget.computer,
+                            )));
                   },
                 ),
               ]),
