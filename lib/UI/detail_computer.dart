@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:mobileapp/UI/computers_page.dart';
-import 'package:mobileapp/UI/create_computer.dart';
 import 'package:mobileapp/UI/create_ticket.dart';
 import 'package:mobileapp/UI/detail_ticket.dart';
 import 'package:mobileapp/api/api_endpoints.dart';
@@ -135,16 +134,6 @@ class _DetailComputerState extends State<DetailComputer> {
               animatedIconTheme: const IconThemeData(color: Colors.white),
               backgroundColor: const Color.fromARGB(255, 123, 8, 29),
               children: [
-                SpeedDialChild(
-                  child: const Icon(Icons.follow_the_signs),
-                  label: Translations.of(context)!.text('create_computer'),
-                  backgroundColor: const Color.fromARGB(255, 123, 8, 29),
-                  foregroundColor: Colors.white,
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const CreateComputer()));
-                  },
-                ),
                 SpeedDialChild(
                   child: const Icon(Icons.task),
                   label: Translations.of(context)!.text('create_ticket'),
@@ -464,7 +453,7 @@ class _DetailComputerState extends State<DetailComputer> {
                                   listUsers[element] == selectedUser);
 
                               updateData["name"] = _nameController.text;
-                              updateData["date"] = _dateController.text;
+                              updateData["date_mod"] = _dateController.text;
                               updateData["states_id"] = statusID.first;
                               updateData["entities_id"] = entityID.first;
                               updateData["locations_id"] = locationID.first;
