@@ -263,25 +263,37 @@ class _HomePageState extends State<HomePage> {
 
     if (listComputerData.isNotEmpty) {
       listComputerData.forEach((key, value) {
+        if (key.isEmpty) {
+          key = "No status";
+        }
         data.add(BarMmodel(
             key, value, charts.ColorUtil.fromDartColor(colors[index])));
         index++;
       });
+      return [
+        charts.Series<BarMmodel, String>(
+          data: data,
+          id: 'graphComputers',
+          colorFn: (BarMmodel barModeel, _) => barModeel.barColor,
+          domainFn: (BarMmodel barModeel, _) =>
+              "${barModeel.value} - ${barModeel.title}",
+          measureFn: (BarMmodel barModeel, _) => barModeel.value,
+        )
+      ];
     } else {
       data.add(BarMmodel(
           Translations.of(context)!.text('message_no_item_found'),
           1,
           charts.ColorUtil.fromDartColor(Colors.red)));
+      return [
+        charts.Series<BarMmodel, String>(
+          data: data,
+          id: 'graphComputers',
+          colorFn: (BarMmodel barModeel, _) => barModeel.barColor,
+          domainFn: (BarMmodel barModeel, _) => barModeel.title,
+          measureFn: (BarMmodel barModeel, _) => barModeel.value,
+        )
+      ];
     }
-
-    return [
-      charts.Series<BarMmodel, String>(
-        data: data,
-        id: 'graphComputers',
-        colorFn: (BarMmodel barModeel, _) => barModeel.barColor,
-        domainFn: (BarMmodel barModeel, _) => barModeel.title,
-        measureFn: (BarMmodel barModeel, _) => barModeel.value,
-      )
-    ];
   }
 }
