@@ -639,69 +639,114 @@ class _DetailTicketState extends State<DetailTicket> {
 
     if (listITILFollowup[index].itemsID.toString() ==
         widget.ticket.title.toString()) {
-      return Card(
-        clipBehavior: Clip.antiAlias,
-        elevation: 0,
-        shape: RoundedRectangleBorder(
-          side: BorderSide(
-            color: Theme.of(context).colorScheme.outline,
+      return Dismissible(
+          key: UniqueKey(),
+
+          // only allows the user swipe from right to left
+          direction: DismissDirection.endToStart,
+
+          // Remove this product from the list
+          onDismissed: (_) async {
+            responseAPIDelete = objectTicket.apiMgmt.delete(
+                ApiEndpoint.apiRootTicketFollowup, listITILFollowup[index].id!);
+
+            final apiResponseValueDelete =
+                await responseAPIDelete.then((val) => val["delete"]);
+
+            if (apiResponseValueDelete == "true") {
+              if (!mounted) return;
+              messages.messageBottomBar(
+                  Translations.of(context)!.text('item_deleted'), context);
+            } else if (apiResponseValueDelete == "errorDelete") {
+              if (!mounted) return;
+              messages.sendAlert(
+                  Translations.of(context)!.text('error_delete'), context);
+            } else {
+              if (!mounted) return;
+              messages.sendAlert(
+                  Translations.of(context)!.text('delete_canceled'), context);
+            }
+          },
+
+          // This will show up when the user performs dismissal action
+          // It is a red background and a trash icon
+          background: Container(
+            color: const Color.fromARGB(255, 123, 8, 29),
+            margin: const EdgeInsets.symmetric(horizontal: 0),
+            alignment: Alignment.centerRight,
+            child: const Icon(
+              Icons.delete,
+              color: Colors.white,
+            ),
           ),
-          borderRadius: const BorderRadius.all(Radius.circular(12)),
-        ),
-        child: Column(
-          children: [
-            Row(
+
+          // Display the list of followup
+          child: Card(
+            clipBehavior: Clip.antiAlias,
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+              side: BorderSide(
+                color: Theme.of(context).colorScheme.outline,
+              ),
+              borderRadius: const BorderRadius.all(Radius.circular(12)),
+            ),
+            child: Column(
               children: [
-                Expanded(
-                  child: ListTile(
-                    leading: const Icon(
-                      Icons.person,
-                      size: 40,
-                      color: Colors.black,
-                    ),
-                    trailing: Icon(
-                      testIsPrivate ? Icons.lock : null,
-                      size: 30,
-                      color: const Color.fromARGB(255, 123, 8, 29),
-                    ),
-                    horizontalTitleGap: 5,
-                    title: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          listITILFollowup[index].userID.toString(),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ListTile(
+                        leading: const Icon(
+                          Icons.person,
+                          size: 40,
+                          color: Colors.black,
+                        ),
+                        trailing: Icon(
+                          testIsPrivate ? Icons.lock : null,
+                          size: 30,
+                          color: const Color.fromARGB(255, 123, 8, 29),
+                        ),
+                        horizontalTitleGap: 5,
+                        title: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              listITILFollowup[index].userID.toString(),
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 20),
+                            ),
+                            const SizedBox(
+                              width: 30,
+                            ),
+                            Text(
+                              listITILFollowup[index]
+                                  .date
+                                  .toString()
+                                  .split(" ")[0],
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 10),
+                            ),
+                          ],
+                        ),
+                        subtitle: Text(
+                          listITILFollowup[index].content.toString(),
                           style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20),
+                            color: Colors.black,
+                          ),
                         ),
-                        const SizedBox(
-                          width: 30,
-                        ),
-                        Text(
-                          listITILFollowup[index].date.toString().split(" ")[0],
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 10),
-                        ),
-                      ],
-                    ),
-                    subtitle: Text(
-                      listITILFollowup[index].content.toString(),
-                      style: const TextStyle(
-                        color: Colors.black,
+                        onTap: () {
+                          showUpdateFollowup(
+                              listITILFollowup[index].id!,
+                              listITILFollowup[index].content.toString(),
+                              listITILFollowup[index].isPrivate!);
+                        },
                       ),
                     ),
-                    onTap: () {
-                      showUpdateFollowup(
-                          listITILFollowup[index].id!,
-                          listITILFollowup[index].content.toString(),
-                          listITILFollowup[index].isPrivate!);
-                    },
-                  ),
+                  ],
                 ),
               ],
             ),
-          ],
-        ),
-      );
+          ));
     } else {
       return const InkWell(
         child: Text("No data"),
@@ -751,99 +796,142 @@ class _DetailTicketState extends State<DetailTicket> {
     }
 
     if (listTask[index].ticketID.toString() == widget.ticket.title.toString()) {
-      return Card(
-        clipBehavior: Clip.antiAlias,
-        elevation: 0,
-        shape: RoundedRectangleBorder(
-          side: BorderSide(
-            color: Theme.of(context).colorScheme.outline,
+      // Display the list item
+      return Dismissible(
+          key: UniqueKey(),
+
+          // only allows the user swipe from right to left
+          direction: DismissDirection.endToStart,
+
+          // Remove this product from the list
+          onDismissed: (_) async {
+            responseAPIDelete = objectTicket.apiMgmt
+                .delete(ApiEndpoint.apiRootTicketTasks, listTask[index].id!);
+
+            final apiResponseValueDelete =
+                await responseAPIDelete.then((val) => val["delete"]);
+
+            if (apiResponseValueDelete == "true") {
+              if (!mounted) return;
+              messages.messageBottomBar(
+                  Translations.of(context)!.text('item_deleted'), context);
+            } else if (apiResponseValueDelete == "errorDelete") {
+              if (!mounted) return;
+              messages.sendAlert(
+                  Translations.of(context)!.text('error_delete'), context);
+            } else {
+              if (!mounted) return;
+              messages.sendAlert(
+                  Translations.of(context)!.text('delete_canceled'), context);
+            }
+          },
+
+          // This will show up when the user performs dismissal action
+          // It is a red background and a trash icon
+          background: Container(
+            color: const Color.fromARGB(255, 123, 8, 29),
+            margin: const EdgeInsets.symmetric(horizontal: 0),
+            alignment: Alignment.centerRight,
+            child: const Icon(
+              Icons.delete,
+              color: Colors.white,
+            ),
           ),
-          borderRadius: const BorderRadius.all(Radius.circular(12)),
-        ),
-        child: Column(
-          children: [
-            Row(
+
+          // Display the list of tasks
+          child: Card(
+            clipBehavior: Clip.antiAlias,
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+              side: BorderSide(
+                color: Theme.of(context).colorScheme.outline,
+              ),
+              borderRadius: const BorderRadius.all(Radius.circular(12)),
+            ),
+            child: Column(
               children: [
-                Expanded(
-                  child: ListTile(
-                    leading: const Icon(
-                      Icons.person,
-                      size: 40,
-                      color: Colors.black,
-                    ),
-                    trailing: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Icon(
-                          testIsPrivate ? Icons.lock : null,
-                          size: 20,
-                          color: const Color.fromARGB(255, 123, 8, 29),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ListTile(
+                        leading: const Icon(
+                          Icons.person,
+                          size: 40,
+                          color: Colors.black,
                         ),
-                        Icon(
-                          iconState,
-                          size: 20,
-                          color: const Color.fromARGB(255, 123, 8, 29),
-                        )
-                      ],
-                    ),
-                    horizontalTitleGap: 5,
-                    title: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Flexible(
-                            child: Text(
-                          listTask[index].userID.toString(),
+                        trailing: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Icon(
+                              testIsPrivate ? Icons.lock : null,
+                              size: 20,
+                              color: const Color.fromARGB(255, 123, 8, 29),
+                            ),
+                            Icon(
+                              iconState,
+                              size: 20,
+                              color: const Color.fromARGB(255, 123, 8, 29),
+                            )
+                          ],
+                        ),
+                        horizontalTitleGap: 5,
+                        title: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Flexible(
+                                child: Text(
+                              listTask[index].userID.toString(),
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 20),
+                            )),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Flexible(
+                                child: Text(
+                              listTask[index].date.toString(),
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 10),
+                            )),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Icon(
+                              testDurationExist ? Icons.timer : null,
+                              size: 15,
+                              color: const Color.fromARGB(255, 123, 8, 29),
+                            ),
+                            Text(
+                              listTask[index].fullDuration.toString(),
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 10),
+                            ),
+                          ],
+                        ),
+                        subtitle: Text(
+                          listTask[index].content.toString(),
                           style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20),
-                        )),
-                        const SizedBox(
-                          width: 10,
+                            color: Colors.black,
+                          ),
                         ),
-                        Flexible(
-                            child: Text(
-                          listTask[index].date.toString(),
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 10),
-                        )),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Icon(
-                          testDurationExist ? Icons.timer : null,
-                          size: 15,
-                          color: const Color.fromARGB(255, 123, 8, 29),
-                        ),
-                        Text(
-                          listTask[index].fullDuration.toString(),
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 10),
-                        ),
-                      ],
-                    ),
-                    subtitle: Text(
-                      listTask[index].content.toString(),
-                      style: const TextStyle(
-                        color: Colors.black,
+                        onTap: () {
+                          showUpdateTask(
+                            listTask[index].id!,
+                            listTask[index].content.toString(),
+                            listTask[index].isPrivate!,
+                            listTask[index].state!,
+                            listTask[index].stateVlaue!,
+                            listTask[index].duration!,
+                          );
+                        },
                       ),
-                    ),
-                    onTap: () {
-                      showUpdateTask(
-                        listTask[index].id!,
-                        listTask[index].content.toString(),
-                        listTask[index].isPrivate!,
-                        listTask[index].state!,
-                        listTask[index].stateVlaue!,
-                        listTask[index].duration!,
-                      );
-                    },
-                  ),
-                )
+                    )
+                  ],
+                ),
               ],
             ),
-          ],
-        ),
-      );
+          ));
     } else {
       return const InkWell(
         child: Text(""),

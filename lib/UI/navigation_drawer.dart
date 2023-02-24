@@ -17,8 +17,7 @@ class NavigationDrawerMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       child: Material(
-        // ignore: prefer_const_constructors
-        color: Color.fromARGB(255, 123, 8, 29),
+        color: const Color.fromARGB(255, 123, 8, 29),
         child: ListView(
           children: <Widget>[
             buildHeader(
