@@ -464,6 +464,7 @@ class _DetailComputerState extends State<DetailComputer> {
                                   listUsers[element] == selectedUser);
 
                               updateData["name"] = _nameController.text;
+                              updateData["date"] = _dateController.text;
                               updateData["states_id"] = statusID.first;
                               updateData["entities_id"] = entityID.first;
                               updateData["locations_id"] = locationID.first;

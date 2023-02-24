@@ -99,7 +99,6 @@ class BuildFormFields {
     );
   }
 
-
   /// Create date time field in a form
   Widget buildDateTimeField(TextEditingController controllerField,
       String labelTextField, BuildContext context) {
@@ -131,10 +130,21 @@ class BuildFormFields {
         DateTime? date = DateTime(1900);
         FocusScope.of(context).requestFocus(FocusNode());
         date = (await showDatePicker(
-            context: context,
-            initialDate: DateTime.now(),
-            firstDate: DateTime(1900),
-            lastDate: DateTime(2100)));
+          context: context,
+          initialDate: DateTime.now(),
+          firstDate: DateTime(1900),
+          lastDate: DateTime(2100),
+          builder: (context, child) {
+            return Theme(
+              data: ThemeData(
+                  //primarySwatch: const Color.fromARGB(255, 123, 8, 29),
+                  colorScheme: ColorScheme.fromSwatch().copyWith(
+                primary: const Color.fromARGB(255, 123, 8, 29),
+              )),
+              child: child!,
+            );
+          },
+        ));
 
         if (date != null) {
           String formattedDate = DateFormat('yyyy-MM-dd hh:mm:ss').format(date);

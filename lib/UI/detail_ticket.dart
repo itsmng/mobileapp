@@ -535,6 +535,7 @@ class _DetailTicketState extends State<DetailTicket> {
                                   listUsers[element] == selectedAssignedUser);
 
                               updateData["name"] = _titleController.text;
+                              updateData["date"] = _dateController.text;
                               updateData["priority"] = priorityID.first;
                               updateData["status"] = statusID.first;
                               updateData["entities_id"] = entityID.first;
