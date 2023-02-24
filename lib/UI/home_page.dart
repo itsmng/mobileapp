@@ -264,7 +264,7 @@ class _HomePageState extends State<HomePage> {
     if (listComputerData.isNotEmpty) {
       listComputerData.forEach((key, value) {
         if (key.isEmpty) {
-          key = "No status";
+          key = Translations.of(context)!.text('without_status');
         }
         data.add(BarMmodel(
             key, value, charts.ColorUtil.fromDartColor(colors[index])));
