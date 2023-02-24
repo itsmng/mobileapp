@@ -609,19 +609,25 @@ class _DetailTicketState extends State<DetailTicket> {
 
   // Display all followup
   Widget followup() {
-    return ListView(
-      children: [
-        Column(
-          children: [
-            ListView.builder(
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemCount: listITILFollowup.length,
-                itemBuilder: _itemBuilderFollowup),
-          ],
-        )
-      ],
-    );
+    if (listITILFollowup.isEmpty) {
+      return Center(
+        child: Text(Translations.of(context)!.text('message_no_item_found')),
+      );
+    } else {
+      return ListView(
+        children: [
+          Column(
+            children: [
+              ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount: listITILFollowup.length,
+                  itemBuilder: _itemBuilderFollowup),
+            ],
+          )
+        ],
+      );
+    }
   }
 
   Widget _itemBuilderFollowup(BuildContext context, int index) {
@@ -698,26 +704,32 @@ class _DetailTicketState extends State<DetailTicket> {
       );
     } else {
       return const InkWell(
-        child: Text(""),
+        child: Text("No data"),
       );
     }
   }
 
   // Display all followup
   Widget task() {
-    return ListView(
-      children: [
-        Column(
-          children: [
-            ListView.builder(
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemCount: listTask.length,
-                itemBuilder: _itemBuilderTask),
-          ],
-        )
-      ],
-    );
+    if (listTask.isEmpty) {
+      return Center(
+        child: Text(Translations.of(context)!.text('message_no_item_found')),
+      );
+    } else {
+      return ListView(
+        children: [
+          Column(
+            children: [
+              ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount: listTask.length,
+                  itemBuilder: _itemBuilderTask),
+            ],
+          )
+        ],
+      );
+    }
   }
 
   Widget _itemBuilderTask(BuildContext context, int index) {
@@ -1171,7 +1183,7 @@ class _DetailTicketState extends State<DetailTicket> {
                           messages.messageBottomBar(
                               Translations.of(context)!.text('item_added'),
                               context);
-                           var ticket = Tickets(
+                          var ticket = Tickets(
                               id: widget.ticket.id,
                               date: _dateController.text,
                               statusValue: selectedStatus,
