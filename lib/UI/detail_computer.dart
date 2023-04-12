@@ -177,8 +177,9 @@ class _DetailComputerState extends State<DetailComputer> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    Flexible(
+                    Expanded(
                       child: DropdownButtonFormField(
+                        isExpanded: true,
                         value: selectedUserInCharge,
                         items: dropdown.dropdownItem(listUsersInCharge),
                         onChanged: (String? value) {
@@ -206,8 +207,9 @@ class _DetailComputerState extends State<DetailComputer> {
                     const SizedBox(
                       width: 15,
                     ),
-                    Flexible(
+                    Expanded(
                       child: DropdownButtonFormField(
+                        isExpanded: true,
                         value: selectedUser,
                         items: dropdown.dropdownItem(listUsers),
                         onChanged: (String? value) {
@@ -236,8 +238,9 @@ class _DetailComputerState extends State<DetailComputer> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Flexible(
+                    Expanded(
                       child: DropdownButtonFormField(
+                        isExpanded: true,
                         value: selectedStatus,
                         items: dropdown.dropdownItem(listStatus),
                         onChanged: (String? value) {
@@ -264,8 +267,9 @@ class _DetailComputerState extends State<DetailComputer> {
                     const SizedBox(
                       width: 15,
                     ),
-                    Flexible(
+                    Expanded(
                       child: DropdownButtonFormField(
+                        isExpanded: true,
                         value: selectedUpdateSource,
                         items: dropdown.dropdownItem(listUpdateSource),
                         onChanged: (String? value) {
@@ -294,8 +298,9 @@ class _DetailComputerState extends State<DetailComputer> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Flexible(
+                    Expanded(
                       child: DropdownButtonFormField(
+                        isExpanded: true,
                         value: selectedLocation,
                         items: dropdown.dropdownItem(listLocations),
                         onChanged: (String? value) {
@@ -322,8 +327,9 @@ class _DetailComputerState extends State<DetailComputer> {
                     const SizedBox(
                       width: 15,
                     ),
-                    Flexible(
+                    Expanded(
                       child: DropdownButtonFormField(
+                        isExpanded: true,
                         value: selectedEntity,
                         items: dropdown.dropdownItem(listEntities),
                         onChanged: (String? value) {
@@ -352,7 +358,7 @@ class _DetailComputerState extends State<DetailComputer> {
                 ),
                 Row(
                   children: [
-                    Flexible(
+                    Expanded(
                       child: formFieldsComputer.buildTextField(
                           _serialController,
                           Icons.numbers,
@@ -363,7 +369,7 @@ class _DetailComputerState extends State<DetailComputer> {
                     const SizedBox(
                       width: 15,
                     ),
-                    Flexible(
+                    Expanded(
                       child: formFieldsComputer.buildTextField(
                           _otherSerialController,
                           Icons.numbers,
