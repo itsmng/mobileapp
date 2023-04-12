@@ -156,6 +156,8 @@ class _TicketsPageState extends State<TicketsPage> {
   bool isAscending = false;
   int rowPerPage = 8;
 
+  late Future<List<Tickets>> futurTicketExist;
+
   final TextEditingController _searchController = TextEditingController();
 
   void onsortColoumn(int columnIndex, bool ascending) {
@@ -191,6 +193,8 @@ class _TicketsPageState extends State<TicketsPage> {
     _initSession.apiMgmt
         .saveListStringData("customHeadersTicket", ["Status", "Open date"]);
     _initSession.apiMgmt.saveListStringData("selectedFilterTicket", ["New"]);
+
+    futurTicketExist = ticket.fetchTicketsData(apiRespTicket);
     super.initState();
   }
 
@@ -201,87 +205,95 @@ class _TicketsPageState extends State<TicketsPage> {
     final ticket = Tickets();
     final computer = Computer();
     return Scaffold(
-      drawer: const NavigationDrawerMenu(),
-      appBar: AppBar(
-        title: Text(Translations.of(context)!.text('all_tickets')),
-        centerTitle: true,
-        backgroundColor: const Color.fromARGB(255, 123, 8, 29),
-        foregroundColor: const Color.fromARGB(255, 255, 255, 255),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            tooltip: Translations.of(context)!.text('create_ticket'),
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => CreateTicket(
-                  ticket: ticket,
-                  computer: computer,
-                ),
-              ));
-            },
-          )
-        ],
-      ),
-      body: dataTickets.isEmpty
-          ? Center(
-              child: CircularProgressIndicator(value: progress),
-            )
-          : Container(
-              padding: const EdgeInsets.all(8.0),
-              decoration: BoxDecoration(
-                color: Theme.of(context).canvasColor,
-                borderRadius: const BorderRadius.all(Radius.circular(10)),
-              ),
-              width: double.infinity,
-              child: SingleChildScrollView(
-                child: PaginatedDataTable(
-                  actions: <IconButton>[
-                    IconButton(
-                      color: const Color.fromARGB(255, 123, 8, 29),
-                      icon: const Icon(Icons.filter_alt_outlined),
-                      onPressed: _showMultiSelectFilter,
-                    ),
-                    IconButton(
-                      color: const Color.fromARGB(255, 123, 8, 29),
-                      icon: const Icon(Icons.mode_edit),
-                      onPressed: _showMultiSelectEditFiled,
-                    ),
-                  ],
-                  sortColumnIndex: sortColumnIndex,
-                  sortAscending: isAscending,
-                  header: Container(
-                      padding: const EdgeInsets.all(5),
-                      child: TextField(
-                        controller: _searchController,
-                        decoration: InputDecoration(
-                          hintText: Translations.of(context)!.text('search'),
-                        ),
-                        onChanged: (value) {
-                          setState(() {
-                            dataTickets = filterData!
-                                .where(
-                                    (element) => element.title!.contains(value))
-                                .toList();
-                          });
-                        },
-                      )),
-                  source: RowSourceTicket(
-                    myData: dataTickets,
-                    count: dataTickets.length,
-                    customSecondHeader: secondHeaderCustomizable,
-                    customThirdHeader: thirdHeaderCustomizable,
-                    context: context,
+        drawer: const NavigationDrawerMenu(),
+        appBar: AppBar(
+          title: Text(Translations.of(context)!.text('all_tickets')),
+          centerTitle: true,
+          backgroundColor: const Color.fromARGB(255, 123, 8, 29),
+          foregroundColor: const Color.fromARGB(255, 255, 255, 255),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.add),
+              tooltip: Translations.of(context)!.text('create_ticket'),
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => CreateTicket(
+                    ticket: ticket,
+                    computer: computer,
                   ),
-                  rowsPerPage: rowPerPage,
-                  columnSpacing: 8,
-                  columns: [
-                    tableHeaders(firstHeaderNoCustomizable),
-                    tableHeaders(secondHeaderCustomizable),
-                    tableHeaders(thirdHeaderCustomizable),
-                  ],
-                ),
-              )),
-    );
+                ));
+              },
+            )
+          ],
+        ),
+        body: FutureBuilder(
+          future: futurTicketExist,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return ListView.builder(
+                itemCount: 1,
+                itemBuilder: (_, index) => Container(
+                    padding: const EdgeInsets.all(8.0),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).canvasColor,
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    ),
+                    width: double.infinity,
+                    child: SingleChildScrollView(
+                      child: PaginatedDataTable(
+                        actions: <IconButton>[
+                          IconButton(
+                            color: const Color.fromARGB(255, 123, 8, 29),
+                            icon: const Icon(Icons.filter_alt_outlined),
+                            onPressed: _showMultiSelectFilter,
+                          ),
+                          IconButton(
+                            color: const Color.fromARGB(255, 123, 8, 29),
+                            icon: const Icon(Icons.mode_edit),
+                            onPressed: _showMultiSelectEditFiled,
+                          ),
+                        ],
+                        sortColumnIndex: sortColumnIndex,
+                        sortAscending: isAscending,
+                        header: Container(
+                            padding: const EdgeInsets.all(5),
+                            child: TextField(
+                              controller: _searchController,
+                              decoration: InputDecoration(
+                                hintText:
+                                    Translations.of(context)!.text('search'),
+                              ),
+                              onChanged: (value) {
+                                setState(() {
+                                  dataTickets = filterData!
+                                      .where((element) =>
+                                          element.title!.contains(value))
+                                      .toList();
+                                });
+                              },
+                            )),
+                        source: RowSourceTicket(
+                          myData: dataTickets,
+                          count: dataTickets.length,
+                          customSecondHeader: secondHeaderCustomizable,
+                          customThirdHeader: thirdHeaderCustomizable,
+                          context: context,
+                        ),
+                        rowsPerPage: rowPerPage,
+                        columnSpacing: 8,
+                        columns: [
+                          tableHeaders(firstHeaderNoCustomizable),
+                          tableHeaders(secondHeaderCustomizable),
+                          tableHeaders(thirdHeaderCustomizable),
+                        ],
+                      ),
+                    )),
+              );
+            } else {
+              return const Center(child: CircularProgressIndicator());
+            }
+          },
+        ));
   }
 
   DataColumn tableHeaders(String name) {
