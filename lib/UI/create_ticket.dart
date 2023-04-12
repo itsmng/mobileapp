@@ -186,6 +186,7 @@ class _CreateTicketState extends State<CreateTicket> {
                 children: [
                   Expanded(
                     child: DropdownButtonFormField(
+                      isExpanded: true,
                       value: selectedPriority,
                       items: dropdownPriority,
                       onChanged: (String? value) {
@@ -219,6 +220,7 @@ class _CreateTicketState extends State<CreateTicket> {
                   ),
                   Expanded(
                     child: DropdownButtonFormField(
+                      isExpanded: true,
                       value: selectedEntity,
                       items: dropdown.dropdownItem(listEntities),
                       onChanged: (String? value) {
@@ -254,6 +256,7 @@ class _CreateTicketState extends State<CreateTicket> {
                 children: <Widget>[
                   Expanded(
                     child: DropdownButtonFormField(
+                      isExpanded: true,
                       value: selectedLocation,
                       items: dropdown.dropdownItem(listLocations),
                       onChanged: (String? value) {
@@ -287,6 +290,7 @@ class _CreateTicketState extends State<CreateTicket> {
                   ),
                   Expanded(
                     child: DropdownButtonFormField(
+                      isExpanded: true,
                       value: selectedITILCategory,
                       items: dropdown.dropdownItem(listITILCategory),
                       onChanged: (String? value) {
@@ -323,6 +327,7 @@ class _CreateTicketState extends State<CreateTicket> {
                 children: <Widget>[
                   Expanded(
                     child: DropdownButtonFormField(
+                      isExpanded: true,
                       value: selectedUserRecipient,
                       items: dropdown.dropdownItem(listUsers),
                       onChanged: (String? value) {
@@ -356,6 +361,7 @@ class _CreateTicketState extends State<CreateTicket> {
                   ),
                   Expanded(
                     child: DropdownButtonFormField(
+                      isExpanded: true,
                       value: selectedAssignedUser,
                       items: dropdown.dropdownItem(listAssignedUsers),
                       onChanged: (String? value) {
@@ -391,6 +397,7 @@ class _CreateTicketState extends State<CreateTicket> {
                 children: <Widget>[
                   Expanded(
                     child: DropdownButtonFormField(
+                      isExpanded: true,
                       value: selectedComputer,
                       items: dropdown.dropdownItem(listComputer),
                       onChanged: (String? value) {
@@ -458,10 +465,6 @@ class _CreateTicketState extends State<CreateTicket> {
                         listUsers[element] == selectedUserRecipient);
                     var associatedElementID = listComputer.keys.where(
                         (element) => listComputer[element] == selectedComputer);
-                    /*
-                    var assignedID = listUsers.keys.where((element) =>
-                        listUsers[element] == selectedAssignedUser);
-                  */
 
                     addTicketData["name"] = _titleController.text;
                     addTicketData["priority"] = priorityID.first;
