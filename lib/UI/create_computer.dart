@@ -25,7 +25,6 @@ class _CreateComputerState extends State<CreateComputer> {
   final GlobalKey<FormState> _formKeyAddComputer = GlobalKey<FormState>();
 
   final formFieldsComputer = BuildFormFields();
- 
 
   final objectComputer = Computer();
   dynamic responseAPIAddComputer;
@@ -88,7 +87,7 @@ class _CreateComputerState extends State<CreateComputer> {
 
   @override
   Widget build(BuildContext context) {
-     final buttonForm = Button(context);
+    final buttonForm = Button(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(Translations.of(context)!.text('create_computer')),
@@ -121,6 +120,7 @@ class _CreateComputerState extends State<CreateComputer> {
                 children: <Widget>[
                   Expanded(
                     child: DropdownButtonFormField(
+                      isExpanded: true,
                       value: selectedUserInCharge,
                       items: dropdown.dropdownItem(listUsersInCharge),
                       onChanged: (String? value) {
@@ -149,6 +149,7 @@ class _CreateComputerState extends State<CreateComputer> {
                   ),
                   Expanded(
                     child: DropdownButtonFormField(
+                      isExpanded: true,
                       value: selectedUser,
                       items: dropdown.dropdownItem(listUsers),
                       onChanged: (String? value) {
@@ -179,6 +180,7 @@ class _CreateComputerState extends State<CreateComputer> {
                 children: <Widget>[
                   Expanded(
                     child: DropdownButtonFormField(
+                      isExpanded: true,
                       value: selectedStatus,
                       items: dropdown.dropdownItem(listStatus),
                       onChanged: (String? value) {
@@ -207,6 +209,7 @@ class _CreateComputerState extends State<CreateComputer> {
                   ),
                   Expanded(
                     child: DropdownButtonFormField(
+                      isExpanded: true,
                       value: selectedUpdateSource,
                       items: dropdown.dropdownItem(listUpdateSource),
                       onChanged: (String? value) {
@@ -237,6 +240,7 @@ class _CreateComputerState extends State<CreateComputer> {
                 children: <Widget>[
                   Expanded(
                     child: DropdownButtonFormField(
+                      isExpanded: true,
                       value: selectedLocation,
                       items: dropdown.dropdownItem(listLocations),
                       onChanged: (String? value) {
@@ -265,6 +269,7 @@ class _CreateComputerState extends State<CreateComputer> {
                   ),
                   Expanded(
                     child: DropdownButtonFormField(
+                      isExpanded: true,
                       value: selectedEntity,
                       items: dropdown.dropdownItem(listEntities),
                       onChanged: (String? value) {
