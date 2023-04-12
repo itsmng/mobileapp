@@ -255,6 +255,7 @@ class _DetailTicketState extends State<DetailTicket> {
                   children: <Widget>[
                     Expanded(
                       child: DropdownButtonFormField(
+                        isExpanded: true,
                         value: selectedEntity,
                         items: dropdown.dropdownItem(listEntities),
                         onChanged: (String? value) {
@@ -285,6 +286,7 @@ class _DetailTicketState extends State<DetailTicket> {
                   children: <Widget>[
                     Expanded(
                       child: DropdownButtonFormField(
+                        isExpanded: true,
                         value: selectedPriority,
                         items: dropdownPriority,
                         onChanged: (String? value) {
@@ -315,6 +317,7 @@ class _DetailTicketState extends State<DetailTicket> {
                   children: <Widget>[
                     Expanded(
                       child: DropdownButtonFormField(
+                        isExpanded: true,
                         value: selectedStatus,
                         items: dropdown.dropdownItem(listStatus),
                         onChanged: (String? value) {
@@ -345,6 +348,7 @@ class _DetailTicketState extends State<DetailTicket> {
                   children: <Widget>[
                     Expanded(
                       child: DropdownButtonFormField(
+                        isExpanded: true,
                         value: selectedLocation,
                         items: dropdown.dropdownItem(listLocations),
                         onChanged: (String? value) {
@@ -373,6 +377,7 @@ class _DetailTicketState extends State<DetailTicket> {
                     ),
                     Expanded(
                       child: DropdownButtonFormField(
+                        isExpanded: true,
                         value: selectedITILCategory,
                         items: dropdown.dropdownItem(listITILCategory),
                         onChanged: (String? value) {
@@ -404,6 +409,7 @@ class _DetailTicketState extends State<DetailTicket> {
                   children: <Widget>[
                     Expanded(
                       child: DropdownButtonFormField(
+                        isExpanded: true,
                         value: selectedUserRecipient,
                         items: dropdown.dropdownItem(listUsers),
                         onChanged: (String? value) {
@@ -433,6 +439,7 @@ class _DetailTicketState extends State<DetailTicket> {
                     ),
                     Expanded(
                       child: DropdownButtonFormField(
+                        isExpanded: true,
                         value: selectedAssignedUser,
                         items: dropdown.dropdownItem(listAssignedUsers),
                         onChanged: (String? value) {
