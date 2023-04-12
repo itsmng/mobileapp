@@ -46,6 +46,9 @@ dependencies:
   duration_picker: ^1.1.1
   flutter_localizations:
     sdk: flutter
+  flutter_launcher_icons: ^0.13.0
+  rename: ^2.1.1
+   
   
 dev_dependencies:
   flutter_test:
@@ -58,6 +61,11 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
 
+flutter_icons:
+  image_path: assets/itsmng.png
+  android: true
+  ios: true
+    
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -70,6 +78,7 @@ flutter:
   uses-material-design: true
   assets:  
     - assets/login_logo_itsm.png
+    - assets/itsmng.png
     - locale/i18n_en.json
     - locale/i18n_fr.json
 
