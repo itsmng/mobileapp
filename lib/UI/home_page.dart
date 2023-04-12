@@ -17,7 +17,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late List<Tickets> futureTicket;
   late List<Computer> futureComputer;
-
+  late Future<List<Tickets>> futurTicketExist;
   var ticket = Tickets();
   var computer = Computer();
 
@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     apiResponseTicket = ticket.apiMgmt.get(ApiEndpoint.apiGetAllTickets);
     apiResponseComputer = computer.apiMgmt.get(ApiEndpoint.apiGetAllComputers);
-
+    futurTicketExist = ticket.fetchTicketsData(apiResponseTicket);
     handleTickets();
     handleComputers();
     super.initState();
@@ -47,103 +47,116 @@ class _HomePageState extends State<HomePage> {
         foregroundColor: const Color.fromARGB(255, 255, 255, 255),
         title: Text(Translations.of(context)!.text('home_title')),
       ),
-      body: Center(
-        child: listTicketsData.isEmpty
-            ? CircularProgressIndicator(value: progress)
-            : ListView(
-                children: [
-                  Container(
-                    height: 300,
-                    padding: const EdgeInsets.all(10),
-                    child: Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Column(children: <Widget>[
-                          Text(
-                            Translations.of(context)!
-                                .text('ticket_status_title'),
-                            style: Theme.of(context).textTheme.bodyLarge,
-                          ),
-                          Expanded(
-                            child: charts.BarChart(
-                              _createTicketsChart(),
-                              animate: true,
+      body: FutureBuilder(
+          future: futurTicketExist,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return ListView.builder(
+                itemCount: 1,
+                itemBuilder: (_, index) => Column(
+                  children: [
+                    Container(
+                      height: 300,
+                      padding: const EdgeInsets.all(10),
+                      child: Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Column(children: <Widget>[
+                            Text(
+                              Translations.of(context)!
+                                  .text('ticket_status_title'),
+                              style: Theme.of(context).textTheme.bodyLarge,
                             ),
-                          ),
-                        ]),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    height: 80,
-                    padding: const EdgeInsets.all(10),
-                    child: Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(3),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            Column(
-                              children: <Widget>[
-                                Text(
-                                  Translations.of(context)!.text('latest_24h'),
-                                  style: Theme.of(context).textTheme.bodyLarge,
-                                ),
-                                Text(
-                                  listTicketsData["Latest tickets"].toString(),
-                                  style: Theme.of(context).textTheme.bodyLarge,
-                                ),
-                              ],
+                            Expanded(
+                              child: charts.BarChart(
+                                _createTicketsChart(),
+                                animate: true,
+                              ),
                             ),
-                            Column(
-                              children: <Widget>[
-                                Text(
-                                  Translations.of(context)!
-                                      .text('late_tickets'),
-                                  style: Theme.of(context).textTheme.bodyLarge,
-                                ),
-                                Text(
-                                  listTicketsData["Late tickets"].toString(),
-                                  style: Theme.of(context).textTheme.bodyLarge,
-                                ),
-                              ],
-                            ),
-                          ],
+                          ]),
                         ),
                       ),
                     ),
-                  ),
-                  Container(
-                    height: 200,
-                    padding: const EdgeInsets.all(10),
-                    child: Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(5),
-                        child: Column(children: <Widget>[
-                          Text(
-                            Translations.of(context)!
-                                .text('computers_status_title'),
-                            style: Theme.of(context).textTheme.bodyLarge,
+                    Container(
+                      height: 80,
+                      padding: const EdgeInsets.all(10),
+                      child: Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(3),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              Column(
+                                children: <Widget>[
+                                  Text(
+                                    Translations.of(context)!
+                                        .text('latest_24h'),
+                                    style:
+                                        Theme.of(context).textTheme.bodyLarge,
+                                  ),
+                                  Text(
+                                    listTicketsData["Latest tickets"]
+                                        .toString(),
+                                    style:
+                                        Theme.of(context).textTheme.bodyLarge,
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                children: <Widget>[
+                                  Text(
+                                    Translations.of(context)!
+                                        .text('late_tickets'),
+                                    style:
+                                        Theme.of(context).textTheme.bodyLarge,
+                                  ),
+                                  Text(
+                                    listTicketsData["Late tickets"].toString(),
+                                    style:
+                                        Theme.of(context).textTheme.bodyLarge,
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
-                          Expanded(
-                            child: charts.PieChart<String>(
-                              defaultRenderer: charts.ArcRendererConfig(
-                                  arcRendererDecorators: [
-                                    charts.ArcLabelDecorator(
-                                        labelPosition:
-                                            charts.ArcLabelPosition.outside)
-                                  ]),
-                              _createComputerChart(),
-                              animate: true,
-                            ),
-                          ),
-                        ]),
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-      ),
+                    Container(
+                      height: 200,
+                      padding: const EdgeInsets.all(10),
+                      child: Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(5),
+                          child: Column(children: <Widget>[
+                            Text(
+                              Translations.of(context)!
+                                  .text('computers_status_title'),
+                              style: Theme.of(context).textTheme.bodyLarge,
+                            ),
+                            Expanded(
+                              child: charts.PieChart<String>(
+                                defaultRenderer: charts.ArcRendererConfig(
+                                    arcRendererDecorators: [
+                                      charts.ArcLabelDecorator(
+                                          labelPosition:
+                                              charts.ArcLabelPosition.outside)
+                                    ]),
+                                _createComputerChart(),
+                                animate: true,
+                              ),
+                            ),
+                          ]),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            } else {
+              return const Center(child: CircularProgressIndicator());
+            }
+          }),
     );
   }
 
@@ -158,6 +171,8 @@ class _HomePageState extends State<HomePage> {
     int lateTickets = 0;
     DateTime currentDate = DateTime.now();
     late Duration diff;
+    listTicketsData["Latest tickets"] = 0;
+    listTicketsData["Late tickets"] = 0;
 
     for (var element in futureTicket) {
       if (element.statusID == 1) {
@@ -192,6 +207,7 @@ class _HomePageState extends State<HomePage> {
             plannedTickets;
         listTicketsData[Translations.of(context)!.text('pending_ticket')] =
             pendingTickets;
+
         listTicketsData["Latest tickets"] = latestTickets;
         listTicketsData["Late tickets"] = lateTickets;
       });
@@ -217,7 +233,6 @@ class _HomePageState extends State<HomePage> {
         }
       });
     }
-
     return [
       charts.Series<BarMmodel, String>(
         data: data,
