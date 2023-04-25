@@ -195,6 +195,7 @@ class NavigationDrawerMenu extends StatelessWidget {
                 Icons.logout,
                 color: Colors.white,
               ),
+              tooltip: Translations.of(context)!.text('logout'),
               onPressed: () async {
                 var respos =
                     await _initSession.apiMgmt.logoutFromItsmAPI("killSession");
