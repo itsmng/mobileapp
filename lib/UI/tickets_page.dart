@@ -190,15 +190,37 @@ class _TicketsPageState extends State<TicketsPage> {
   void initState() {
     apiRespTicket = ticket.apiMgmt.get(ApiEndpoint.apiGetAllTickets);
     getTicketData();
-    _initSession.apiMgmt
-        .saveListStringData("customHeadersTicket", ["Status", "Open date"]);
+    setDefaultSelectedheaders();
     _initSession.apiMgmt.saveListStringData("selectedFilterTicket", ["New"]);
-
     futurTicketExist = ticket.fetchTicketsData(apiRespTicket);
     super.initState();
   }
 
   double progress = 0.5;
+
+  // Call this when the user pull down the screen
+  Future<void> _loadData() async {
+    setState(() {
+      apiRespTicket = ticket.apiMgmt.get(ApiEndpoint.apiGetAllTickets);
+      getTicketData();
+
+      _initSession.apiMgmt.saveListStringData("selectedFilterTicket", ["New"]);
+
+      futurTicketExist = ticket.fetchTicketsData(apiRespTicket);
+    });
+  }
+
+  setDefaultSelectedheaders() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getStringList("customHeadersTicket") == null ||
+        prefs.getStringList("customHeadersTicket")!.isEmpty) {
+      _initSession.apiMgmt.saveListStringData("customHeadersTicket",
+          [secondHeaderCustomizable, thirdHeaderCustomizable]);
+    } else {
+      secondHeaderCustomizable = prefs.getStringList("customHeadersTicket")![0];
+      thirdHeaderCustomizable = prefs.getStringList("customHeadersTicket")![1];
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -226,73 +248,77 @@ class _TicketsPageState extends State<TicketsPage> {
             )
           ],
         ),
-        body: FutureBuilder(
-          future: futurTicketExist,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return ListView.builder(
-                itemCount: 1,
-                itemBuilder: (_, index) => Container(
-                    padding: const EdgeInsets.all(8.0),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).canvasColor,
-                      borderRadius: const BorderRadius.all(Radius.circular(10)),
-                    ),
-                    width: double.infinity,
-                    child: SingleChildScrollView(
-                      child: PaginatedDataTable(
-                        actions: <IconButton>[
-                          IconButton(
-                            color: const Color.fromARGB(255, 123, 8, 29),
-                            icon: const Icon(Icons.filter_alt_outlined),
-                            onPressed: _showMultiSelectFilter,
-                          ),
-                          IconButton(
-                            color: const Color.fromARGB(255, 123, 8, 29),
-                            icon: const Icon(Icons.mode_edit),
-                            onPressed: _showMultiSelectEditFiled,
-                          ),
-                        ],
-                        sortColumnIndex: sortColumnIndex,
-                        sortAscending: isAscending,
-                        header: Container(
-                            padding: const EdgeInsets.all(5),
-                            child: TextField(
-                              controller: _searchController,
-                              decoration: InputDecoration(
-                                hintText:
-                                    Translations.of(context)!.text('search'),
-                              ),
-                              onChanged: (value) {
-                                setState(() {
-                                  dataTickets = filterData!
-                                      .where((element) =>
-                                          element.title!.contains(value))
-                                      .toList();
-                                });
-                              },
-                            )),
-                        source: RowSourceTicket(
-                          myData: dataTickets,
-                          count: dataTickets.length,
-                          customSecondHeader: secondHeaderCustomizable,
-                          customThirdHeader: thirdHeaderCustomizable,
-                          context: context,
-                        ),
-                        rowsPerPage: rowPerPage,
-                        columnSpacing: 8,
-                        columns: [
-                          tableHeaders(firstHeaderNoCustomizable),
-                          tableHeaders(secondHeaderCustomizable),
-                          tableHeaders(thirdHeaderCustomizable),
-                        ],
+        body: RefreshIndicator(
+          onRefresh: _loadData,
+          child: FutureBuilder(
+            future: futurTicketExist,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return ListView.builder(
+                  itemCount: 1,
+                  itemBuilder: (_, index) => Container(
+                      padding: const EdgeInsets.all(8.0),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).canvasColor,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10)),
                       ),
-                    )),
-              );
-            } else {
-              return const Center(child: CircularProgressIndicator());
-            }
-          },
+                      width: double.infinity,
+                      child: SingleChildScrollView(
+                        child: PaginatedDataTable(
+                          actions: <IconButton>[
+                            IconButton(
+                              color: const Color.fromARGB(255, 123, 8, 29),
+                              icon: const Icon(Icons.filter_alt_outlined),
+                              onPressed: _showMultiSelectFilter,
+                            ),
+                            IconButton(
+                              color: const Color.fromARGB(255, 123, 8, 29),
+                              icon: const Icon(Icons.mode_edit),
+                              onPressed: _showMultiSelectEditFiled,
+                            ),
+                          ],
+                          sortColumnIndex: sortColumnIndex,
+                          sortAscending: isAscending,
+                          header: Container(
+                              padding: const EdgeInsets.all(5),
+                              child: TextField(
+                                controller: _searchController,
+                                decoration: InputDecoration(
+                                  hintText:
+                                      Translations.of(context)!.text('search'),
+                                ),
+                                onChanged: (value) {
+                                  setState(() {
+                                    dataTickets = filterData!
+                                        .where((element) =>
+                                            element.title!.contains(value))
+                                        .toList();
+                                  });
+                                },
+                              )),
+                          source: RowSourceTicket(
+                            myData: dataTickets,
+                            count: dataTickets.length,
+                            customSecondHeader: secondHeaderCustomizable,
+                            customThirdHeader: thirdHeaderCustomizable,
+                            context: context,
+                          ),
+                          rowsPerPage: rowPerPage,
+                          columnSpacing: 8,
+                          columns: [
+                            tableHeaders(firstHeaderNoCustomizable),
+                            tableHeaders(secondHeaderCustomizable),
+                            tableHeaders(thirdHeaderCustomizable),
+                          ],
+                        ),
+                      )),
+                );
+              } else {
+                return const Center(child: CircularProgressIndicator());
+              }
+            },
+          ),
         ));
   }
 

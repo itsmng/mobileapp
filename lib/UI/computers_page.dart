@@ -190,8 +190,7 @@ class _ComputersPageState extends State<ComputersPage> {
   void initState() {
     apiRespComputer = computer.apiMgmt.get(ApiEndpoint.apiGetAllComputers);
     getComputerData();
-    _initSession.apiMgmt
-        .saveListStringData("customHeadersComputer", ["Status", "Open date"]);
+    setDefaultSelectedheaders();
     _initSession.apiMgmt
         .saveListStringData("selectedFilterComputer", ["Production"]);
 
@@ -199,98 +198,127 @@ class _ComputersPageState extends State<ComputersPage> {
     super.initState();
   }
 
+  // Call this when the user pull down the screen
+  Future<void> _loadData() async {
+    setState(() {
+      apiRespComputer = computer.apiMgmt.get(ApiEndpoint.apiGetAllTickets);
+      getComputerData();
+
+      _initSession.apiMgmt.saveListStringData("selectedFilterTicket", ["New"]);
+
+      futurComputerExist = computer.fetchComputerData(apiRespComputer);
+    });
+  }
+
+  setDefaultSelectedheaders() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getStringList("customHeadersComputer") == null ||
+        prefs.getStringList("customHeadersComputer")!.isEmpty) {
+      _initSession.apiMgmt.saveListStringData("customHeadersComputer",
+          [secondHeaderCustomizable, thirdHeaderCustomizable]);
+    } else {
+      secondHeaderCustomizable =
+          prefs.getStringList("customHeadersComputer")![0];
+      thirdHeaderCustomizable =
+          prefs.getStringList("customHeadersComputer")![1];
+    }
+  }
+
   double progress = 0.5;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const NavigationDrawerMenu(),
-      appBar: AppBar(
-        title: Text(Translations.of(context)!.text('all_computers')),
-        centerTitle: true,
-        backgroundColor: const Color.fromARGB(255, 123, 8, 29),
-        foregroundColor: const Color.fromARGB(255, 255, 255, 255),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            tooltip: Translations.of(context)!.text('create_computer'),
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => const CreateComputer(),
-              ));
-            },
-          )
-        ],
-      ),
-      body: FutureBuilder(
-        future: futurComputerExist,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return ListView.builder(
-              itemCount: 1,
-              itemBuilder: (_, index) => Container(
-                  padding: const EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).canvasColor,
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  ),
-                  width: double.infinity,
-                  child: SingleChildScrollView(
-                    child: PaginatedDataTable(
-                      actions: <IconButton>[
-                        IconButton(
-                          color: const Color.fromARGB(255, 123, 8, 29),
-                          icon: const Icon(Icons.filter_alt_outlined),
-                          onPressed: _showMultiSelectFilter,
-                        ),
-                        IconButton(
-                          color: const Color.fromARGB(255, 123, 8, 29),
-                          icon: const Icon(Icons.mode_edit),
-                          onPressed: _showMultiSelectEditFiled,
-                        ),
-                      ],
-                      sortColumnIndex: sortColumnIndex,
-                      sortAscending: isAscending,
-                      header: Container(
-                          padding: const EdgeInsets.all(5),
-                          child: TextField(
-                            controller: _searchController,
-                            decoration: InputDecoration(
-                              hintText:
-                                  Translations.of(context)!.text('search'),
-                            ),
-                            onChanged: (value) {
-                              setState(() {
-                                dataComputers = filterData!
-                                    .where((element) =>
-                                        element.name!.contains(value))
-                                    .toList();
-                              });
-                            },
-                          )),
-                      source: RowSourceComputer(
-                        myData: dataComputers,
-                        count: dataComputers.length,
-                        customSecondHeader: secondHeaderCustomizable,
-                        customThirdHeader: thirdHeaderCustomizable,
-                        context: context,
+        drawer: const NavigationDrawerMenu(),
+        appBar: AppBar(
+          title: Text(Translations.of(context)!.text('all_computers')),
+          centerTitle: true,
+          backgroundColor: const Color.fromARGB(255, 123, 8, 29),
+          foregroundColor: const Color.fromARGB(255, 255, 255, 255),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.add),
+              tooltip: Translations.of(context)!.text('create_computer'),
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const CreateComputer(),
+                ));
+              },
+            )
+          ],
+        ),
+        body: RefreshIndicator(
+          onRefresh: _loadData,
+          child: FutureBuilder(
+            future: futurComputerExist,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return ListView.builder(
+                  itemCount: 1,
+                  itemBuilder: (_, index) => Container(
+                      padding: const EdgeInsets.all(8.0),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).canvasColor,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10)),
                       ),
-                      rowsPerPage: rowPerPage,
-                      columnSpacing: 8,
-                      columns: [
-                        tableHeaders(firstHeaderNoCustomizable),
-                        tableHeaders(secondHeaderCustomizable),
-                        tableHeaders(thirdHeaderCustomizable),
-                      ],
-                    ),
-                  )),
-            );
-          } else {
-            return const Center(child: CircularProgressIndicator());
-          }
-        },
-      ),
-    );
+                      width: double.infinity,
+                      child: SingleChildScrollView(
+                        child: PaginatedDataTable(
+                          actions: <IconButton>[
+                            IconButton(
+                              color: const Color.fromARGB(255, 123, 8, 29),
+                              icon: const Icon(Icons.filter_alt_outlined),
+                              onPressed: _showMultiSelectFilter,
+                            ),
+                            IconButton(
+                              color: const Color.fromARGB(255, 123, 8, 29),
+                              icon: const Icon(Icons.mode_edit),
+                              onPressed: _showMultiSelectEditFiled,
+                            ),
+                          ],
+                          sortColumnIndex: sortColumnIndex,
+                          sortAscending: isAscending,
+                          header: Container(
+                              padding: const EdgeInsets.all(5),
+                              child: TextField(
+                                controller: _searchController,
+                                decoration: InputDecoration(
+                                  hintText:
+                                      Translations.of(context)!.text('search'),
+                                ),
+                                onChanged: (value) {
+                                  setState(() {
+                                    dataComputers = filterData!
+                                        .where((element) =>
+                                            element.name!.contains(value))
+                                        .toList();
+                                  });
+                                },
+                              )),
+                          source: RowSourceComputer(
+                            myData: dataComputers,
+                            count: dataComputers.length,
+                            customSecondHeader: secondHeaderCustomizable,
+                            customThirdHeader: thirdHeaderCustomizable,
+                            context: context,
+                          ),
+                          rowsPerPage: rowPerPage,
+                          columnSpacing: 8,
+                          columns: [
+                            tableHeaders(firstHeaderNoCustomizable),
+                            tableHeaders(secondHeaderCustomizable),
+                            tableHeaders(thirdHeaderCustomizable),
+                          ],
+                        ),
+                      )),
+                );
+              } else {
+                return const Center(child: CircularProgressIndicator());
+              }
+            },
+          ),
+        ));
   }
 
   DataColumn tableHeaders(String name) {
