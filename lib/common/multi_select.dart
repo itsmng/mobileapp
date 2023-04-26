@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobileapp/api/model.dart';
 import 'package:mobileapp/common/button.dart';
+import 'package:mobileapp/translations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MultiSelect extends StatefulWidget {
@@ -85,7 +86,6 @@ class _MultiSelectState extends State<MultiSelect> {
         _selectedItems.addAll(_selectedfilter);
         Navigator.pop(context, _selectedItems);
       }
-      
     }
   }
 
@@ -101,28 +101,69 @@ class _MultiSelectState extends State<MultiSelect> {
       _listSelected = _selectedfilter;
     }
 
-    return AlertDialog(
-      title: const Text('Select Status'),
-      content: SingleChildScrollView(
-        child: ListBody(
-          children: widget.items
-              .map((item) => CheckboxListTile(
-                    value: _listSelected.contains(item),
-                    title: Text(item),
-                    controlAffinity: ListTileControlAffinity.leading,
-                    onChanged: (isChecked) => _itemChange(item, isChecked!),
-                  ))
-              .toList(),
+    if (widget.type == "Editor") {
+      return AlertDialog(
+        title: Text(Translations.of(context)!.text('select_field')),
+        content: SingleChildScrollView(
+          child: ListBody(
+            children: widget.items
+                .map((item) => CheckboxListTile(
+                      value: _listSelected.contains(item),
+                      title: Text(item),
+                      controlAffinity: ListTileControlAffinity.leading,
+                      onChanged: (isChecked) => _itemChange(item, isChecked!),
+                    ))
+                .toList(),
+          ),
         ),
-      ),
-      actions: [
-        button.buttonExit(
-          () => _cancel(),
+        actions: [
+          button.buttonExit(
+            () => _cancel(),
+          ),
+          button.buttonSave(() {
+            _submit();
+          }),
+        ],
+      );
+    } else {
+      for (var i = 0; i < widget.items.length; i++) {
+        if (widget.items[i] == "New") {
+          widget.items[i] = Translations.of(context)!.text('new_ticket');
+        } else if (widget.items[i] == "Processing (assigned)") {
+          widget.items[i] = Translations.of(context)!.text('assigned_ticket');
+        } else if (widget.items[i] == "Processing (planned)") {
+          widget.items[i] = Translations.of(context)!.text('planned_ticket');
+        } else if (widget.items[i] == "Pending") {
+          widget.items[i] = Translations.of(context)!.text('pending_ticket');
+        } else if (widget.items[i] == "Solved") {
+          widget.items[i] = Translations.of(context)!.text('solved_ticket');
+        } else if (widget.items[i] == "Closed") {
+          widget.items[i] = Translations.of(context)!.text('closed_ticket');
+        }
+      }
+      return AlertDialog(
+        title: Text(Translations.of(context)!.text('select_status')),
+        content: SingleChildScrollView(
+          child: ListBody(
+            children: widget.items
+                .map((item) => CheckboxListTile(
+                      value: _listSelected.contains(item),
+                      title: Text(item),
+                      controlAffinity: ListTileControlAffinity.leading,
+                      onChanged: (isChecked) => _itemChange(item, isChecked!),
+                    ))
+                .toList(),
+          ),
         ),
-        button.buttonSave(() {
-          _submit();
-        }),
-      ],
-    );
+        actions: [
+          button.buttonExit(
+            () => _cancel(),
+          ),
+          button.buttonSave(() {
+            _submit();
+          }),
+        ],
+      );
+    }
   }
 }
