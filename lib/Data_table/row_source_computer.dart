@@ -42,7 +42,14 @@ DataRow recentDataRow(Computer data, String firstHeaderCustomizable,
     String secondHeaderCustomizable, BuildContext context) {
   return DataRow(
     cells: [
-      DataCell(Text(data.name.toString()),
+      DataCell(
+          Text(
+            data.name.toString(),
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Color.fromARGB(255, 123, 8, 29),
+            ),
+          ),
           // ignore: avoid_returning_null_for_void
           onTap: (() => Navigator.push(
               context,
