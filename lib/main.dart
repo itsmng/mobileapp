@@ -17,7 +17,9 @@ Future<void> main() async {
   String? appToken = prefs.getString("App-token");
   String? userToken = prefs.getString("User-token");
 
-  if (url == null && appToken == null && userToken == null) {
+  if ((url == null || url.isEmpty) &&
+      (appToken == null || appToken.isEmpty) &&
+      (userToken == null || userToken.isEmpty)) {
     return runApp(const MyApp());
   } else {
     return runApp(const MyApp2());
