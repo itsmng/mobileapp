@@ -170,6 +170,7 @@ class _DetailTicketState extends State<DetailTicket> {
             foregroundColor: const Color.fromARGB(255, 255, 255, 255),
             leading: IconButton(
               icon: const Icon(Icons.arrow_back_ios),
+               tooltip: Translations.of(context)!.text('back'),
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => const TicketsPage(),

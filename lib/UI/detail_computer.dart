@@ -107,6 +107,15 @@ class _DetailComputerState extends State<DetailComputer> {
             centerTitle: true,
             backgroundColor: const Color.fromARGB(255, 123, 8, 29),
             foregroundColor: const Color.fromARGB(255, 255, 255, 255),
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back_ios),
+              tooltip: Translations.of(context)!.text('back'),
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const ComputersPage(),
+                ));
+              },
+            ),
             bottom: TabBar(
               labelStyle: const TextStyle(color: Colors.white),
               indicatorColor: Colors.white,

@@ -319,8 +319,12 @@ class _CreateComputerState extends State<CreateComputer> {
                   )
                 ],
               ),
-              formFieldsComputer.buildTextAreaField(_commentController,
-                  Icons.text_fields, "comment", TextInputType.multiline, false),
+              formFieldsComputer.buildTextAreaField(
+                  _commentController,
+                  Icons.text_fields,
+                  Translations.of(context)!.text('comment'),
+                  TextInputType.multiline,
+                  false),
               const SizedBox(
                 height: 20,
               ),
