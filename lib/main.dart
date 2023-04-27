@@ -1,9 +1,12 @@
 //import 'dart:async';
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:mobileapp/UI/authentification.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:mobileapp/UI/home_page.dart';
+import 'package:mobileapp/api/model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'application.dart';
 import 'translations.dart';
@@ -89,14 +92,27 @@ class _MyApp2State extends State<MyApp2> {
   @override
   void initState() {
     super.initState();
-    _localeOverrideDelegate =
-        const SpecificLocalizationDelegate(Locale('en', ''));
+
+    _localeOverrideDelegate = SpecificLocalizationDelegate(
+        Locale(Platform.localeName.substring(0, 2), ''));
+    final initSession = InitSession();
+    initSession.apiMgmt
+        .saveStringData("language", Platform.localeName.substring(0, 2));
+    //getDefaultLanguage();
 
     ///
     /// Let's save a pointer to this method, should the user wants to change its language
     /// We would then call: applic.onLocaleChanged(new Locale('en',''));
     ///
     applic.onLocaleChanged = onLocaleChange;
+  }
+
+  getDefaultLanguage() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _localeOverrideDelegate = SpecificLocalizationDelegate(
+          Locale(prefs.getString("language").toString(), ''));
+    });
   }
 
   onLocaleChange(Locale locale) {
@@ -119,6 +135,7 @@ class _MyApp2State extends State<MyApp2> {
         const TranslationsDelegate(),
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: applic.supportedLocales(),
       home: const HomePage(),
