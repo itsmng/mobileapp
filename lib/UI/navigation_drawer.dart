@@ -206,6 +206,7 @@ class NavigationDrawerMenu extends StatelessWidget {
                   await prefs.remove("App-token");
                   await prefs.remove("User-token");
                   await prefs.remove("customHeadersTicket");
+                  await prefs.remove("customHeadersComputer");
 
                   if (context.mounted) {
                     Navigator.pushAndRemoveUntil(
