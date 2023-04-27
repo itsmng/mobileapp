@@ -38,6 +38,7 @@ class _MultiSelectState extends State<MultiSelect> {
       if (widget.model == "Ticket") {
         _selectedHeaders.addAll(prefs.getStringList("customHeadersTicket")!);
       } else if (widget.model == "Computer") {
+        print(prefs.getStringList("customHeadersComputer"));
         _selectedHeaders.addAll(prefs.getStringList("customHeadersComputer")!);
       }
     });
@@ -96,6 +97,8 @@ class _MultiSelectState extends State<MultiSelect> {
       var initSession = InitSession();
       initSession.apiMgmt
           .saveListStringData("customHeadersTicket", _selectedHeaders);
+      initSession.apiMgmt
+          .saveListStringData("customHeadersComputer", _selectedHeaders);
       _listSelected = _selectedHeaders;
     } else if (widget.type == "Filter") {
       _listSelected = _selectedfilter;

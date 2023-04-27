@@ -142,18 +142,19 @@ class _ComputersPageState extends State<ComputersPage> {
           _initSession.apiMgmt
               .saveListStringData("customHeadersComputer", selectedList);
         } else {
+          print(prefs.getStringList("customHeadersComputer"));
           // If we select one element it's fixed in the third postion of the table
           if (secondHeaderCustomizable ==
-              prefs.getStringList("customHeadersTicket")![0]) {
+              prefs.getStringList("customHeadersComputer")![0]) {
             secondHeaderCustomizable =
-                prefs.getStringList("customHeadersTicket")![0];
+                prefs.getStringList("customHeadersComputer")![0];
             thirdHeaderCustomizable =
-                prefs.getStringList("customHeadersTicket")![1];
+                prefs.getStringList("customHeadersComputer")![1];
           } else {
             secondHeaderCustomizable =
-                prefs.getStringList("customHeadersTicket")![1];
+                prefs.getStringList("customHeadersComputer")![1];
             thirdHeaderCustomizable =
-                prefs.getStringList("customHeadersTicket")![0];
+                prefs.getStringList("customHeadersComputer")![0];
           }
         }
       });
