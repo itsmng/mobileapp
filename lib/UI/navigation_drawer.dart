@@ -80,11 +80,16 @@ class NavigationDrawerMenu extends StatelessWidget {
                           color: Colors.white,
                           iconSize: 30,
                           tooltip: 'French language',
-                          onPressed: () {
+                          onPressed: () async {
+                            final prefs = await SharedPreferences.getInstance();
+                            await prefs.remove("customHeadersTicket");
+                            await prefs.remove("customHeadersComputer");
                             applic.onLocaleChanged!(const Locale('fr', ''));
-                            Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const HomePage(),
-                            ));
+                            if (context.mounted) {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => const HomePage(),
+                              ));
+                            }
                           },
                         ),
                         const Text('French',
@@ -94,11 +99,17 @@ class NavigationDrawerMenu extends StatelessWidget {
                           color: Colors.white,
                           iconSize: 30,
                           tooltip: 'English language',
-                          onPressed: () {
+                          onPressed: () async {
+                            final prefs = await SharedPreferences.getInstance();
+                            await prefs.remove("customHeadersTicket");
+                            await prefs.remove("customHeadersComputer");
                             applic.onLocaleChanged!(const Locale('en', ''));
-                            Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const HomePage(),
-                            ));
+
+                            if (context.mounted) {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => const HomePage(),
+                              ));
+                            }
                           },
                         ),
                         const Text(
