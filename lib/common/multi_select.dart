@@ -95,10 +95,14 @@ class _MultiSelectState extends State<MultiSelect> {
     final button = Button(context);
     if (widget.type == "Editor") {
       var initSession = InitSession();
-      initSession.apiMgmt
-          .saveListStringData("customHeadersTicket", _selectedHeaders);
-      initSession.apiMgmt
-          .saveListStringData("customHeadersComputer", _selectedHeaders);
+      if (widget.model == "Ticket") {
+        initSession.apiMgmt
+            .saveListStringData("customHeadersTicket", _selectedHeaders);
+      } else {
+        initSession.apiMgmt
+            .saveListStringData("customHeadersComputer", _selectedHeaders);
+      }
+
       _listSelected = _selectedHeaders;
     } else if (widget.type == "Filter") {
       _listSelected = _selectedfilter;
