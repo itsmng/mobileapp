@@ -85,6 +85,8 @@ class NavigationDrawerMenu extends StatelessWidget {
                             await prefs.remove("customHeadersTicket");
                             await prefs.remove("customHeadersComputer");
                             applic.onLocaleChanged!(const Locale('fr', ''));
+                            _initSession.apiMgmt
+                                .saveStringData("language", "fr");
                             if (context.mounted) {
                               Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => const HomePage(),
@@ -104,7 +106,8 @@ class NavigationDrawerMenu extends StatelessWidget {
                             await prefs.remove("customHeadersTicket");
                             await prefs.remove("customHeadersComputer");
                             applic.onLocaleChanged!(const Locale('en', ''));
-
+                            _initSession.apiMgmt
+                                .saveStringData("language", "en");
                             if (context.mounted) {
                               Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => const HomePage(),
