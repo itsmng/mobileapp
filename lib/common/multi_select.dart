@@ -36,10 +36,14 @@ class _MultiSelectState extends State<MultiSelect> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       if (widget.model == "Ticket") {
-        _selectedHeaders.addAll(prefs.getStringList("customHeadersTicket")!);
+        if (prefs.getStringList("customHeadersTicket") != null) {
+          _selectedHeaders.addAll(prefs.getStringList("customHeadersTicket")!);
+        }
       } else if (widget.model == "Computer") {
-        print(prefs.getStringList("customHeadersComputer"));
-        _selectedHeaders.addAll(prefs.getStringList("customHeadersComputer")!);
+        if (prefs.getStringList("customHeadersComputer") != null) {
+          _selectedHeaders
+              .addAll(prefs.getStringList("customHeadersComputer")!);
+        }
       }
     });
   }
@@ -48,24 +52,46 @@ class _MultiSelectState extends State<MultiSelect> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       if (widget.model == "Ticket") {
-        _selectedfilter.addAll(prefs.getStringList("selectedFilterTicket")!);
+        if (prefs.getStringList("selectedFilterTicket") != null) {
+          _selectedfilter.addAll(prefs.getStringList("selectedFilterTicket")!);
+        }
       } else if (widget.model == "Computer") {
-        _selectedfilter.addAll(prefs.getStringList("selectedFilterComputer")!);
+        if (prefs.getStringList("selectedFilterComputer") != null) {
+          _selectedfilter
+              .addAll(prefs.getStringList("selectedFilterComputer")!);
+        }
       }
     });
   }
 
 // This function is triggered when a checkbox is checked or unchecked
   void _itemChange(String itemValue, bool isSelected) {
+    var initSession = InitSession();
     setState(() {
       if (isSelected) {
         _selectedItems.add(itemValue);
         _selectedHeaders.add(itemValue);
         _selectedfilter.add(itemValue);
+
+        if (widget.model == "Ticket") {
+          initSession.apiMgmt
+              .saveListStringData("selectedFilterTicket", _selectedfilter);
+        } else if (widget.model == "Computer") {
+          initSession.apiMgmt
+              .saveListStringData("selectedFilterComputer", _selectedfilter);
+        }
       } else {
         _selectedItems.remove(itemValue);
         _selectedHeaders.remove(itemValue);
         _selectedfilter.remove(itemValue);
+
+        if (widget.model == "Ticket") {
+          initSession.apiMgmt
+              .saveListStringData("selectedFilterTicket", _selectedfilter);
+        } else if (widget.model == "Computer") {
+          initSession.apiMgmt
+              .saveListStringData("selectedFilterComputer", _selectedfilter);
+        }
       }
     });
   }
