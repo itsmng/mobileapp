@@ -216,14 +216,14 @@ class _HomePageState extends State<HomePage> {
       }
 
       setState(() {
-        listTicketsData[Translations.of(context)!.text('new_ticket')] =
+        listTicketsData[Translations.of(context)!.text('graph_new_ticket')] =
             newTicket;
-        listTicketsData[Translations.of(context)!.text('assigned_ticket')] =
-            assignedTicket;
-        listTicketsData[Translations.of(context)!.text('planned_ticket')] =
-            plannedTickets;
-        listTicketsData[Translations.of(context)!.text('pending_ticket')] =
-            pendingTickets;
+        listTicketsData[Translations.of(context)!
+            .text('graph_assigned_ticket')] = assignedTicket;
+        listTicketsData[Translations.of(context)!
+            .text('graph_planned_ticket')] = plannedTickets;
+        listTicketsData[Translations.of(context)!
+            .text('graph_pending_ticket')] = pendingTickets;
 
         listTicketsData["Latest tickets"] = latestTickets;
         listTicketsData["Late tickets"] = lateTickets;
