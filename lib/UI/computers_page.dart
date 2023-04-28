@@ -76,22 +76,22 @@ class _ComputersPageState extends State<ComputersPage> {
     if (results != null) {
       setState(() {
         _selectedItems = results;
+        if (_selectedItems.isNotEmpty) {
+          dataComputers = [];
 
-        // Remove elements of the list
-        dataComputers = [];
-
-        // Add the ferting elements in the list
-        for (var element in _selectedItems) {
-          for (var stat in allStateComputer) {
-            if (element == stat.name) {
-              dataComputers.addAll(filterData!
-                  .where((element) => element.statusValue == stat.name)
-                  .toList());
-              listSelectedFilter.add(element);
-              _initSession.apiMgmt.saveListStringData(
-                  "selectedFilterComputer", listSelectedFilter);
+          // Add the ferting elements in the list
+          for (var element in _selectedItems) {
+            for (var stat in allStateComputer) {
+              if (element == stat.name) {
+                dataComputers.addAll(filterData!
+                    .where((element) => element.statusValue == stat.name)
+                    .toList());
+                listSelectedFilter.add(element);
+              }
             }
           }
+        } else {
+          dataComputers = filterData!;
         }
       });
     }
@@ -189,12 +189,11 @@ class _ComputersPageState extends State<ComputersPage> {
   @override
   void initState() {
     apiRespComputer = computer.apiMgmt.get(ApiEndpoint.apiGetAllComputers);
+    futurComputerExist = computer.fetchComputerData(apiRespComputer);
+
     getComputerData();
     setDefaultSelectedheaders();
-    _initSession.apiMgmt
-        .saveListStringData("selectedFilterComputer", ["Production"]);
 
-    futurComputerExist = computer.fetchComputerData(apiRespComputer);
     super.initState();
   }
 
@@ -202,11 +201,9 @@ class _ComputersPageState extends State<ComputersPage> {
   Future<void> _loadData() async {
     setState(() {
       apiRespComputer = computer.apiMgmt.get(ApiEndpoint.apiGetAllTickets);
-      getComputerData();
-
-      _initSession.apiMgmt.saveListStringData("selectedFilterTicket", ["New"]);
-
       futurComputerExist = computer.fetchComputerData(apiRespComputer);
+
+      getComputerData();
     });
   }
 

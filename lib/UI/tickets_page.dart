@@ -58,27 +58,38 @@ class _TicketsPageState extends State<TicketsPage> {
         );
       },
     );
+    Map<int, String> listStatus = {
+      1: "Nouveau",
+      2: "En cours (Attribué)",
+      3: "En cours (Planifié)",
+      4: "En attente",
+      5: "Résolu",
+      6: "Clos"
+    };
 
     // Update UI
     if (results != null) {
       setState(() {
         _selectedItems = results;
+        if (_selectedItems.isNotEmpty) {
+          dataTickets = [];
+          // Add the ferting elements in the list
+          for (var element in _selectedItems) {
+            for (var stat in allSpecialStatus) {
+              if (listStatus[stat.id] == element) {
+                element = stat.name.toString();
+              }
 
-        // Remove elements of the list
-        dataTickets = [];
-
-        // Add the ferting elements in the list
-        for (var element in _selectedItems) {
-          for (var stat in allSpecialStatus) {
-            if (element == stat.name) {
-              dataTickets.addAll(filterData!
-                  .where((element) => element.statusID == stat.id)
-                  .toList());
-              listSelectedFilter.add(element);
-              _initSession.apiMgmt.saveListStringData(
-                  "selectedFilterTicket", listSelectedFilter);
+              if (element == stat.name) {
+                dataTickets.addAll(filterData!
+                    .where((element) => element.statusID == stat.id)
+                    .toList());
+                listSelectedFilter.add(element);
+              }
             }
           }
+        } else {
+          dataTickets = filterData!;
         }
       });
     }
@@ -191,7 +202,6 @@ class _TicketsPageState extends State<TicketsPage> {
     apiRespTicket = ticket.apiMgmt.get(ApiEndpoint.apiGetAllTickets);
     getTicketData();
     setDefaultSelectedheaders();
-    _initSession.apiMgmt.saveListStringData("selectedFilterTicket", ["New"]);
     futurTicketExist = ticket.fetchTicketsData(apiRespTicket);
     super.initState();
   }
@@ -203,9 +213,6 @@ class _TicketsPageState extends State<TicketsPage> {
     setState(() {
       apiRespTicket = ticket.apiMgmt.get(ApiEndpoint.apiGetAllTickets);
       getTicketData();
-
-      _initSession.apiMgmt.saveListStringData("selectedFilterTicket", ["New"]);
-
       futurTicketExist = ticket.fetchTicketsData(apiRespTicket);
     });
   }
