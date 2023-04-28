@@ -55,6 +55,27 @@ class _AuthentificationState extends State<Authentification> {
     }
   }
 
+  checkValidParameter() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    if (prefs.getString("URL") == _urlController.text &&
+        prefs.getString("App-token") == _apiTokenController.text &&
+        prefs.getString("User-token") == _userTokenController.text) {
+      if (context.mounted) {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => const HomePage(),
+        ));
+      }
+    }
+
+    if (_initSession.apiMgmt.apiSessionToken != null) {
+      if (!mounted) return;
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => const HomePage(),
+      ));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -334,12 +355,7 @@ class _AuthentificationState extends State<Authentification> {
             .saveBoolData("Auth-status", _initSession.apiMgmt.authStatus);
 
         _initSession.apiMgmt.setApiSessionToken(data.sessionToken.toString());
-        if (_initSession.apiMgmt.apiSessionToken != null) {
-          if (!mounted) return;
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => const HomePage(),
-          ));
-        }
+        checkValidParameter();
       });
     }
   }
