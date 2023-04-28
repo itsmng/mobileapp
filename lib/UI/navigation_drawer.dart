@@ -84,6 +84,9 @@ class NavigationDrawerMenu extends StatelessWidget {
                             final prefs = await SharedPreferences.getInstance();
                             await prefs.remove("customHeadersTicket");
                             await prefs.remove("customHeadersComputer");
+                            await prefs.remove("selectedFilterTicket");
+                            await prefs.remove("selectedFilterComputer");
+
                             applic.onLocaleChanged!(const Locale('fr', ''));
                             _initSession.apiMgmt
                                 .saveStringData("language", "fr");
@@ -105,6 +108,9 @@ class NavigationDrawerMenu extends StatelessWidget {
                             final prefs = await SharedPreferences.getInstance();
                             await prefs.remove("customHeadersTicket");
                             await prefs.remove("customHeadersComputer");
+                            await prefs.remove("selectedFilterTicket");
+                            await prefs.remove("selectedFilterComputer");
+
                             applic.onLocaleChanged!(const Locale('en', ''));
                             _initSession.apiMgmt
                                 .saveStringData("language", "en");
@@ -221,6 +227,8 @@ class NavigationDrawerMenu extends StatelessWidget {
                   await prefs.remove("User-token");
                   await prefs.remove("customHeadersTicket");
                   await prefs.remove("customHeadersComputer");
+                  await prefs.remove("selectedFilterTicket");
+                  await prefs.remove("selectedFilterComputer");
 
                   if (context.mounted) {
                     Navigator.pushAndRemoveUntil(
