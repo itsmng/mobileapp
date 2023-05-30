@@ -137,7 +137,6 @@ class BuildFormFields {
           builder: (context, child) {
             return Theme(
               data: ThemeData(
-                  //primarySwatch: const Color.fromARGB(255, 123, 8, 29),
                   colorScheme: ColorScheme.fromSwatch().copyWith(
                 primary: const Color.fromARGB(255, 123, 8, 29),
               )),

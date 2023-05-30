@@ -1,5 +1,3 @@
-//import 'dart:async';
-
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -35,7 +33,6 @@ class _MyAppState extends State<MyApp> {
     final initSession = InitSession();
     initSession.apiMgmt
         .saveStringData("language", Platform.localeName.substring(0, 2));
-    //getDefaultLanguage();
 
     ///
     /// Let's save a pointer to this method, should the user wants to change its language
@@ -65,7 +62,6 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         primarySwatch: Colors.grey,
         primaryColor: const Color.fromARGB(255, 254, 255, 255),
-        // scaffoldBackgroundColor: const Color.fromARGB(255, 174, 12, 42)
       ),
       localizationsDelegates: [
         _localeOverrideDelegate!,

@@ -5,8 +5,8 @@ import 'package:mobileapp/api/api_mgmt.dart';
 
 class ItemTicket {
   int? id;
-  String? ticketsID;
-  String? itemsID;
+  int? ticketsID;
+  int? itemsID;
   String? itemsType;
   String? statusTicket;
   String? dateTicket;

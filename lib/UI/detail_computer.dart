@@ -18,6 +18,8 @@ import 'package:mobileapp/models/update_source.dart';
 import 'package:mobileapp/models/user.dart';
 import 'package:mobileapp/translations.dart';
 
+import '../models/special_status.dart';
+
 class DetailComputer extends StatefulWidget {
   const DetailComputer({super.key, required this.computer});
   final Computer computer;
@@ -41,22 +43,25 @@ class _DetailComputerState extends State<DetailComputer> {
   final dropdown = Dropdown();
 
   Map<int, String> listStatus = {};
-  late String selectedStatus;
+  late int? selectedStatus;
+
+  Map<int, String> listTicketStatus = {};
+  late String selectedTicketStatus;
 
   Map<int, String> listEntities = {};
-  late String selectedEntity;
+  late int? selectedEntity;
 
   Map<int, String> listLocations = {};
-  late String selectedLocation;
+  late int? selectedLocation;
 
   Map<int, String> listUpdateSource = {};
   late String selectedUpdateSource;
 
   Map<int, String> listUsersInCharge = {};
-  late String selectedUserInCharge;
+  late int? selectedUserInCharge;
 
   Map<int, String> listUsers = {};
-  late String selectedUser;
+  late int? selectedUser;
 
   List<ItemTicket> allItemsTickets = [];
   dynamic responseAPIAddFollowup;
@@ -66,31 +71,30 @@ class _DetailComputerState extends State<DetailComputer> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _serialController = TextEditingController();
   final TextEditingController _otherSerialController = TextEditingController();
-  final TextEditingController _dateController = TextEditingController();
   final TextEditingController _commentController = TextEditingController();
 
   @override
   void initState() {
     _nameController.text = widget.computer.name.toString();
     _serialController.text = widget.computer.serial.toString();
-    _dateController.text = widget.computer.date.toString();
     _otherSerialController.text = widget.computer.otherSerial.toString();
     _commentController.text = widget.computer.comment.toString();
 
-    selectedStatus = widget.computer.statusValue.toString();
-    selectedEntity = widget.computer.entity.toString();
-    selectedLocation = widget.computer.location.toString();
+    selectedStatus = widget.computer.statusID;
+    selectedEntity = widget.computer.entity;
+    selectedLocation = widget.computer.location;
     selectedUpdateSource = widget.computer.source.toString();
-    selectedUserInCharge = widget.computer.userIdTech.toString();
-    selectedUser = widget.computer.userID.toString();
+    selectedUserInCharge = widget.computer.userIdTech;
+    selectedUser = widget.computer.userID;
 
     getAllStatus();
+    getAllTicketStatus();
     getAllEntities();
     getAllLocations();
     getAllUpdateSource();
     getAllUsersInCharge();
     getAllUsers();
-    getAllItemsTickets();
+    getAllItemsTicketsByComputer();
     super.initState();
   }
 
@@ -181,19 +185,18 @@ class _DetailComputerState extends State<DetailComputer> {
                     Translations.of(context)!.text('name'),
                     TextInputType.text,
                     true),
-                formFieldsComputer.buildDateTimeField(_dateController,
-                    Translations.of(context)!.text('open_date'), context),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Expanded(
                       child: DropdownButtonFormField(
                         isExpanded: true,
-                        value: selectedUserInCharge,
+                        value: listUsers[selectedUserInCharge],
                         items: dropdown.dropdownItem(listUsersInCharge),
                         onChanged: (String? value) {
                           setState(() {
-                            selectedUserInCharge = value!;
+                            selectedUserInCharge = listUsers.keys.firstWhere((element) 
+                              => listUsers[element] == value);
                           });
                         },
                         decoration: InputDecoration(
@@ -219,11 +222,12 @@ class _DetailComputerState extends State<DetailComputer> {
                     Expanded(
                       child: DropdownButtonFormField(
                         isExpanded: true,
-                        value: selectedUser,
+                        value: listUsers[selectedUser],
                         items: dropdown.dropdownItem(listUsers),
                         onChanged: (String? value) {
                           setState(() {
-                            selectedUser = value!;
+                            selectedUser = listUsers.keys.firstWhere((element) 
+                              => listUsers[element] == value);
                           });
                         },
                         decoration: InputDecoration(
@@ -250,11 +254,12 @@ class _DetailComputerState extends State<DetailComputer> {
                     Expanded(
                       child: DropdownButtonFormField(
                         isExpanded: true,
-                        value: selectedStatus,
+                        value: listStatus[selectedStatus],
                         items: dropdown.dropdownItem(listStatus),
                         onChanged: (String? value) {
                           setState(() {
-                            selectedStatus = value!;
+                            selectedStatus = listStatus.keys.firstWhere((element) 
+                              => listStatus[element] == value);
                           });
                         },
                         decoration: InputDecoration(
@@ -310,11 +315,12 @@ class _DetailComputerState extends State<DetailComputer> {
                     Expanded(
                       child: DropdownButtonFormField(
                         isExpanded: true,
-                        value: selectedLocation,
+                        value: listLocations[selectedLocation],
                         items: dropdown.dropdownItem(listLocations),
                         onChanged: (String? value) {
                           setState(() {
-                            selectedLocation = value!;
+                            selectedLocation = listLocations.keys.firstWhere((element) 
+                              => listLocations[element] == value);
                           });
                         },
                         decoration: InputDecoration(
@@ -339,11 +345,12 @@ class _DetailComputerState extends State<DetailComputer> {
                     Expanded(
                       child: DropdownButtonFormField(
                         isExpanded: true,
-                        value: selectedEntity,
+                        value: listEntities[selectedEntity],
                         items: dropdown.dropdownItem(listEntities),
                         onChanged: (String? value) {
                           setState(() {
-                            selectedEntity = value!;
+                            selectedEntity = listEntities.keys.firstWhere((element) 
+                              => listEntities[element] == value);
                           });
                         },
                         decoration: InputDecoration(
@@ -445,38 +452,27 @@ class _DetailComputerState extends State<DetailComputer> {
                             if (!_formKeyComputer.currentState!.validate()) {
                               return;
                             } else {
-                              var statusID = listStatus.keys.where((element) =>
-                                  listStatus[element] == selectedStatus);
+                              var statusID = selectedStatus;
 
-                              var entityID = listEntities.keys.where(
-                                  (element) =>
-                                      listEntities[element] == selectedEntity);
+                              var entityID = selectedEntity;
 
-                              var locationID = listLocations.keys.where(
-                                  (element) =>
-                                      listLocations[element] ==
-                                      selectedLocation);
+                              var locationID = selectedLocation;
 
                               var updateSourceID = listUpdateSource.keys.where(
                                   (element) =>
                                       listUpdateSource[element] ==
                                       selectedUpdateSource);
-                              var userTechID = listUsersInCharge.keys.where(
-                                  (element) =>
-                                      listUsersInCharge[element] ==
-                                      selectedUserInCharge);
-                              var userID = listUsers.keys.where((element) =>
-                                  listUsers[element] == selectedUser);
+                              var userTechID = selectedUserInCharge;
+                              var userID = selectedUser;
 
                               updateData["name"] = _nameController.text;
-                              updateData["date_mod"] = _dateController.text;
-                              updateData["states_id"] = statusID.first;
-                              updateData["entities_id"] = entityID.first;
-                              updateData["locations_id"] = locationID.first;
+                              updateData["states_id"] = statusID;
+                              updateData["entities_id"] = entityID;
+                              updateData["locations_id"] = locationID;
                               updateData["autoupdatesystems_id"] =
                                   updateSourceID.first;
-                              updateData["users_id_tech"] = userTechID.first;
-                              updateData["users_id"] = userID.first;
+                              updateData["users_id_tech"] = userTechID;
+                              updateData["users_id"] = userID;
 
                               updateData["serial"] = _serialController.text;
                               updateData["otherserial"] =
@@ -546,10 +542,10 @@ class _DetailComputerState extends State<DetailComputer> {
 
   Widget _itemBuilderListTickets(BuildContext context, int index) {
     var ticketData = allTicketsWithComputer.where((element) =>
-        element.title == allItemsTickets[index].ticketsID.toString());
+        element.id == allItemsTickets[index].ticketsID);
 
-    if (allItemsTickets[index].itemsID.toString() ==
-        widget.computer.name.toString()) {
+    if (allItemsTickets.asMap().containsKey(index) && allItemsTickets[index].itemsID ==
+        widget.computer.id) {
       return Card(
         clipBehavior: Clip.antiAlias,
         elevation: 0,
@@ -572,7 +568,7 @@ class _DetailComputerState extends State<DetailComputer> {
                     ),
                     horizontalTitleGap: 5,
                     title: Text(
-                      allItemsTickets[index].ticketsID.toString(),
+                      allTicketsWithComputer.firstWhere((element) => element.id == allItemsTickets[index].ticketsID).title.toString(),
                       style: const TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 20),
                     ),
@@ -583,7 +579,7 @@ class _DetailComputerState extends State<DetailComputer> {
                       ),
                     ),
                     trailing: Text(
-                      allItemsTickets[index].statusTicket.toString(),
+                      listTicketStatus[int.parse(allItemsTickets[index].statusTicket.toString())]!,
                       style: const TextStyle(
                         color: Colors.black,
                       ),
@@ -682,8 +678,8 @@ class _DetailComputerState extends State<DetailComputer> {
 
   getAllItemsTickets() async {
     // Object of the Special Status class
-    final itemsTcikets = ItemTicket();
-    List<ItemTicket> allItems = await itemsTcikets.getAllItemTicket();
+    final itemsTickets = ItemTicket();
+    List<ItemTicket> allItems = await itemsTickets.getAllItemTicket();
 
     final ticket = Tickets();
     var apires = ticket.apiMgmt.get(ApiEndpoint.apiGetAllTickets);
@@ -692,14 +688,54 @@ class _DetailComputerState extends State<DetailComputer> {
     setState(() {
       for (var e in allItems) {
         for (Tickets ele in allTickets) {
-          if (e.ticketsID == ele.title) {
+          if (e.ticketsID == ele.id) {
             e.dateTicket = ele.date;
             e.statusTicket = ele.statusValue;
-            allTicketsWithComputer.add(ele);
           }
         }
 
         allItemsTickets.add(e);
+      }
+    });
+  }
+
+  getAllItemsTicketsByComputer() async {
+    int? id = widget.computer.id;
+    final itemsTickets = ItemTicket();
+    final tickets = Tickets();
+
+    var apiItemTicket = itemsTickets.apiMgmt.get(ApiEndpoint.apiGetItemTicketByComputer + id.toString());
+    allItemsTickets = await itemsTickets.fetchItemTicketData(apiItemTicket);
+
+    List<ItemTicket> deleted = [];
+
+    for (ItemTicket it in allItemsTickets){
+      var apiTicket = tickets.apiMgmt.get(ApiEndpoint.apiGetTicketsById + it.ticketsID.toString());
+      Tickets ticket = await tickets.fetchItemTicketDataNoList(apiTicket);
+
+      if (ticket.isDeleted == 0) {
+        it.dateTicket = ticket.date;
+        it.statusTicket = ticket.statusValue;
+        allTicketsWithComputer.add(ticket);
+      } else {
+        deleted.add(it);
+      }
+    }
+
+    for (ItemTicket it in deleted) {
+      allItemsTickets.remove(it);
+    }
+
+  }
+
+    getAllTicketStatus() async {
+    // Object of the Special Status class
+    final specialStatus = SpecialStatus();
+    List<SpecialStatus> allSpecialStatus =
+        await specialStatus.getAllSpecialStatus();
+    setState(() {
+      for (var e in allSpecialStatus) {
+        listTicketStatus[e.id!] = e.name.toString();
       }
     });
   }

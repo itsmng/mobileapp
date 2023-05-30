@@ -7,12 +7,12 @@ import 'package:mobileapp/common/dropdown.dart';
 import 'package:mobileapp/common/message.dart';
 import 'package:mobileapp/common/button.dart';
 import 'package:mobileapp/common/form_fields.dart';
+import 'package:mobileapp/models/entity.dart';
 import 'package:mobileapp/models/itil_category.dart';
 import 'package:mobileapp/models/itil_followup.dart';
 import 'package:mobileapp/models/location.dart';
 import 'package:mobileapp/models/special_status.dart';
 import 'package:mobileapp/models/task.dart';
-import 'package:mobileapp/models/ticket_user.dart';
 import 'package:mobileapp/models/tickets_model.dart';
 import 'package:mobileapp/models/user.dart';
 import 'package:mobileapp/translations.dart';
@@ -56,22 +56,21 @@ class _DetailTicketState extends State<DetailTicket> {
   final dropdown = Dropdown();
 
   Map<int, String> listStatus = {};
-  late String selectedStatus;
+  late int? selectedStatus;
 
   Map<int, String> listEntities = {};
-  late String selectedEntity;
+  late int? selectedEntity;
 
   Map<int, String> listLocations = {};
-  late String selectedLocation;
+  late int? selectedLocation;
 
   Map<int, String> listITILCategory = {};
   late String selectedITILCategory;
 
   Map<int, String> listUsers = {};
-  late String selectedUserRecipient;
+  late int? selectedUserRecipient;
 
-  Map<int, String> listAssignedUsers = {};
-  late String selectedAssignedUser;
+  late int? selectedAssignedUser;
 
   List<ITILfollowup> listITILFollowup = [];
   List<Task> listTask = [];
@@ -139,12 +138,12 @@ class _DetailTicketState extends State<DetailTicket> {
     _contentTaskController.clear();
 
     selectedPriority = widget.ticket.priority.toString();
-    selectedStatus = widget.ticket.statusValue.toString();
-    selectedEntity = widget.ticket.entity.toString();
-    selectedLocation = widget.ticket.location.toString();
+    selectedStatus = widget.ticket.statusID;
+    selectedEntity = widget.ticket.entity;
+    selectedLocation = widget.ticket.location;
     selectedITILCategory = widget.ticket.category.toString();
-    selectedUserRecipient = widget.ticket.recipient.toString();
-    selectedAssignedUser = widget.ticket.assignedUser.toString();
+    selectedUserRecipient = widget.ticket.recipient;
+    selectedAssignedUser = widget.ticket.assignedUser;
     selectedToDo = "To do";
 
     getAllStatus();
@@ -152,7 +151,6 @@ class _DetailTicketState extends State<DetailTicket> {
     getAllLocations();
     getAllITILCategory();
     getAllUsers();
-    getAllAssignedUsers();
     getAllITILFollowup();
     getAllTask();
     super.initState();
@@ -257,11 +255,12 @@ class _DetailTicketState extends State<DetailTicket> {
                     Expanded(
                       child: DropdownButtonFormField(
                         isExpanded: true,
-                        value: selectedEntity,
+                        value: listEntities[selectedEntity],
                         items: dropdown.dropdownItem(listEntities),
                         onChanged: (String? value) {
                           setState(() {
-                            selectedEntity = value!;
+                            selectedEntity = listEntities.keys.firstWhere((element) 
+                              => listEntities[element] == value);
                           });
                         },
                         decoration: InputDecoration(
@@ -319,11 +318,12 @@ class _DetailTicketState extends State<DetailTicket> {
                     Expanded(
                       child: DropdownButtonFormField(
                         isExpanded: true,
-                        value: selectedStatus,
+                        value: listStatus[selectedStatus],
                         items: dropdown.dropdownItem(listStatus),
                         onChanged: (String? value) {
                           setState(() {
-                            selectedStatus = value!;
+                            selectedStatus = listStatus.keys.firstWhere((element) 
+                              => listStatus[element] == value);
                           });
                         },
                         decoration: InputDecoration(
@@ -350,11 +350,12 @@ class _DetailTicketState extends State<DetailTicket> {
                     Expanded(
                       child: DropdownButtonFormField(
                         isExpanded: true,
-                        value: selectedLocation,
+                        value: listLocations[selectedLocation],
                         items: dropdown.dropdownItem(listLocations),
                         onChanged: (String? value) {
                           setState(() {
-                            selectedLocation = value!;
+                            selectedLocation = listLocations.keys.firstWhere((element) 
+                              => listLocations[element] == value);
                           });
                         },
                         decoration: InputDecoration(
@@ -390,67 +391,6 @@ class _DetailTicketState extends State<DetailTicket> {
                           labelText: Translations.of(context)!.text('category'),
                           prefixIcon: const Icon(
                               Icons.integration_instructions_outlined,
-                              color: Colors.black),
-                          focusColor: Colors.black,
-                          enabledBorder: const UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(width: 3, color: Colors.greenAccent),
-                          ),
-                          labelStyle: const TextStyle(color: Colors.black),
-                          errorStyle: const TextStyle(
-                              color: Color.fromARGB(255, 245, 183, 177),
-                              fontStyle: FontStyle.italic),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Expanded(
-                      child: DropdownButtonFormField(
-                        isExpanded: true,
-                        value: selectedUserRecipient,
-                        items: dropdown.dropdownItem(listUsers),
-                        onChanged: (String? value) {
-                          setState(() {
-                            selectedUserRecipient = value!;
-                          });
-                        },
-                        decoration: InputDecoration(
-                          labelText:
-                              Translations.of(context)!.text('recipient'),
-                          prefixIcon: const Icon(Icons.supervised_user_circle,
-                              color: Colors.black),
-                          focusColor: Colors.black,
-                          enabledBorder: const UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(width: 3, color: Colors.greenAccent),
-                          ),
-                          labelStyle: const TextStyle(color: Colors.black),
-                          errorStyle: const TextStyle(
-                              color: Color.fromARGB(255, 245, 183, 177),
-                              fontStyle: FontStyle.italic),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 15,
-                    ),
-                    Expanded(
-                      child: DropdownButtonFormField(
-                        isExpanded: true,
-                        value: selectedAssignedUser,
-                        items: dropdown.dropdownItem(listAssignedUsers),
-                        onChanged: (String? value) {
-                          setState(() {
-                            selectedAssignedUser = value!;
-                          });
-                        },
-                        decoration: InputDecoration(
-                          labelText: Translations.of(context)!.text('assigned'),
-                          prefixIcon: const Icon(Icons.assignment_ind,
                               color: Colors.black),
                           focusColor: Colors.black,
                           enabledBorder: const UnderlineInputBorder(
@@ -527,43 +467,28 @@ class _DetailTicketState extends State<DetailTicket> {
                                       listPriority[element] ==
                                       selectedPriority);
 
-                              var statusID = listStatus.keys.where((element) =>
-                                  listStatus[element] == selectedStatus);
+                              var statusID = selectedStatus;
 
-                              var entityID = listEntities.keys.where(
-                                  (element) =>
-                                      listEntities[element] == selectedEntity);
+                              var entityID = selectedEntity;
 
-                              var locationID = listLocations.keys.where(
-                                  (element) =>
-                                      listLocations[element] ==
-                                      selectedLocation);
+                              var locationID = selectedLocation;
 
                               var itilCategoryID = listITILCategory.keys.where(
                                   (element) =>
                                       listITILCategory[element] ==
                                       selectedITILCategory);
-                              var userRecipientID = listUsers.keys.where(
-                                  (element) =>
-                                      listUsers[element] ==
-                                      selectedUserRecipient);
-                              var assignedID = listUsers.keys.where((element) =>
-                                  listUsers[element] == selectedAssignedUser);
 
                               updateData["name"] = _titleController.text;
                               updateData["date"] = _dateController.text;
                               updateData["priority"] = priorityID.first;
-                              updateData["status"] = statusID.first;
-                              updateData["entities_id"] = entityID.first;
-                              updateData["locations_id"] = locationID.first;
+                              updateData["status"] = statusID;
+                              updateData["entities_id"] = entityID;
+                              updateData["locations_id"] = locationID;
                               updateData["itilcategories_id"] =
                                   itilCategoryID.first;
-                              updateData["users_id_recipient"] =
-                                  userRecipientID.first;
-                              updateData["content"] = _contentController.text;
+                              updateData["content"] = 
+                                _contentController.text.toString().replaceAll(RegExp(r'\n'), "&lt;p&gt;");
 
-                              updateTicketUserData["users_id"] =
-                                  assignedID.first;
                               widget.ticket.assignedUserID ??= 0;
 
                               responseAPIUpdateUserAssigned =
@@ -645,8 +570,8 @@ class _DetailTicketState extends State<DetailTicket> {
       testIsPrivate = true;
     }
 
-    if (listITILFollowup[index].itemsID.toString() ==
-        widget.ticket.title.toString()) {
+    if (listITILFollowup[index].itemsID ==
+        widget.ticket.id) {
       return Dismissible(
           key: UniqueKey(),
 
@@ -719,7 +644,7 @@ class _DetailTicketState extends State<DetailTicket> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              listITILFollowup[index].userID.toString(),
+                              listUsers[listITILFollowup[index].userID]!,
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 20),
                             ),
@@ -737,7 +662,7 @@ class _DetailTicketState extends State<DetailTicket> {
                           ],
                         ),
                         subtitle: Text(
-                          listITILFollowup[index].content.toString(),
+                          listITILFollowup[index].content.toString().length > 150 ? '${listITILFollowup[index].content.toString().substring(0, 150)} ...' : listITILFollowup[index].content.toString(),
                           style: const TextStyle(
                             color: Colors.black,
                           ),
@@ -803,7 +728,7 @@ class _DetailTicketState extends State<DetailTicket> {
       iconState = Icons.done;
     }
 
-    if (listTask[index].ticketID.toString() == widget.ticket.title.toString()) {
+    if (listTask[index].ticketID == widget.ticket.id) {
       // Display the list item
       return Dismissible(
           key: UniqueKey(),
@@ -889,7 +814,7 @@ class _DetailTicketState extends State<DetailTicket> {
                           children: [
                             Flexible(
                                 child: Text(
-                              listTask[index].userID.toString(),
+                              listUsers[listTask[index].userID]!,
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 20),
                             )),
@@ -918,7 +843,7 @@ class _DetailTicketState extends State<DetailTicket> {
                           ],
                         ),
                         subtitle: Text(
-                          listTask[index].content.toString(),
+                          listTask[index].content.toString().length > 150 ? '${listTask[index].content.toString().substring(0, 150)} ...' : listTask[index].content.toString(),
                           style: const TextStyle(
                             color: Colors.black,
                           ),
@@ -1282,11 +1207,11 @@ class _DetailTicketState extends State<DetailTicket> {
                           var ticket = Tickets(
                               id: widget.ticket.id,
                               date: _dateController.text,
-                              statusValue: selectedStatus,
+                              statusID: selectedStatus,
                               title: _titleController.text,
                               entity: selectedEntity,
                               priority: selectedPriority,
-                              location: selectedLocation,
+                              //location: selectedLocation,
                               category: selectedITILCategory,
                               recipient: selectedUserRecipient,
                               assignedUser: selectedAssignedUser,
@@ -1361,8 +1286,8 @@ class _DetailTicketState extends State<DetailTicket> {
                           ),
                           labelStyle: const TextStyle(color: Colors.black),
                           errorStyle: const TextStyle(
-                              color: Color.fromARGB(255, 245, 183, 177),
-                              fontStyle: FontStyle.italic),
+                            color: Color.fromARGB(255, 245, 183, 177),
+                            fontStyle: FontStyle.italic),
                         ),
                       ),
                       DurationPicker(
@@ -1383,12 +1308,12 @@ class _DetailTicketState extends State<DetailTicket> {
                             ],
                           ),
                           Switch(
-                              value: isPrivateTask,
-                              onChanged: (bool? checked) {
-                                setState(() {
-                                  isPrivateTask = checked!;
-                                });
-                              })
+                            value: isPrivateTask,
+                            onChanged: (bool? checked) {
+                              setState(() {
+                                isPrivateTask = checked!;
+                              });
+                            })
                         ],
                       )
                     ],
@@ -1428,7 +1353,7 @@ class _DetailTicketState extends State<DetailTicket> {
                           var ticket = Tickets(
                               id: widget.ticket.id,
                               date: _dateController.text,
-                              statusValue: selectedStatus,
+                              statusID: selectedStatus,
                               title: _titleController.text,
                               entity: selectedEntity,
                               priority: selectedPriority,
@@ -1476,8 +1401,12 @@ class _DetailTicketState extends State<DetailTicket> {
   }
 
   getAllEntities() async {
+    final entity = Entity();
+    List<Entity> allEntities = await entity.getAllEntities();
     setState(() {
-      listEntities[1] = selectedEntity;
+      for (var e in allEntities) {
+        listEntities[e.id!] = e.name.toString();
+      }
     });
   }
 
@@ -1514,25 +1443,6 @@ class _DetailTicketState extends State<DetailTicket> {
       listUsers[0] = "";
       for (var e in allUsers) {
         listUsers[e.id!] = e.name.toString();
-      }
-    });
-  }
-
-  getAllAssignedUsers() async {
-    // Object of the Special Status class
-    final assignedUser = TicketUser();
-    List<TicketUser> allAssignedUsers = await assignedUser.getAllTicketUsers();
-    await getAllUsers();
-    setState(() {
-      listAssignedUsers[0] = "";
-      for (var e in allAssignedUsers) {
-        if (!listAssignedUsers.containsValue(e.userID.toString())) {
-          listUsers.forEach((key, value) {
-            if (value == e.userID.toString()) {
-              listAssignedUsers[key] = e.userID.toString();
-            }
-          });
-        }
       }
     });
   }

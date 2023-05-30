@@ -5,9 +5,9 @@ import 'package:mobileapp/api/api_mgmt.dart';
 
 class Task {
   int? id;
-  String? ticketID;
+  int? ticketID;
   String? date;
-  String? userID;
+  int? userID;
   int? isPrivate;
   String? content;
   int? duration;

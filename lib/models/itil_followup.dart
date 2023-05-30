@@ -6,9 +6,9 @@ import 'package:mobileapp/api/api_mgmt.dart';
 class ITILfollowup {
   int? id;
   String? itemtype;
-  String? itemsID;
+  int? itemsID;
   String? date;
-  String? userID;
+  int? userID;
   int? isPrivate;
   String? content;
 
