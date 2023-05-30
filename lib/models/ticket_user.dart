@@ -5,8 +5,8 @@ import 'package:mobileapp/api/api_mgmt.dart';
 
 class TicketUser {
   int? id;
-  String? ticketsID;
-  String? userID;
+  int? ticketsID;
+  int? userID;
 
   final apiMgmt = ApiMgmt();
 
