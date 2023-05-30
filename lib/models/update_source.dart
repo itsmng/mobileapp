@@ -22,11 +22,16 @@ class UpdateSource {
   }
 
   Future<List<UpdateSource>> fetchUpdateSourceData(dynamic data) async {
-    final parsed = json.decode(await data).cast<Map<String, dynamic>>();
+    try {
+      final parsed = json.decode(await data).cast<Map<String, dynamic>>();
 
-    return parsed
+      return parsed
         .map<UpdateSource>((json) => UpdateSource.fromMap(json))
         .toList();
+    } catch (e) {
+      return [];
+    }
+    
   }
 
   getAllUpdateSource() async {
