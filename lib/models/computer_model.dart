@@ -61,7 +61,6 @@ class Computer {
       date: json["date_creation"],
       lastUpdate: json["date_mod"],
       comment: json["comment"],
-      //statusValue: json["states_id"],
     );
   }
 
