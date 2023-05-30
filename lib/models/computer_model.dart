@@ -8,16 +8,16 @@ List<Computer> postFromJson(String str) =>
     List<Computer>.from(json.decode(str).map((x) => Computer.fromMap(x)));
 
 class Computer {
-  String? statusID;
+  int? statusID;
   int? id;
-  String? entity;
+  int? entity;
   String? name;
   String? serial;
   String? otherSerial;
-  String? userIdTech;
+  int? userIdTech;
   String? source;
-  String? location;
-  String? userID;
+  int? location;
+  int? userID;
   String? date;
   String? lastUpdate;
   String? comment;
@@ -43,24 +43,12 @@ class Computer {
   });
 
   factory Computer.fromMap(Map<String, dynamic> json) {
-    if (json["users_id_tech"] == 0) {
-      json["users_id_tech"] = "";
-    }
-    if (json["locations_id"] == 0) {
-      json["locations_id"] = "";
-    }
     if (json["autoupdatesystems_id"] == 0) {
       json["autoupdatesystems_id"] = "";
     }
-    if (json["users_id"] == 0) {
-      json["users_id"] = "";
-    }
-    if (json["states_id"] == 0) {
-      json["states_id"] = "";
-    }
 
     return Computer(
-      statusID: json["states_id"].toString(),
+      statusID: json["states_id"],
       id: json["id"],
       entity: json["entities_id"],
       name: json["name"],
@@ -73,17 +61,21 @@ class Computer {
       date: json["date_creation"],
       lastUpdate: json["date_mod"],
       comment: json["comment"],
-      statusValue: json["states_id"],
+      //statusValue: json["states_id"],
     );
   }
 
   Future<List<Computer>> fetchComputerData(dynamic data) async {
-    final parsed = json.decode(await data).cast<Map<String, dynamic>>();
+    try {
+      final parsed = json.decode(await data).cast<Map<String, dynamic>>();
 
-    var listComputers =
-        parsed.map<Computer>((json) => Computer.fromMap(json)).toList();
+      var listComputers =
+          parsed.map<Computer>((json) => Computer.fromMap(json)).toList();
 
-    return listComputers;
+      return listComputers;
+    } catch (e) {
+      return [];
+    }
   }
 
   // Method to return Tickets's attributes by selected
