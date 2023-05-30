@@ -94,7 +94,6 @@ class _DetailComputerState extends State<DetailComputer> {
     getAllUpdateSource();
     getAllUsersInCharge();
     getAllUsers();
-    //getAllItemsTickets();
     getAllItemsTicketsByComputer();
     super.initState();
   }
@@ -569,7 +568,6 @@ class _DetailComputerState extends State<DetailComputer> {
                     ),
                     horizontalTitleGap: 5,
                     title: Text(
-                      //allItemsTickets[index].ticketsID.toString(),
                       allTicketsWithComputer.firstWhere((element) => element.id == allItemsTickets[index].ticketsID).title.toString(),
                       style: const TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 20),
@@ -581,7 +579,6 @@ class _DetailComputerState extends State<DetailComputer> {
                       ),
                     ),
                     trailing: Text(
-                      //allItemsTickets[index].statusTicket.toString(),
                       listTicketStatus[int.parse(allItemsTickets[index].statusTicket.toString())]!,
                       style: const TextStyle(
                         color: Colors.black,
@@ -694,7 +691,6 @@ class _DetailComputerState extends State<DetailComputer> {
           if (e.ticketsID == ele.id) {
             e.dateTicket = ele.date;
             e.statusTicket = ele.statusValue;
-            //allTicketsWithComputer.add(ele);
           }
         }
 
@@ -741,7 +737,6 @@ class _DetailComputerState extends State<DetailComputer> {
       for (var e in allSpecialStatus) {
         listTicketStatus[e.id!] = e.name.toString();
       }
-      //selectedStatus = listTicketStatus.values.first;
     });
   }
 }
