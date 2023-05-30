@@ -406,69 +406,6 @@ class _DetailTicketState extends State<DetailTicket> {
                     ),
                   ],
                 ),
-/*                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Expanded(
-                      child: DropdownButtonFormField(
-                        isExpanded: true,
-                        value: listUsers[selectedUserRecipient],
-                        items: dropdown.dropdownItem(listUsers),
-                        onChanged: (String? value) {
-                          setState(() {
-                            selectedUserRecipient = listUsers.keys.firstWhere((element) 
-                              => listUsers[element] == value);
-                          });
-                        },
-                        decoration: InputDecoration(
-                          labelText:
-                              Translations.of(context)!.text('recipient'),
-                          prefixIcon: const Icon(Icons.supervised_user_circle,
-                              color: Colors.black),
-                          focusColor: Colors.black,
-                          enabledBorder: const UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(width: 3, color: Colors.greenAccent),
-                          ),
-                          labelStyle: const TextStyle(color: Colors.black),
-                          errorStyle: const TextStyle(
-                              color: Color.fromARGB(255, 245, 183, 177),
-                              fontStyle: FontStyle.italic),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 15,
-                    ),
-                    Expanded(
-                      child: DropdownButtonFormField(
-                        isExpanded: true,
-                        value: listUsers[selectedAssignedUser],
-                        items: dropdown.dropdownItem(listUsers),
-                        onChanged: (String? value) {
-                          setState(() {
-                            selectedAssignedUser = listUsers.keys.firstWhere((element) 
-                              => listUsers[element] == value);
-                          });
-                        },
-                        decoration: InputDecoration(
-                          labelText: Translations.of(context)!.text('assigned'),
-                          prefixIcon: const Icon(Icons.assignment_ind,
-                              color: Colors.black),
-                          focusColor: Colors.black,
-                          enabledBorder: const UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(width: 3, color: Colors.greenAccent),
-                          ),
-                          labelStyle: const TextStyle(color: Colors.black),
-                          errorStyle: const TextStyle(
-                              color: Color.fromARGB(255, 245, 183, 177),
-                              fontStyle: FontStyle.italic),
-                        ),
-                      ),
-                    ),
-                  ],
-                ), */
                 formFieldsTicket.buildTextAreaField(
                     _contentController,
                     Icons.text_fields,
@@ -708,7 +645,6 @@ class _DetailTicketState extends State<DetailTicket> {
                           children: [
                             Text(
                               listUsers[listITILFollowup[index].userID]!,
-                              //listITILFollowup[index].userID.toString(),
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 20),
                             ),
@@ -1350,17 +1286,10 @@ class _DetailTicketState extends State<DetailTicket> {
                           ),
                           labelStyle: const TextStyle(color: Colors.black),
                           errorStyle: const TextStyle(
-                              color: Color.fromARGB(255, 245, 183, 177),
-                              fontStyle: FontStyle.italic),
+                            color: Color.fromARGB(255, 245, 183, 177),
+                            fontStyle: FontStyle.italic),
                         ),
                       ),
-                      /*DropdownButton(
-                        items: items, 
-                        onChanged: (String? value) {
-                          setState(() {
-                            selectedToDo = value!;
-                          });
-                        }),*/
                       DurationPicker(
                         duration: duration,
                         baseUnit: BaseUnit.minute,
@@ -1379,12 +1308,12 @@ class _DetailTicketState extends State<DetailTicket> {
                             ],
                           ),
                           Switch(
-                              value: isPrivateTask,
-                              onChanged: (bool? checked) {
-                                setState(() {
-                                  isPrivateTask = checked!;
-                                });
-                              })
+                            value: isPrivateTask,
+                            onChanged: (bool? checked) {
+                              setState(() {
+                                isPrivateTask = checked!;
+                              });
+                            })
                         ],
                       )
                     ],
