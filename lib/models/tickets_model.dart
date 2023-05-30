@@ -16,16 +16,17 @@ class Tickets {
   String? timeToResolve;
   String? title;
   String? category;
-  String? location;
+  int? location;
   String? lastUpdate;
-  String? entity;
+  int? entity;
   String? priority;
   int? id;
-  String? recipient;
+  int? recipient;
   String? content;
-  String? assignedUser;
+  int? assignedUser;
   int? assignedUserID;
   String? associatedElement;
+  int? isDeleted;
 
   final apiMgmt = ApiMgmt();
 
@@ -45,6 +46,7 @@ class Tickets {
     this.content,
     this.assignedUser,
     this.associatedElement,
+    this.isDeleted,
   });
 
   factory Tickets.fromMap(Map<String, dynamic> json) {
@@ -60,9 +62,6 @@ class Tickets {
     if (json["itilcategories_id"] == 0) {
       json["itilcategories_id"] = "";
     }
-    if (json["locations_id"] == 0) {
-      json["locations_id"] = "";
-    }
     if (json["users_id_recipient"] == 0) {
       json["users_id_recipient"] = "";
     }
@@ -72,12 +71,10 @@ class Tickets {
     }
 
     // Remove &lt;p&gt; and &lt;/p&gt; caracters adding by the API
+    /*json["content"] =
+        json["content"].toString().replaceAll(RegExp(r'&lt;p&gt;'), "");*/
     json["content"] =
-        json["content"].toString().replaceAll(RegExp(r'&lt;p&gt;'), "");
-    json["content"] =
-        json["content"].toString().replaceAll(RegExp(r'&lt;/p&gt;'), "\n");
-    json["entities_id"] =
-        json["entities_id"].toString().replaceAll(RegExp(r'&gt;'), ">");
+        json["content"].toString().replaceAll(RegExp(r'&lt;p&gt;'), "\n");
 
     return Tickets(
       date: json["date"],
@@ -93,8 +90,9 @@ class Tickets {
       statusValue: json["status"].toString(),
       recipient: json["users_id_recipient"],
       content: json["content"],
-      assignedUser: "",
+      assignedUser: 0,
       associatedElement: "",
+      isDeleted: json["is_deleted"],
     );
   }
 
@@ -119,34 +117,44 @@ class Tickets {
 
   // A function that converts a response body into a List<Photo>.
   Future<List<Tickets>> fetchTicketsData(dynamic data) async {
-    final parsed = json.decode(await data).cast<Map<String, dynamic>>();
-    var listTickets =
-        parsed.map<Tickets>((json) => Tickets.fromMap(json)).toList();
+    try {
+      final parsed = json.decode(await data).cast<Map<String, dynamic>>();
+      var listTickets =
+          parsed.map<Tickets>((json) => Tickets.fromMap(json)).toList();
 
-    // Retrieve the list of the special status
-    Map<int, String> listStatus = await getSpecialStatusValues();
+      // Retrieve the list of the special status
+      Map<int, String> listStatus = await getSpecialStatusValues();
 
-    // Replace the special status id by there matching name
-    for (Tickets ele in listTickets) {
-      if (listStatus.containsKey(ele.statusID)) {
-        ele.statusValue = listStatus[ele.statusID];
-      }
-    }
-
-    final ticketUser = TicketUser();
-    List<TicketUser> allTicketUsers = await ticketUser.getAllTicketUsers();
-
-    // Add assigned user in the corresponding ticket
-    for (Tickets ticket in listTickets) {
-      for (TicketUser ticketUser in allTicketUsers) {
-        if (ticketUser.ticketsID == ticket.title.toString()) {
-          ticket.assignedUser = ticketUser.userID;
-          ticket.assignedUserID = ticketUser.id;
+      // Replace the special status id by there matching name
+      for (Tickets ele in listTickets) {
+        if (listStatus.containsKey(ele.statusID)) {
+          ele.statusValue = listStatus[ele.statusID];
         }
       }
-    }
 
-    return listTickets;
+      final ticketUser = TicketUser();
+      List<TicketUser> allTicketUsers = await ticketUser.getAllTicketUsers();
+
+      // Add assigned user in the corresponding ticket
+      for (Tickets ticket in listTickets) {
+        for (TicketUser ticketUser in allTicketUsers) {
+          if (ticketUser.ticketsID == ticket.id) {
+            ticket.assignedUser = ticketUser.userID;
+            ticket.assignedUserID = ticketUser.id;
+          }
+        }
+      }
+
+      return listTickets;
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future<Tickets> fetchItemTicketDataNoList(dynamic data) async {
+    final parsed = json.decode(await data);
+
+    return Tickets.fromMap(parsed);
   }
 
   // Method to return Tickets's attributes by selected
